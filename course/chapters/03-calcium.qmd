@@ -1,0 +1,240 @@
+---
+filters:
+  - shortiquiz
+---
+
+# Calcium signalling {#sec-calcium}
+
+```{ojs}
+//| echo: false
+//| output: false
+// Reported Ca2+ concentrations (M) and times (s), each with its source.
+// lo = hi for a single value. Only values recorded in the course notes are used.
+caData = [
+  // Concentrations
+  { panel: "Concentrations", label: "Resting cytosol", kind: "cytosolic signal", lo: 1e-7, hi: 1e-7, value: "≈ 100 nM",
+    src: "berridge2003calcium, p. 523", note: "maintained by pumps (review; mammalian cells)" },
+  { panel: "Concentrations", label: "Puffs and sparks", kind: "cytosolic signal", lo: 5e-8, hi: 6e-7, value: "~50–600 nM",
+    src: "berridge2003calcium, p. 524", note: "elementary events from IP3R or RYR clusters; spread ~2–6 µm" },
+  { panel: "Concentrations", label: "Ca²⁺ spike (Xenopus)", kind: "cytosolic signal", lo: 1e-7, hi: 1e-6, value: "10⁻⁷ → 10⁻⁶ M",
+    src: "rosenberg2011calcium, sec. \"Spatiotemporal characteristics of calcium transients\"", note: "embryonic Xenopus spinal neurons, Fura-2; unit printed as \"m\", read as M" },
+  { panel: "Concentrations", label: "GCaMP6s K_d", kind: "indicator", lo: 1.44e-7, hi: 1.44e-7, value: "144 nM",
+    src: "chen2013ultrasensitive, Supplementary Table 2", note: "purified protein in buffer" },
+  { panel: "Concentrations", label: "GCaMP6f K_d", kind: "indicator", lo: 3.75e-7, hi: 3.75e-7, value: "375 nM",
+    src: "chen2013ultrasensitive, Supplementary Table 2", note: "purified protein in buffer" },
+  { panel: "Concentrations", label: "Imaging buffer", kind: "recording solution", lo: 1e-3, hi: 1e-3, value: "1 mM",
+    src: "fairless2013membrane, p. 2", note: "CaCl2 in the bath solution for dye imaging; not a measured extracellular value" },
+  { panel: "Concentrations", label: "Slice solution (ACSF)", kind: "recording solution", lo: 2e-3, hi: 2e-3, value: "2 mM",
+    src: "rivera1999kcc2, p. 255", note: "CaCl2 in artificial cerebrospinal fluid, rat slices; not a measured extracellular value" },
+  // Times
+  { panel: "Times", label: "Exocytosis", kind: "response", lo: 1e-6, hi: 1e-6, value: "µs",
+    src: "berridge2003calcium, p. 517", note: "\"within microseconds\"; plotted at 1 µs (approx.)" },
+  { panel: "Times", label: "GCaMP6f, 1 spike", kind: "indicator", lo: 0.045, hi: 0.142, value: "45–142 ms",
+    src: "chen2013ultrasensitive, Supplementary Table 3", note: "rise to peak 45 ms, half-decay 142 ms; mouse V1 in vivo (mice 1.5–2 months old at virus injection)" },
+  { panel: "Times", label: "GDP duration", kind: "duration", lo: 0.3, hi: 0.3, value: "~300 ms",
+    src: "benari2002excitatory, p. 734", note: "giant depolarising potential, rat hippocampus, first two postnatal weeks (electrical event that drives Ca²⁺ oscillations)" },
+  { panel: "Times", label: "Puffs and sparks", kind: "duration", lo: 1, hi: 1, value: "< 1 s",
+    src: "berridge2003calcium, p. 524", note: "duration below 1 s; plotted at the 1 s bound" },
+  { panel: "Times", label: "Spike rise (Xenopus)", kind: "duration", lo: 5, hi: 5, value: "< 5 s",
+    src: "rosenberg2011calcium, sec. \"Spatiotemporal characteristics of calcium transients\"", note: "plotted at the 5 s bound" },
+  { panel: "Times", label: "Spike vs wave (Xenopus)", kind: "duration", lo: 9, hi: 33, value: "9 vs 33 s",
+    src: "moody2005ion, p. 905", note: "duration of soma spikes (9 s) and waves (33 s), Xenopus spinal neurons" },
+  { panel: "Times", label: "Spike decay τ (Xenopus)", kind: "duration", lo: 10, hi: 180, value: "~10 s and ~3 min",
+    src: "rosenberg2011calcium, sec. \"Spatiotemporal characteristics of calcium transients\"", note: "two time constants of a double-exponential decay" },
+  { panel: "Times", label: "Optimal decoding interval", kind: "response", lo: 60, hi: 60, value: "~1 min",
+    src: "moody2005ion, p. 912", note: "responses tuned to transients near 1/min" },
+  { panel: "Times", label: "Interval, mouse hindbrain E11.5", kind: "interval", lo: 60, hi: 120, value: "1–2 min",
+    src: "moody2005ion, p. 898", note: "synchronised motor-neuron transients" },
+  { panel: "Times", label: "Interval, cortex near birth", kind: "interval", lo: 60, hi: 720, value: "~1–12 min",
+    src: "moody2005ion, p. 894", note: "widespread cortical transients, E18–P5 (rodent)" },
+  { panel: "Times", label: "Interval, growth-cone waves", kind: "interval", lo: 360, hi: 450, value: "8–10 per h",
+    src: "moody2005ion, p. 905", note: "Xenopus spinal neurons; interval = 3600 s / frequency" },
+  { panel: "Times", label: "Interval, soma spikes", kind: "interval", lo: 1200, hi: 3600, value: "1–3 per h",
+    src: "moody2005ion, p. 905", note: "Xenopus spinal neurons, first 10 h in culture; interval = 3600 s / frequency" },
+  { panel: "Times", label: "Transcription, proliferation", kind: "response", lo: 60, hi: 3600, value: "min to h",
+    src: "berridge2003calcium, p. 517", note: "\"minutes to hours\"; bar drawn from 1 min to 1 h" },
+  { panel: "Times", label: "NF-ATc in nucleus", kind: "response", lo: 7200, hi: 7200, value: "> 2 h",
+    src: "moody2005ion, p. 912", note: "after a 3-min depolarisation, hippocampal neurons; plotted at the 2 h bound" }
+]
+caGradient = (2e-3 / 1e-7).toLocaleString("en-US")   // ACSF Ca2+ / resting cytosolic Ca2+
+
+```
+
+The mechanosensitive channel Piezo1 lets Ca²⁺ into cells. In neural stem cells from human fetal cortex (23 weeks of gestation), the cells' own traction forces open Piezo1, and the resulting spontaneous Ca²⁺ transients grow with substrate stiffness [@pathak2014stretch, sec. "Piezo1 Is Activated by Traction Forces"; Fig. 4C–D]. Ca²⁺ is where mechanical, electrical and chemical signals meet, so you need to know how cells make and read it.
+
+::: {.callout-note title="After this chapter you will be able to"}
+- name the main ways Ca²⁺ enters and leaves the cytosol, and the resting cytosolic concentration;
+- distinguish Ca²⁺ spikes from Ca²⁺ waves in developing neurons;
+- explain how cells decode Ca²⁺ signals by amplitude, frequency, route of entry and location;
+- place reported Ca²⁺ concentrations and timescales on a common scale.
+:::
+
+## The toolkit: on and off {#sec-calcium-toolkit}
+
+Cytosolic Ca²⁺ reflects a balance between "on" reactions, which bring Ca²⁺ in from outside or release it from internal stores, and "off" reactions, which remove it [@berridge2003calcium, Fig. 1, p. 518]. At rest, pumps keep it at about 100 nM [@berridge2003calcium, p. 523]. Entry is driven by a large electrochemical gradient [@berridge2003calcium, p. 520]; slice recording solution, for comparison, contains 2 mM [@rivera1999kcc2, p. 255], ${caGradient} times the resting cytosolic level.
+
+*On.* Ca²⁺ enters through voltage-operated, receptor-operated, store-operated and transient receptor potential (TRP) channels [@berridge2003calcium, Box 1, p. 519; pp. 520–522]. In developing neurons the main routes are voltage-sensitive Ca²⁺ channels, ionotropic glutamate receptors and TRP channels [@rosenberg2011calcium, sec. "The relationship between activity and ion channel expression"]. Stores release Ca²⁺ through inositol-1,4,5-trisphosphate (IP₃) receptors and ryanodine receptors, and Ca²⁺ itself can trigger this: **Ca²⁺-induced Ca²⁺ release** (CICR) is "an autocatalytic mechanism by which cytoplasmic Ca²⁺ activates the release of Ca²⁺ from internal stores" [@berridge2003calcium, p. 520].
+
+*Off.* The SERCA pump refills the stores; the plasma-membrane pump PMCA and the Na⁺/Ca²⁺ exchanger NCX (3 Na⁺ for 1 Ca²⁺) export Ca²⁺; mitochondria take it up [@berridge2003calcium, pp. 521–523]. Most Ca²⁺ that enters is caught by buffers. The **Ca²⁺-binding ratio** $K_S$, bound over free Ca²⁺, is about 40 in motoneurons and up to 2,000 in Purkinje neurons [@berridge2003calcium, p. 523].
+
+## Local and global signals {#sec-calcium-space}
+
+The smallest signals, **puffs** (from clusters of IP₃ receptors) and **sparks** (from ryanodine receptors), raise Ca²⁺ to ~50–600 nM over ~2–6 µm for less than 1 s [@berridge2003calcium, p. 524]. By recruiting neighbouring clusters they can build a global wave [@berridge2003calcium, p. 524]. Fast responses such as exocytosis, which happens "within microseconds", use local signals; slow ones such as transcription, over "minutes to hours", use repeated global transients [@berridge2003calcium, pp. 517, 524].
+
+Embryonic *Xenopus* spinal neurons show two kinds of spontaneous transients before synapses form [@rosenberg2011calcium, sec. "Spatiotemporal characteristics of calcium transients"]:
+
+- **Ca²⁺ spikes** are fast and global. Driven by Ca²⁺-dependent action potentials plus CICR, they raise Ca²⁺ from 10⁻⁷ to 10⁻⁶ M in under 5 s and decay with time constants of ~10 s and ~3 min.
+- **Ca²⁺ waves** are slower and variable, rising and decaying over half a minute to several minutes, and often stay in the soma or growth cone where they start.
+
+Moody and Bosma give durations of 9 s for spikes and 33 s for waves, with growth-cone waves more frequent than soma spikes (8–10 vs 1–3 per hour) [@moody2005ion, p. 905]. In mammals, recurrent Ca²⁺ transients involving thousands of cells occur in the cortex of newborn mice [@spitzer2006electrical, Box 2, p. 711].
+
+```{ojs}
+//| echo: false
+viewof caPanel = Inputs.radio(["Concentrations", "Times"], { value: "Concentrations", label: "Show" })
+```
+
+```{ojs}
+//| echo: false
+//| label: fig-ca-ladder
+//| fig-cap: "The calcium ladder: reported Ca²⁺ concentrations (\"Concentrations\") or durations, intervals between events and response times (\"Times\"), on log axes. Each bar or dot is a value reported in one source (Berridge et al. 2003; Rosenberg et al. 2011; Moody and Bosma 2005; Ben-Ari 2002; Chen et al. 2013; Rivera et al. 1999; Fairless et al. 2013); hover for the citation key, locator, species and notes. Bars are reported ranges or pairs of values; dots are single values. Values given only as a bound (\"< 1 s\", \"> 2 h\") are drawn at the bound. Species and preparations differ between rows, so rows are not directly comparable. Recording-solution values are what experimenters put in the bath, not measured extracellular concentrations."
+{
+  const rows = caData.filter(d => d.panel === caPanel).slice().sort((a, b) => a.lo - b.lo || a.hi - b.hi)
+  const isConc = caPanel === "Concentrations"
+  const tip = d => `${d.label}: ${d.value}\n${d.note}\nSource: ${d.src}`
+  const fmtC = v => v >= 1e-3 ? `${Math.round(v * 1e3)} mM` : v >= 1e-6 ? `${Math.round(v * 1e6)} µM` : `${Math.round(v * 1e9)} nM`
+  const tTicks = [1e-6, 1e-3, 1, 60, 3600]
+  const tNames = ["1 µs", "1 ms", "1 s", "1 min", "1 h"]
+  const kinds = isConc ? ["cytosolic signal", "indicator", "recording solution"] : ["duration", "interval", "response", "indicator"]
+  const colors = isConc ? ["#2a78d6", "#1baf7a", "#9aa5b1"] : ["#2a78d6", "#eb6834", "#8e5ed6", "#1baf7a"]
+  const ranged = rows.filter(d => d.hi > d.lo)
+  return Plot.plot({
+    width: Math.min(width, 720), height: 50 + rows.length * 32,
+    marginLeft: 190, marginRight: 90,
+    x: isConc
+      ? { type: "log", domain: [1e-8, 1e-2], ticks: [1e-8, 1e-7, 1e-6, 1e-5, 1e-4, 1e-3, 1e-2], tickFormat: fmtC, label: "Ca²⁺ concentration (log) →", grid: true }
+      : { type: "log", domain: [1e-7, 1e5], ticks: tTicks, tickFormat: v => tNames[tTicks.indexOf(v)] ?? "", label: "time (log) →", grid: true },
+    y: { domain: rows.map(d => d.label), label: null },
+    color: { domain: kinds, range: colors, legend: true },
+    marks: [
+      Plot.ruleY(ranged, { y: "label", x1: "lo", x2: "hi", stroke: "kind", strokeWidth: 5, strokeOpacity: 0.6, title: tip }),
+      Plot.dot(rows, { y: "label", x: "lo", fill: "kind", r: 5, title: tip }),
+      Plot.dot(ranged, { y: "label", x: "hi", fill: "kind", r: 5, title: tip }),
+      Plot.text(rows, { y: "label", x: "hi", text: "value", dx: 9, textAnchor: "start", fill: "currentColor", fontSize: 10 })
+    ]
+  })
+}
+```
+
+Things to try:
+
+- On the concentration ladder, note that both GCaMP6 affinities lie between rest and the peak of a Ca²⁺ spike. That is why these indicators report transients well (@sec-indicators).
+- On the time ladder, compare the intervals between spontaneous transients with the ~1 min interval to which responses are tuned [@moody2005ion, p. 912].
+
+## How cells decode calcium {#sec-calcium-decoding}
+
+According to Moody and Bosma, nearly all effects of early activity act through Ca²⁺ influx, and the response depends on four features of the transient [@moody2005ion, pp. 910–914]:
+
+- **Amplitude.** CICR has a threshold: in dorsal root ganglion (DRG) neurons, going from seven to nine action potentials in a burst raised the Ca²⁺ transient fivefold [@moody2005ion, p. 911]. Translocation of calmodulin to the nucleus is graded over 0–600 nM [@moody2005ion, p. 912].
+- **Frequency.** Responses are tuned to transients near 1/min [@moody2005ion, p. 912]; CaMKII and PKC are frequency decoders [@berridge2003calcium, p. 524]. In *Xenopus* spinal neurons, imposed transients at 2 per hour rescued K⁺-current maturation, 3 per hour the GABA phenotype and 8–9 per hour neurite length [@moody2005ion, p. 905]. Spike frequency also sets transmitter identity: more spiking gives more GABA and glycine neurons, less spiking more glutamate and acetylcholine neurons [@rosenberg2011calcium, sec. "Calcium-mediated specification of neurotransmitter phenotype"].
+- **Route of entry.** Ca²⁺ entering through L-type channels or NMDA receptors can drive the transcription factor CREB [@moody2005ion, p. 913], through local complexes of channels and signalling proteins called **microdomains** [@moody2005ion, p. 914].
+- **Location.** Local transients, as in the growth cone of *Xenopus* spinal neurons, act on local processes such as motility [@moody2005ion, p. 914]. The **growth cone** is the "highly motile and exquisitely sensitive" tip of an axon or dendrite [@dickson2002molecular, p. 1959].
+
+## Calcium in the growth cone {#sec-calcium-growth-cone}
+
+"Calcium spikes regulate neurotransmitter specification, whereas calcium waves regulate the rate of axon extension" [@rosenberg2011calcium, sec. "Spatiotemporal characteristics of calcium transients"]. In the developing *Xenopus* spinal cord, neurons with frequent growth-cone transients extend their axons slowly, and blocking or raising the frequency shows the transients are necessary and sufficient for this [@rosenberg2011calcium, sec. "Calcium-mediated regulation of axon outgrowth and pathfinding"]. Transients in filopodia regulate turning onto preferred substrates [@rosenberg2011calcium, sec. "Calcium-mediated regulation of axon outgrowth and pathfinding"].
+
+In cultured *Xenopus* spinal neurons, turning towards the guidance cue netrin-1 requires Ca²⁺ influx and release from stores, and a local Ca²⁺ gradient made by uncaging is enough to turn the growth cone without netrin-1 [@dickson2002molecular, p. 1962]. Dickson cautions that "compelling evidence of their involvement in growth cone turning in vivo is lacking" [@dickson2002molecular, p. 1962]. @sec-growth-cone and @sec-guidance continue the story.
+
+## Where mechanics comes in {#sec-calcium-mechanics}
+
+Spitzer lists mechanoreceptors among the "novel" routes of ion influx in development [@spitzer2006electrical, p. 707]. Two examples show Ca²⁺ as the readout of stiffness:
+
+- In human fetal neural stem cells, Piezo1-dependent transients were minimal on 0.4–0.7 kPa substrates and increased on 3.7 and 750 kPa and on glass [@pathak2014stretch, sec. "Piezo1 Is Activated by Traction Forces"].
+- Rat oligodendrocyte progenitor cells showed Ca²⁺ transients on stiff but virtually none on soft hydrogels, and Piezo1 knockdown abolished them [@segel2019niche, Extended Data Fig. 6h–j].
+
+Genetically encoded indicators such as GCaMP6 make such transients visible: in cultured rat neurons with synaptic transmission blocked, Ca²⁺ rises after field stimulation come from voltage-gated Ca²⁺ channels [@chen2013ultrasensitive, Methods, "Neuronal culture screen"]. @sec-indicators, @sec-piezo and @sec-frontier build on these results.
+
+## Check yourself {#sec-calcium-check}
+
+:::{.qmulti}
+Purkinje neurons have a Ca²⁺-binding ratio $K_S$ of up to 2,000. What does this mean?
+
+- For each free Ca²⁺ ion in the cytosol, up to about 2,000 are bound to buffers.
+
+  > Correct [@berridge2003calcium, p. 523]. Most Ca²⁺ that enters never reaches an effector freely.
+
+- The cytosolic Ca²⁺ concentration is 2,000 times the resting level.
+
+  > $K_S$ compares bound and free Ca²⁺, not two moments in time.
+
+- Purkinje neurons have 2,000 Ca²⁺ channels.
+
+  > $K_S$ is a ratio of concentrations, not a channel count.
+
+:::
+
+**Compute.** Slice solution contains 2 mM Ca²⁺, and resting cytosolic Ca²⁺ is about 100 nM. The outside is {{< qinput 20000 tol=1 hints="2 × 10⁻³ M / 1 × 10⁻⁷ M" >}} times more concentrated.
+
+:::{.qmulti}
+In embryonic *Xenopus* spinal neurons, which kind of Ca²⁺ transient regulates the rate of axon extension?
+
+- Waves, which are slower and often stay in the growth cone.
+
+  > Correct [@rosenberg2011calcium]. Spikes regulate transmitter specification.
+
+- Spikes, which spread through the whole cell.
+
+  > Spikes set transmitter phenotype; waves regulate axon extension.
+
+- Neither: axon extension does not depend on Ca²⁺.
+
+  > Blocking or raising growth-cone transient frequency changes outgrowth rate.
+
+:::
+
+:::{.qmulti}
+A *Xenopus* neuron shows frequent growth-cone Ca²⁺ transients. What do you expect for its axon?
+
+- Slow outgrowth.
+
+  > Correct: transient frequency is inversely related to outgrowth rate [@rosenberg2011calcium; @spitzer2006electrical, p. 709].
+
+- Fast outgrowth.
+
+  > The relation is inverse: neurons with low-frequency activity extend fastest.
+
+:::
+
+::: {.callout-tip title="Answers" collapse="true"}
+1. Up to ~2,000 bound per free Ca²⁺ ion [@berridge2003calcium, p. 523].
+2. $2\times10^{-3} / 10^{-7}$ = 20,000 [@rivera1999kcc2, p. 255; @berridge2003calcium, p. 523].
+3. Waves [@rosenberg2011calcium, sec. "Spatiotemporal characteristics of calcium transients"].
+4. Slow outgrowth [@rosenberg2011calcium, sec. "Calcium-mediated regulation of axon outgrowth and pathfinding"].
+:::
+
+## Summary {#sec-calcium-summary}
+
+- Resting cytosolic Ca²⁺ is about 100 nM, set by on reactions (channels, store release) and off reactions (pumps, exchangers, buffers) [@berridge2003calcium, pp. 518, 523].
+- Developing *Xenopus* neurons show fast, global Ca²⁺ spikes (10⁻⁷ to 10⁻⁶ M) and slower, local waves [@rosenberg2011calcium].
+- Cells decode amplitude, frequency (often near 1/min), route of entry and location [@moody2005ion, pp. 910–914; @berridge2003calcium, p. 524].
+- Ca²⁺ transients report mechanical inputs: Piezo1-dependent transients rise with substrate stiffness [@pathak2014stretch; @segel2019niche].
+
+:::{.qflashcards}
+
+- What is the resting cytosolic Ca²⁺ concentration?
+
+  > About 100 nM, kept by pumps [@berridge2003calcium, p. 523].
+
+- What is CICR?
+
+  > Ca²⁺-induced Ca²⁺ release: cytosolic Ca²⁺ opens store release channels (IP₃ or ryanodine receptors).
+
+- Ca²⁺ spike or wave: which sets transmitter phenotype?
+
+  > Spikes (in *Xenopus* spinal neurons).
+
+- Name four features of a Ca²⁺ signal that cells decode.
+
+  > Amplitude, frequency, route of entry, location.
+
+:::

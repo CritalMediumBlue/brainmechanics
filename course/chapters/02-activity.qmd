@@ -1,0 +1,230 @@
+---
+filters:
+  - shortiquiz
+---
+
+# Electrical activity in the developing brain and the GABA switch {#sec-activity}
+
+```{ojs}
+//| echo: false
+import { predictGate, locked } from "./pedagogy/predict.js"
+```
+
+```{ojs}
+//| echo: false
+//| output: false
+// Every computed number in the prose of this chapter comes from here.
+// E_Cl is @eq-nernst with z = −1 (@eq-ecl).
+actRTF = 25.43     // RT/F in mV at 22 °C, as given by Fairless et al. (2013, p. 5)
+actClOut = 140     // external Cl− in mM (Ben-Ari 2002, Box 2, p. 730)
+actECl = ci => -actRTF * Math.log(actClOut / ci)
+// [Cl−]i at which E_Cl equals a given V_m (DF = 0)
+actCross = vm => actClOut * Math.exp(vm / actRTF)
+actE25 = actECl(25).toFixed(1)
+actE7 = actECl(7).toFixed(1)
+actCross75 = actCross(-75).toFixed(1)
+// RT/F is proportional to absolute temperature: 34 °C (Rivera et al.) vs 22 °C
+actTempPct = ((307.15 / 295.15 - 1) * 100).toFixed(0)
+```
+
+Young neurons are electrically active long before their circuits are wired. This activity regulates proliferation, migration and differentiation, and ion influx through mechanoreceptors counts among its "novel" forms [@spitzer2006electrical, p. 707]: this is where mechanics enters. This chapter covers the best-studied case of young neurons following different electrical rules: the neurotransmitter GABA excites them.
+
+::: {.callout-note title="After this chapter you will be able to"}
+- name the three principles that make spontaneous activity possible in immature neurons;
+- compute $E_\mathrm{Cl}$ from the internal Cl⁻ concentration and decide, from the driving force, whether GABA depolarises a neuron;
+- describe the NKCC1 → KCC2 switch and its time course in rat hippocampus;
+- explain why the switch is tied to maturation, not to birth.
+:::
+
+## Spontaneous activity before synapses mature {#sec-activity-spontaneous}
+
+**Spontaneous activity** is activity "occurring in the absence of sensory input"; it "takes place both before and after the formation of synaptic connections" [@rosenberg2011calcium, sec. "Spatiotemporal characteristics of calcium transients"]. Moody and Bosma found three recurring principles behind it [@moody2005ion, p. 884]:
+
+1. Immature ion channels are *optimised* for spontaneous activity and Ca²⁺ entry.
+2. The development of many channel types is *coordinated*.
+3. The activity is *self-limiting*: the mature channels that end it are expressed in an activity-dependent way.
+
+Early excitability is broader than Na⁺ action potentials: GABA and glycine "generate depolarizing chloride currents at early stages" [@spitzer2006electrical, p. 707].
+
+In rat hippocampus, GABA synapses form before glutamate synapses. At E18–E20 virtually all pyramidal neurons are silent. At P0, 80% of CA1 pyramidal neurons are still silent, 10% have only GABA synaptic currents and 10% have both [@benari2002excitatory, p. 733; Fig. 4]. The dominant network pattern of the first two postnatal weeks is the **giant depolarising potential** (GDP): a "long-lasting (~300 ms), recurrent (0.1 Hz)" depolarisation driven by GABA and NMDA receptors [@benari2002excitatory, p. 734]. Moody and Bosma give a lower GDP frequency in the first postnatal week, 0.4–2 per minute [@moody2005ion, p. 891].
+
+## Why GABA can depolarise {#sec-activity-gaba}
+
+GABA_A receptors are "anion (predominantly Cl⁻)-permeant" [@rivera1999kcc2, p. 251]. Whether opening them depolarises or hyperpolarises a cell is set by the **driving force** [@rivera1999kcc2, p. 253]:
+
+$$
+DF_\mathrm{GABA\text{-}A} = E_\mathrm{GABA\text{-}A} - V_m,
+$$ {#eq-df}
+
+where $E_\mathrm{GABA\text{-}A}$ is the reversal potential of the GABA_A response and $V_m$ the resting membrane potential. Positive $DF$ depolarises; negative $DF$ hyperpolarises. Ben-Ari treats $E_\mathrm{GABA}$ and $E_\mathrm{Cl}$ as the same quantity [@benari2002excitatory, p. 729]. Setting $z = -1$ in @eq-nernst, which follows from the Boltzmann distribution of @fairless2013membrane [eq. 7, p. 8], gives
+
+$$
+E_\mathrm{Cl} = -\frac{RT}{F}\,\ln\frac{[\mathrm{Cl}^-]_e}{[\mathrm{Cl}^-]_i},
+$$ {#eq-ecl}
+
+with $[\mathrm{Cl}^-]_e$ and $[\mathrm{Cl}^-]_i$ the external and internal Cl⁻ concentrations. More internal Cl⁻ makes $E_\mathrm{Cl}$ less negative.
+
+Before you explore, make a prediction.
+
+```{ojs}
+//| echo: false
+viewof actGuess = predictGate({
+  prompt: "At P0 in rat hippocampus, does opening GABA-A channels depolarise or hyperpolarise a pyramidal neuron?",
+  confidence: true,
+  spec: {
+    kind: "choice",
+    options: ["It depolarises the neuron", "It hyperpolarises the neuron", "Neither: GABA-A responses are absent at P0"],
+    answer: "It depolarises the neuron",
+    feedback: {
+      "It depolarises the neuron": "Right. Rivera et al. measured a driving force of +7.0 mV at P0–P4: E_GABA lies above V_m, so Cl⁻ flows out.",
+      "It hyperpolarises the neuron": "That is the adult behaviour. At P0–P4 Rivera et al. measured a positive driving force (+7.0 mV), because internal Cl⁻ is still high.",
+      "Neither: GABA-A responses are absent at P0": "Rivera et al. evoked clear responses with the GABA-A agonist muscimol at P0–P4, and they were depolarising."
+    }
+  }
+})
+```
+
+```{ojs}
+//| echo: false
+viewof actIn = Inputs.form({
+  ci: Inputs.range([2, 60], { value: 25, step: 0.5, label: "[Cl⁻]ᵢ (mM)" }),
+  vm: Inputs.range([-90, -50], { value: -75, step: 1, label: "V_m (mV)" })
+})
+```
+
+```{ojs}
+//| echo: false
+//| label: fig-ecl
+//| fig-cap: "Equilibrium potential of Cl⁻ (E_Cl) against the internal Cl⁻ concentration [Cl⁻]ᵢ, computed with @eq-ecl: external Cl⁻ = 140 mM (Ben-Ari 2002, Box 2) and RT/F = 25.43 mV, the value for 22 °C used by Fairless et al. (2013). Filled dots: the schematic [Cl⁻]ᵢ of immature (25 mM) and mature (7 mM) neurons from Ben-Ari (2002, Fig. 1); yellow band: 20–25 mM, measured by perforated patch in young hippocampal neurons (Box 2). Their E_Cl values are computed here, not measured. Dashed line: V_m from the slider (default −75 mV, Ben-Ari's non-invasive estimate, p. 731). Red ring: [Cl⁻]ᵢ from the slider. Assumes E_GABA = E_Cl. Computed curve, not data; hover over the dots for sources. At the 34 °C of Rivera et al. (1999), RT/F, and with it every E_Cl, would be about 4% larger in magnitude."
+{
+  if (!actGuess.committed) return locked()
+  const curve = d3.range(2, 100.5, 0.5).map(ci => ({ ci, E: actECl(ci) }))
+  const pts = [
+    { ci: 25, E: actECl(25), label: "immature", fill: "#eb6834",
+      tip: `Immature neuron: [Cl⁻]ᵢ = 25 mM (schematic)\nbenari2002excitatory, Fig. 1, p. 730\nE_Cl computed here: ${actECl(25).toFixed(1)} mV` },
+    { ci: 7, E: actECl(7), label: "mature", fill: "#2a78d6",
+      tip: `Mature neuron: [Cl⁻]ᵢ = 7 mM, outside 140 mM\nbenari2002excitatory, Fig. 1 and Box 2, p. 730\nE_Cl computed here: ${actECl(7).toFixed(1)} mV` }
+  ]
+  const cur = { ci: actIn.ci, E: actECl(actIn.ci) }
+  const df = cur.E - actIn.vm
+  const plot = Plot.plot({
+    width: Math.min(width, 640), height: 360,
+    x: { label: "internal Cl⁻, [Cl⁻]ᵢ (mM) →", domain: [0, 100] },
+    y: { label: "↑ E_Cl (mV)", domain: [-110, 0], grid: true },
+    marks: [
+      Plot.rect([{ x1: 20, x2: 25, y1: -110, y2: 0 }], {
+        x1: "x1", x2: "x2", y1: "y1", y2: "y2", fill: "#eda100", fillOpacity: 0.18,
+        title: () => "[Cl⁻]ᵢ 20–25 mM in young hippocampal neurons (perforated patch)\nbenari2002excitatory, Box 2, p. 730"
+      }),
+      Plot.ruleY([actIn.vm], { stroke: "#9aa5b1", strokeWidth: 1.5, strokeDasharray: "5,4" }),
+      Plot.text([{ x: 98, y: actIn.vm }], { x: "x", y: "y", text: () => "V_m", textAnchor: "end", dy: -7, fill: "currentColor" }),
+      Plot.text([{ x: 98, y: -4 }], { x: "x", y: "y", text: () => "E_Cl above V_m: GABA depolarises", textAnchor: "end", fill: "currentColor", fontSize: 11 }),
+      Plot.line(curve, { x: "ci", y: "E", stroke: "#2a78d6", strokeWidth: 2 }),
+      Plot.dot(pts, { x: "ci", y: "E", r: 6, fill: "fill", title: "tip" }),
+      Plot.text(pts, { x: "ci", y: "E", text: "label", dx: 9, dy: 12, textAnchor: "start", fill: "currentColor" }),
+      Plot.dot([cur], { x: "ci", y: "E", r: 8, stroke: "#e34948", strokeWidth: 2, fill: "none" })
+    ]
+  })
+  const verdict = df > 0 ? "depolarising" : (df < 0 ? "hyperpolarising" : "no net effect")
+  return html`<div>${plot}<p style="margin-top:0.5em">At [Cl⁻]ᵢ = ${actIn.ci} mM: E_Cl = ${cur.E.toFixed(1)} mV, so DF = E_Cl − V_m = ${df.toFixed(1)} mV (${verdict}).</p></div>`
+}
+```
+
+Things to try:
+
+- Set $[\mathrm{Cl}^-]_i$ to 25 mM: $E_\mathrm{Cl}$ = ${actE25} mV, well above a $V_m$ of −75 mV. Opening GABA_A channels lets Cl⁻ flow out and depolarises the cell [@benari2002excitatory, p. 729].
+- Set it to 7 mM: $E_\mathrm{Cl}$ = ${actE7} mV, only just below −75 mV. The curve crosses −75 mV at ${actCross75} mM. Ben-Ari likewise calls the adult $E_\mathrm{Cl}$ (−75 mV) "only a few mV more hyperpolarized than V_rest", and stresses how steep the curve is here [@benari2002excitatory, Box 2, p. 730].
+- Move $V_m$. Ben-Ari gives about −75 mV for immature and adult neurons measured non-invasively (p. 731), but a "typical" −65 mV in Box 2 [@benari2002excitatory].
+
+The internal Cl⁻ in young hippocampal neurons is 20–25 mM, measured by **perforated patch**, in which the pipette makes membrane perforations "not permeable to chloride" and so does not change $[\mathrm{Cl}^-]_i$ [@benari2002excitatory, Box 2, p. 730]. The resulting depolarisation can fire action potentials, open voltage-gated Ca²⁺ channels and relieve the Mg²⁺ block of NMDA receptors, raising internal Ca²⁺ [@benari2002excitatory, p. 729; Fig. 3]. That is the bridge to @sec-calcium.
+
+::: {.callout-warning title="Common mistake"}
+"Depolarising means excitatory." Not always. Open GABA channels can clamp $V_m$ near $E_\mathrm{Cl}$ and raise the spike threshold, a **shunting** inhibition [@benari2002excitatory, p. 732]. Functional inhibition develops "before GABA becomes hyperpolarizing, when the GABA reversal potential becomes negative to threshold" [@moody2005ion, p. 918].
+:::
+
+## The NKCC1 → KCC2 switch {#sec-activity-kcc2}
+
+Channels cannot build a gradient (@sec-membrane-channels); transporters do. **NKCC1**, a Na⁺-dependent Cl⁻ importer, raises $[\mathrm{Cl}^-]_i$; **KCC2**, a "neuronal Cl⁻-extruding K⁺/Cl⁻ co-transporter" that is "not found outside the brain", lowers it [@benari2002excitatory, p. 729; @rivera1999kcc2, pp. 251–252; @moody2005ion, p. 917]. Immature neurons express mainly NKCC1, mature neurons mainly KCC2 [@benari2002excitatory, Fig. 1, p. 730].
+
+In rat hippocampus, KCC2 mRNA is barely detectable at P0, rises steeply at P5 and reaches adult levels by P9, while KCC1 does not change [@rivera1999kcc2, pp. 251–252]. Recorded at 34 °C, the driving force of the GABA_A response was +7.0 ± 3.3 mV (n = 6) in P0–P4 pyramidal neurons and −9.6 ± 0.9 mV (n = 8) at P13–P30 [@rivera1999kcc2, pp. 253, 255]. Knocking KCC2 down with antisense oligonucleotides in mature slices (P > 12) shifted it to −2.8 ± 0.8 mV, against −10.3 ± 1.7 mV with the sense control [@rivera1999kcc2, p. 254]. KCC2 is therefore "a necessary (although not a sufficient)" condition for hyperpolarising inhibition [@rivera1999kcc2, p. 254].
+
+The sources date the switch differently: by "the end of the first postnatal week" [@rivera1999kcc2, p. 251], "during the first two postnatal weeks" in rodent cortex and hippocampus [@moody2005ion, p. 917], or excitatory through P10 and inhibitory by P15 [@moody2005ion, pp. 925–926]. Ben-Ari's Box 2 plots rodent hippocampal $E_\mathrm{Cl}$ falling from approx. −43 mV at day 0 to approx. −70 mV by day 14 [@benari2002excitatory, Box 2, p. 730]. These are close to the values in @fig-ecl, but the box states no temperature, so they need not match exactly.
+
+The switch is itself activity-dependent, as principle 3 predicts. In cultured hippocampal neurons, blocking GABA_A receptors prevented KCC2 expression, whereas blocking glutamate receptors or Na⁺ channels (with tetrodotoxin) did not [@benari2002excitatory, p. 730]. GABA → BDNF → KCC2 forms a negative feedback loop that ends GABA excitation [@moody2005ion, p. 915].
+
+Mouse data are scarcer. KCC2-knockout mice die at birth from respiratory failure [@benari2002excitatory, p. 735]. In hippocampal neurons from newborn mice cultured for 7–12 days, GABA raised the fluorescence of a membrane-potential dye instead of lowering it, which Fairless et al. attribute to depolarising GABA in immature neurons [@fairless2013membrane, p. 10; Fig. 6C].
+
+## Maturation, not birth {#sec-activity-maturation}
+
+Guinea pigs are born more mature than rats. KCC2 mRNA is already abundant at E42, and their GABA responses are hyperpolarising at P0–P4 ($DF$ = −10.6 ± 2.4 mV) [@rivera1999kcc2, pp. 252–253]. The timing of the switch is set by differentiation state, not age [@moody2005ion, p. 917]. Even neighbouring neurons differ in KCC2 expression at birth, so effects should be examined relative to the neuron's age, not the animal's [@benari2002excitatory, pp. 730, 737]. For your own work: never transfer rat ages to mouse, and do not equate days in culture with postnatal days.
+
+## Check yourself {#sec-activity-check}
+
+:::{.qmulti}
+Rivera et al. measured $DF_\mathrm{GABA\text{-}A}$ = +7.0 mV in P0–P4 rat pyramidal neurons. What does opening GABA_A channels do?
+
+- It depolarises them, because $E_\mathrm{GABA}$ lies above $V_m$.
+
+  > Correct [@rivera1999kcc2, p. 253].
+
+- It hyperpolarises them, because GABA is an inhibitory transmitter.
+
+  > That is the adult case, with a negative driving force (−9.6 mV at P13–P30).
+
+- Nothing, because Cl⁻ is at equilibrium.
+
+  > At equilibrium the driving force would be zero, not +7 mV.
+
+:::
+
+**Compute.** With 140 mM Cl⁻ outside, 7 mM inside and $RT/F$ = 25.43 mV, @eq-ecl gives $E_\mathrm{Cl}$ = {{< qinput -76.2 tol=0.5 hints="−25.43 × ln(140/7)" >}} mV.
+
+:::{.qmulti}
+Why were GABA responses already hyperpolarising in P0–P4 guinea pigs?
+
+- Guinea pigs are born more mature, and their neurons already express KCC2.
+
+  > Correct [@rivera1999kcc2, pp. 252–253]: the switch follows maturation, not birth.
+
+- Guinea pig neurons lack GABA_A receptors.
+
+  > Their muscimol responses were hyperpolarising, so the receptors are there.
+
+- The recordings were made at a different temperature.
+
+  > Rat and guinea pig were recorded under the same conditions (34 °C).
+
+:::
+
+::: {.callout-tip title="Answers" collapse="true"}
+1. Depolarises: $DF$ > 0 [@rivera1999kcc2, p. 253].
+2. $E_\mathrm{Cl} = -25.43 \ln(140/7) \approx -76.2$ mV (@eq-ecl), close to the −75 mV adult value of @benari2002excitatory [Box 2, p. 730].
+3. KCC2 is already expressed (E42) [@rivera1999kcc2, pp. 252–253].
+:::
+
+## Summary {#sec-activity-summary}
+
+- Spontaneous activity in immature neurons rests on optimised, coordinated channels and limits itself [@moody2005ion, p. 884].
+- GABA depolarises when $DF = E_\mathrm{GABA} - V_m > 0$, that is, when internal Cl⁻ is high (20–25 mM in young hippocampal neurons, 7 mM in mature ones) [@benari2002excitatory, Box 2, p. 730; @rivera1999kcc2, p. 253].
+- In rat hippocampus, KCC2 rises from P0 to adult levels by P9, and the GABA driving force changes from +7.0 to −9.6 mV [@rivera1999kcc2, pp. 251–253].
+- The switch follows maturation, not birth: guinea pigs have KCC2 and hyperpolarising GABA at P0–P4 [@rivera1999kcc2, pp. 252–253; @moody2005ion, p. 917].
+
+:::{.qflashcards}
+
+- What sets the sign of a GABA_A response?
+
+  > The driving force $E_\mathrm{GABA} - V_m$ (@eq-df): positive depolarises, negative hyperpolarises.
+
+- What do NKCC1 and KCC2 do?
+
+  > NKCC1 imports Cl⁻ (high in immature neurons); KCC2 extrudes Cl⁻ (high in mature neurons).
+
+- When does KCC2 appear in rat hippocampus?
+
+  > Barely detectable at P0, steep rise at P5, adult level by P9.
+
+- Why is "depolarising" not the same as "excitatory"?
+
+  > Open GABA channels can shunt the membrane near $E_\mathrm{Cl}$ and raise the spike threshold.
+
+:::

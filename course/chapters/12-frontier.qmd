@@ -1,0 +1,313 @@
+---
+filters:
+  - shortiquiz
+---
+
+# Frontier: stiffness as a developmental signal {#sec-frontier}
+
+```{ojs}
+//| echo: false
+//| output: false
+// Published values used in the figure and in the prose of this chapter.
+// Each row carries its own source string, which is shown as a tooltip.
+frPillai = [
+  { label: "control", K: 432, cond: "control",
+    src: "Pillai et al. 2026, Fig. 3d: median K = 432 Pa; N = 12 animals, n = 1,297 points" },
+  { label: "Piezo1 KD in axons only", K: 467, cond: "control",
+    src: "Pillai et al. 2026, Fig. 3d: median K = 467 Pa, P > 0.999 vs control; N = 7, n = 636" },
+  { label: "Piezo1 KD in brain tissue", K: 231, cond: "knockdown",
+    src: "Pillai et al. 2026, Fig. 3d: median K = 231 Pa, P < 0.0001 vs control; N = 7, n = 484" },
+  { label: "Piezo1 KD in both", K: 240, cond: "knockdown",
+    src: "Pillai et al. 2026, Fig. 3d: median K = 240 Pa, P < 0.0001 vs control; N = 17, n = 1,275" }
+]
+frThompson = [
+  { stage: "st. 33/34", g: 0.65,
+    src: "Thompson et al. 2019, Fig. 3c (read off the plot, approximate)" },
+  { stage: "st. 35/36", g: 0.95,
+    src: "Thompson et al. 2019, Fig. 3c (read off the plot, approximate)" },
+  { stage: "st. 37", g: 1.7,
+    src: "Thompson et al. 2019, Fig. 3c (read off the plot, approximate)" }
+]
+frKreysing = [
+  { sub: "soft, 0.1 kPa", div: 5, cond: "soft",
+    src: "Kreysing et al. 2025, Fig. 2i: spontaneous APs first detected at DIV 5 on soft substrates" },
+  { sub: "stiff, 10 kPa", div: 10, cond: "stiff",
+    src: "Kreysing et al. 2025, Fig. 2i: spontaneous APs first detected at DIV 10 on stiff substrates" }
+]
+// Per-animal AFM values for rat prefrontal cortex (Segel et al. 2019, Supplementary Table 5).
+frSegelK = ({
+  neonate: [272.1, 229.3, 243.4],
+  youngAdult: [364.0, 375.5, 367.9],
+  aged: [443.4, 482.8, 488.7]
+})
+frMean = xs => xs.reduce((a, b) => a + b, 0) / xs.length
+frSegelNeonate = frMean(frSegelK.neonate).toFixed(0)
+frSegelAdult = frMean(frSegelK.youngAdult).toFixed(0)
+frSegelAged = frMean(frSegelK.aged).toFixed(0)
+frFold = (432 / 231).toFixed(2)
+```
+
+Earlier chapters treated stiffness as a property you measure: a number in pascals attached to a piece of tissue (@sec-tissue-mechanics), and a channel that opens when the membrane is pulled (@sec-piezo). The last decade turned that around. Stiffness in the developing brain is now also something the tissue *makes*, something that *changes within minutes*, and something cells *read* to decide where to grow, when to mature and whether to divide. This chapter tours the primary evidence, with the species, stage and numbers attached to each piece.
+
+::: {.callout-note title="After this chapter you will be able to"}
+- name the experiments that show tissue stiffness instructs axon growth, maturation timing and progenitor behaviour, with their species and developmental stage;
+- state the stiffness values and gradients at which these effects were measured, and say why values from different studies cannot be compared directly;
+- explain what it means that Piezo1 both senses and sets tissue stiffness;
+- list the questions the authors of these papers say are still open.
+:::
+
+## What is new since about 2015 {#sec-frontier-new}
+
+Before 2016, the caudal turn of retinal ganglion cell (RGC) axons in the *Xenopus laevis* optic tract was "thought to be mainly controlled by the repellent chemical cues Slit1, Slit2 and Semaphorin3A" [@koser2016mechanosensing, p. 2]. Three things have changed since.
+
+First, stiffness maps of a living developing brain can now be made with atomic force microscopy (AFM) at a resolution of 20–25 µm, "a length scale relevant to individual neuronal growth cones" [@koser2016mechanosensing, p. 4], and repeated on the same animal every ~35 min [@thompson2019rapid, p. 2]. Second, mechanical signals have been tied not only to *where* axons grow but to *when* neurons mature [@kreysing2025environmental, Results] and to *whether* progenitors divide [@segel2019niche, p. 4; @nourse2022piezo, Fig. 3E]. Third, Piezo1 sits on both sides of the arrow: it reads stiffness and it helps set it [@pillai2026long, Fig. 3d].
+
+## Mechanical guidance: axons turn toward softer tissue {#sec-frontier-guidance}
+
+In *Xenopus laevis* eye primordia on polyacrylamide gels (stages 33/34–35/36), RGC axons extended faster on stiff gels than on soft ones — median extension velocity 35.0 µm/h on 1 kPa versus 22.6 µm/h on 0.1 kPa (shear modulus, *P* < 10⁻⁵) — while the growth cones themselves moved *faster* on soft substrates (109 ± 3 versus 99 ± 2 µm/h, *P* < 0.01): they explored instead of advancing [@koser2016mechanosensing, p. 3].
+
+In vivo, the same brains are mechanically heterogeneous. At stages 39–40 the tissue rostral of the optic tract is stiffer than the tissue caudal of it (*P* = 2.97 × 10⁻⁵), and the stiff side has more cell bodies [@koser2016mechanosensing, Fig. 2]. A **stiffness gradient** is the difference in apparent elastic modulus between two neighbouring regions divided by their separation, in Pa/µm [@thompson2019rapid, Methods, p. 14]. Optic-tract curvature follows that gradient: axons turn *away* from stiffer and toward softer tissue (*P* = 1.44 × 10⁻⁴, n = 51 points from 7 animals) [@koser2016mechanosensing, Fig. 3c]. This is the opposite of **durotaxis**, the usual behaviour of non-neuronal cells, which "migrate towards the stiffer side of their substrate" [@koser2016mechanosensing, p. 7].
+
+Mechanics is necessary, not decorative: softening the brain with chondroitin sulphate, stiffening a spot with an AFM bead, blocking mechanosensitive channels with GsMTx4, or knocking Piezo1 down by ~42% with a morpholino all produced defasciculated tracts and pathfinding errors, with reduced optic-tract elongation after Piezo1 knockdown (*P* = 0.00476) [@koser2016mechanosensing, p. 6, Fig. 5i].
+
+## Tissue stiffness is dynamic and self-made {#sec-frontier-dynamic}
+
+Time-lapse in vivo AFM (**tiv-AFM**) re-maps a ~150 × 250 µm patch of the exposed *Xenopus* brain every ~35 min while imaging the labelled axons [@thompson2019rapid, p. 2]. Large stiffness changes appear "approximately 40–80 min after the onset of measurements" [@thompson2019rapid, p. 3]: stiffness is not a fixed material constant of the embryo.
+
+Two numbers make this a guidance story. The rostro-caudal gradient "preceded the projected onset of axon turning on average by 18 min" (*p* = 0.03, paired Wilcoxon, N = 6 animals), and "a stiffness gradient of at least (0.9 ± 0.4) Pa/µm (mean ± SEM) was required for axons to change their growth direction" [@thompson2019rapid, p. 3; Fig. 2d].
+
+Where does the gradient come from? From the cells. Across stages 33/34 to 37/38 it tracks the gradient of cell-body density with a Pearson correlation of ρ = 0.97 [@thompson2019rapid, p. 5]. Blocking mitosis with the Polo-like-kinase-1 inhibitor BI2536 lowered the rise of the stiffness gradient (*p* = 0.01) and, with it, optic-tract turning (*p* = 0.02) [@thompson2019rapid, Fig. 4e]. Proliferation builds the mechanical landscape that the axons then read.
+
+## Stiffness times maturation {#sec-frontier-timing}
+
+Rat hippocampal neurons (Sprague Dawley, E17–E18) were grown on polyacrylamide gels of ~0.1 kPa ("soft") and ~10 kPa ("stiff") shear elastic modulus [@kreysing2025environmental, Results]. On stiff gels, synapse density was lower at DIV 10 and DIV 14 (*p* = 6 × 10⁻⁶ and 2 × 10⁻⁸ for total synapses) and peak sodium current density was lower (*p* = 0.0109), while potassium currents were unchanged (*p* = 0.2146 and 0.1618) [@kreysing2025environmental, Figs. 1c-d, 2c, 2e, 2g]. Spontaneous action potentials were first detected at DIV 5 on soft gels and DIV 10 on stiff ones; a logistic regression put the delay at "approximately 4 days" [@kreysing2025environmental, Results; Supplementary Fig. 5]. Soft is faster.
+
+Piezo1 carries the signal: after CRISPR/Cas9 knockdown, control and knockdown neurons were indistinguishable on soft gels (*p* = 0.383) but differed strongly on stiff ones (*p* = 3 × 10⁻²⁷), the knockdown being the more excitable [@kreysing2025environmental, Fig. 3d]. RNA sequencing found **transthyretin (TTR)** — "originally identified as a thyroxine and retinol transporter" — as the top differentially expressed gene, 3.7-fold higher on soft (*p* = 6.6 × 10⁻⁵); knocking TTR down on soft gels made neurons look like controls on stiff gels (*p* = 0.83) [@kreysing2025environmental, Results; Fig. 4f]. (That panel's legend mislabels its fields of view as "cells", so only the p value is quoted here.)
+
+In vivo the correlation holds in *Xenopus* at stage 37: synapses labelled with FM1-43 "were four times more likely to form in soft regions than in stiff ones" (odds ratio 0.25, *p* = 5 × 10⁻⁶) [@kreysing2025environmental, Fig. 5d]. Stiffening the brain with the ECM cross-linker transglutaminase (0.5 mg/ml from stage 33/34) reduced synaptic labelling at stages 37–38 (*p* = 0.02) — a difference gone by stage 39 after 8 h of recovery (*p* = 1.0) [@kreysing2025environmental, Figs. 5i, 5n].
+
+Measuring maturation this way means patching one cell at a time; optical voltage imaging is the obvious scale-up. The chemigenetic indicator Voltron reports a −70 to +30 mV step as a −23 ± 1% fluorescence change with sub-millisecond kinetics, enough for 15 min of continuous recording across 449 neurons in 3 adult mice [@abdelfattah2019bright, Figs. 1E, 3; Table S1]; those numbers come from the bioRxiv preprint, not the published paper. The limit is photons: SNR > 10 at 1 ms resolution needs ΔF/F above 5% and a bleaching time constant above 10 min, and in tissue the SNR "may be considerably lower (often by a factor of 10) than in cell culture systems" [@knopfel2019optical, Box 2, p. 723; p. 721].
+
+## Piezo1 beyond sensing {#sec-frontier-piezo}
+
+@pillai2026long used a mosaic morpholino knockdown in *Xenopus laevis*: injecting one dorsal blastomere at the 4-cell stage leaves Piezo1-depleted axons on healthy tissue on one side, and healthy axons on depleted tissue on the other [@pillai2026long, Fig. 1b]. Both arrangements misrouted axons, so Piezo1 is needed in the brain tissue as well as in the axon [@pillai2026long, Fig. 1h].
+
+Knocking Piezo1 down in the brain tissue lowered the median apparent elastic modulus from 432 Pa to 231 Pa, a factor of ${frFold}; knocking it down in the axons alone changed nothing (467 Pa, *P* > 0.999) [@pillai2026long, Fig. 3d]. The softening came neither from fewer cells (nuclear density unchanged, *P* = 0.367) nor from softer individual cells (*P* = 0.14), but from loss of adhesion proteins: polysialylated NCAM1 (*P* = 0.007) and N-cadherin (*P* = 0.019) both fell, and knocking those two down directly softened the tissue from 270 Pa to 184 Pa (*P* = 0.017) [@pillai2026long, Figs. 4e, 4f, 4i].
+
+Piezo1 is also required to *read* stiffness. **Compression stiffening** — pressing on tissue to exploit the fact that "the elastic modulus of brain tissue increases under uniaxial compression" — induced ectopic Sema3A in the normally soft hypothalamus (30 nN for more than 6 h, *P* = 0.011), but failed to do so in Piezo1-depleted brains (*P* > 0.999) [@pillai2026long, Figs. 6d, 6h]. Mechanics tunes the supply of a diffusible chemical cue, so "chemical versus mechanical guidance" is a false choice.
+
+Two mammalian results extend Piezo1 into fate and growth. In mouse, constitutive *Piezo1* knockout embryos at E10.5 have a thinner neuroepithelium and a smaller TUJ1⁺ neuronal layer (*P* = 1.437 × 10⁻⁵, Cohen's *d* = −1.32), and their cultured neural stem cells divide more slowly: doubling times of 20 h 07 min (wild type) versus 23 h 45 min (knockout) [@nourse2022piezo, Figs. 2C, 3E]. The pathway there was metabolic: 16 cholesterol-biosynthesis genes down at least 1.5-fold and ~26% less free cholesterol (*P* = 1.264 × 10⁻⁹), with cholesterol supplementation partially rescuing differentiation but not proliferation [@nourse2022piezo, Figs. 4B, 4F, 5B].
+
+In human neural stem/progenitor cells from the cortex of two fetuses at 23 weeks of gestation, Piezo1 carries the stretch-activated current (siRNA removes 89% of it), and spontaneous Ca²⁺ transients were "minimal or no transients on soft substrates (0.4 and 0.7 kPa)" but grew on 3.7 kPa, 750 kPa and glass; Piezo1 siRNA shifted fate away from neurons, MAP2⁺ cells falling from 5.2 ± 0.3% to 3.2 ± 0.3% [@pathak2014stretch, secs. "Molecular Identification of hNSPC SAC", "Piezo1 Is Activated by Traction Forces"; Fig. 5C-D]. The two results point different ways, since loss of Piezo1 reduced *all three* mouse lineages — a discrepancy those authors attribute to species and to knockout versus knockdown [@nourse2022piezo, Fig. 3B-C; Discussion].
+
+## The ageing niche stiffens {#sec-frontier-ageing}
+
+**Oligodendrocyte progenitor cells (OPCs)** are "the widespread and abundant population of central nervous system multipotent stem cells" [@segel2019niche, Abstract]. In rat prefrontal cortex measured by AFM on slices, the mean apparent elastic modulus rose from ${frSegelNeonate} Pa in neonates (~P7) to ${frSegelAdult} Pa in young adults (~120 days) and ${frSegelAged} Pa in aged animals (~455 days), computed here from the per-animal values [@segel2019niche, Supplementary Table 5; Fig. 1g].
+
+Ageing of these cells is a property of the niche. Aged OPCs reseeded on decellularised neonatal brain ECM showed "a 10-fold increase in proliferation rate" over aged ECM; digesting the ECM of aged lesions with chondroitinase ABC gave a "~3-fold increase in both OPC proliferation and differentiation"; and on soft hydrogels their proliferation and differentiation "increased more than ten-fold", while on stiff gels Piezo1 siRNA made them "proliferate and differentiate ~4-5-fold more than the control" [@segel2019niche, p. 3]. In aged mouse lesions, an in vivo Piezo1 knockdown improved OPC proliferation (*p* = 0.04) and differentiation (*p* = 6 × 10⁻³) [@segel2019niche, Fig. 4c], and in neonatal mice an OPC-targeted *Piezo1* knockout gave "a five-fold increase in proliferation and two-fold increase in the total density of OPCs" at P35 [@segel2019niche, p. 4]. Piezo1 is a brake, and age pushes on it.
+
+## The evidence at a glance {#sec-frontier-table}
+
+| System, species and stage | Manipulation | Stiffness values | Readout | Result | Source |
+|---|---|---|---|---|---|
+| *Xenopus* eye primordia, st. 33/34–35/36, in vitro | polyacrylamide gels | 0.1 vs 1 kPa (shear) | axon extension velocity | 22.6 vs 35.0 µm/h (medians) | @koser2016mechanosensing, Fig. 1g |
+| *Xenopus* brain in vivo, st. 39–40 | none (AFM mapping) | K ≈ 150–250 Pa (approx., from Fig. 2) | tract curvature vs gradient | axons turn toward the softer side, *P* = 1.44 × 10⁻⁴ | @koser2016mechanosensing, Fig. 3c |
+| *Xenopus* brain in vivo, st. 40–42 | Piezo1 morpholino (~42% knockdown) | — | optic-tract elongation | reduced, *P* = 0.00476 | @koser2016mechanosensing, Fig. 5i |
+| *Xenopus* diencephalon in vivo, st. 33/34–37/38 | none (tiv-AFM, every ~35 min) | threshold (0.9 ± 0.4) Pa/µm | timing of gradient vs turning | gradient leads turning by 18 min, *p* = 0.03 | @thompson2019rapid, Fig. 2d |
+| *Xenopus* diencephalon in vivo | BI2536, 50 µM (mitotic block) | — | gradient rise, turn angle | both attenuated, *p* = 0.01 and 0.02 | @thompson2019rapid, Fig. 4e |
+| Rat hippocampal neurons, E17–E18, DIV 5–14 | polyacrylamide gels | 0.1 vs 10 kPa (shear) | onset of spontaneous APs | ~4 days later on stiff | @kreysing2025environmental, Fig. 2i |
+| Same, DIV 7 | Piezo1 CRISPR knockdown | 10 kPa | evoked-AP excitability | knockdown neurons far more excitable than controls on stiff, *p* = 3 × 10⁻²⁷ | @kreysing2025environmental, Fig. 3d |
+| *Xenopus* brain in vivo, st. 37–38 | transglutaminase, 0.5 mg/ml | median K ≈ 330 → 430 Pa (approx.) | FM1-43 synapse labelling | labelling reduced, *p* = 0.02; recovered by st. 39 | @kreysing2025environmental, Fig. 5i, 5n |
+| *Xenopus* brain in vivo, st. 40 | Piezo1 morpholino in brain tissue | median K 432 → 231 Pa | AFM stiffness map | tissue softens ~2-fold, *P* < 0.0001 | @pillai2026long, Fig. 3d |
+| *Xenopus* hypothalamus in vivo, st. 35/36 → 40 | AFM compression, 30 nN, > 6 h | — | Sema3A mRNA | ectopic Sema3A, *P* = 0.011; absent without Piezo1 | @pillai2026long, Figs. 6d, 6h |
+| Human fetal cortical NSPCs, 23 weeks gestation, in vitro | silicone substrates; Piezo1 siRNA | 0.4, 0.7, 3.7, 750 kPa, glass | Ca²⁺ transients; MAP2⁺ fraction | transients grow with stiffness; MAP2⁺ 5.2% → 3.2% | @pathak2014stretch, Figs. 4C-D, 5C |
+| Mouse neuroepithelium and NSCs, E10.5 | constitutive *Piezo1* knockout | not measured | NSC doubling time | 20 h 07 min vs 23 h 45 min | @nourse2022piezo, Fig. 3E |
+| Rat prefrontal cortex, P7 / ~120 d / ~455 d | none (AFM on slices) | ${frSegelNeonate} / ${frSegelAdult} / ${frSegelAged} Pa | K versus age | stiffens with age, *p* = 1 × 10⁻⁴ | @segel2019niche, Fig. 1g |
+| Rat aged OPCs, in vitro | soft vs stiff gels; Piezo1 siRNA | ~400 vs ~1300 Pa (shear, approx.) | EdU⁺, MBP⁺ fractions | > 10-fold on soft; 4–5-fold with Piezo1 siRNA | @segel2019niche, Figs. 2b, 3e |
+
+: Primary evidence that tissue stiffness acts as a developmental signal. Stiffness values are quoted in the quantity each paper reports (shear modulus *G* for gels, apparent elastic modulus *K* for tissue); these are different quantities and are not interchangeable. {.evidence}
+
+```{ojs}
+//| echo: false
+//| label: fig-frontier-values
+//| fig-cap: "Three published measurements, each plotted on its own axis. (a) Median apparent elastic modulus K of stage-40 Xenopus laevis brain for four Piezo1 morpholino conditions (Pillai et al. 2026, Fig. 3d). (b) Stiffness gradient across the Xenopus optic tract at three stages (Thompson et al. 2019, Fig. 3c; values read off the published plot, so approximate), with the turning threshold of 0.9 Pa/µm as a red dashed line and its stated SEM of ±0.4 Pa/µm as grey dashed lines. (c) Day in culture at which spontaneous action potentials were first detected in rat E17-E18 hippocampal neurons on soft and stiff gels (Kreysing et al. 2025, Fig. 2i); the same paper puts the delay at about 4 days by logistic regression. All values are as published (medians in panel a, means in panel b as read from the figure); hover a mark for its source. The three panels measure different quantities in different species and preparations, so bars and dots must not be compared across panels."
+{
+  const box = document.createElement("div");
+  const wide = Math.min(width, 620);
+  const label = text => {
+    const h = document.createElement("div");
+    h.textContent = text;
+    h.style.font = "600 0.85rem/1.4 system-ui, sans-serif";
+    h.style.margin = "0.8rem 0 0.1rem 0";
+    return h;
+  };
+
+  box.append(label("(a) Piezo1 knockdown softens Xenopus brain tissue (median K, Pa)"));
+  box.append(Plot.plot({
+    width: wide, height: 180, marginLeft: 165,
+    x: { label: "median apparent elastic modulus K (Pa) →", grid: true, domain: [0, 520] },
+    y: { label: null, domain: frPillai.map(d => d.label) },
+    color: { domain: ["control", "knockdown"], range: ["#2a78d6", "#eb6834"] },
+    marks: [
+      Plot.barX(frPillai, { y: "label", x: "K", fill: "cond", title: "src" }),
+      Plot.text(frPillai, { y: "label", x: "K", text: d => `${d.K} Pa`, dx: 20, fill: "currentColor" }),
+      Plot.ruleX([0])
+    ]
+  }));
+
+  box.append(label("(b) The gradient grows past the turning threshold (Pa/µm)"));
+  box.append(Plot.plot({
+    width: wide, height: 220, marginLeft: 60,
+    x: { label: null, domain: frThompson.map(d => d.stage) },
+    y: { label: "↑ stiffness gradient (Pa/µm)", grid: true, domain: [0, 2] },
+    marks: [
+      Plot.ruleY([0.5, 1.3], { stroke: "#9aa5b1", strokeDasharray: "2,3" }),
+      Plot.ruleY([0.9], { stroke: "#e34948", strokeDasharray: "4,3" }),
+      Plot.dot(frThompson, { x: "stage", y: "g", fill: "#1baf7a", r: 6, title: "src" }),
+      Plot.text(frThompson, { x: "stage", y: "g", text: d => `${d.g} Pa/µm`, dy: -16, fill: "currentColor" }),
+      Plot.text([{ x: frThompson[0].stage, y: 0.9 }],
+        { x: "x", y: "y", text: ["threshold 0.9 ± 0.4 Pa/µm"], dy: -8, dx: 10,
+          textAnchor: "start", fill: "#e34948" }),
+      Plot.ruleY([0])
+    ]
+  }));
+
+  box.append(label("(c) Spontaneous action potentials start later on stiff substrates"));
+  box.append(Plot.plot({
+    width: wide, height: 150, marginLeft: 110,
+    x: { label: "first day in culture with spontaneous action potentials →", grid: true, domain: [0, 12] },
+    y: { label: null, domain: frKreysing.map(d => d.sub) },
+    color: { domain: ["soft", "stiff"], range: ["#1baf7a", "#8e5ed6"] },
+    marks: [
+      Plot.barX(frKreysing, { y: "sub", x: "div", fill: "cond", title: "src" }),
+      Plot.text(frKreysing, { y: "sub", x: "div", text: d => `DIV ${d.div}`, dx: 22, fill: "currentColor" }),
+      Plot.ruleX([0])
+    ]
+  }));
+  return box;
+}
+```
+
+## Open questions {#sec-frontier-open}
+
+These are the questions the authors themselves raise.
+
+- How does Piezo1 activity lower transthyretin? That link "remains to be studied", and the arrow from synapse formation to intrinsic excitability is drawn with a question mark in the authors' own model [@kreysing2025environmental, Discussion; Fig. 4e].
+- How does Piezo1 activity regulate Sema3A, and why does removing Sema3A stiffen the tissue? Both are stated as unknown; the proposed stiffness threshold for cue expression is an inference, "not a measured dose–response curve"; and Sema3A is already expressed at stage 32, before the telencephalon stiffens [@pillai2026long, Outlook].
+- Is turning toward soft tissue a property of the growth cone or a collective effect of a fasciculated bundle? Koser and colleagues raise both, and add that "it is likely that there are other mechanisms involved in neuronal mechanotransduction" [@koser2016mechanosensing, pp. 7–8].
+- Do mitotic blockers reduce turning through stiffness, or through "topological cues" and steric hindrance from fewer cell bodies? And how much do radial glia and ECM build the gradient [@thompson2019rapid, p. 8]?
+- By what mechanism does Piezo1 set lineage choice, and "how do these results translate to the in vivo environment" [@pathak2014stretch, Discussion]?
+- Do other metabolites of the cholesterol pathway contribute, and do the integrins, laminins and collagens upregulated in the knockout "alter tissue mechanics" in turn [@nourse2022piezo, Discussion]?
+- Which indicators actually perform as claimed? That "can only be resolved by stringent independent cross-validation of the most promising GEVIs" [@knopfel2019optical, p. 725], the prerequisite for measuring maturation in many cells at once.
+
+## How the pieces fit {#sec-frontier-fit}
+
+A single loop connects these papers. Proliferation packs cell bodies into one region, which stiffens it [@thompson2019rapid, p. 5], and adhesion proteins maintained with the help of Piezo1 hold that stiffness up [@pillai2026long, Fig. 4i]. Growth cones read the resulting gradient and bend away from the stiff side [@koser2016mechanosensing, Fig. 3c], while the stiff tissue also raises its output of diffusible repellents [@pillai2026long, Fig. 6d]. In the cells that stay put, the same channel slows the clock: stiff environments delay synapse formation and electrical maturation [@kreysing2025environmental, Fig. 2i], and a lifetime of further stiffening quiets progenitors [@segel2019niche, Fig. 1g]. The arrows run both ways, which is why none of this is yet a clean one-directional pathway.
+
+## Check yourself {#sec-frontier-check}
+
+:::{.qmulti}
+In the developing *Xenopus* optic tract, which way do retinal ganglion cell axons turn relative to the stiffness gradient?
+
+- Toward the softer tissue, the opposite of classical durotaxis.
+
+  > Correct [@koser2016mechanosensing, Fig. 3c and p. 7].
+
+- Toward the stiffer tissue, like migrating fibroblasts.
+
+  > That is durotaxis, which the paper explicitly contrasts with what the axons do.
+
+- They ignore the gradient; only Slit and Semaphorin matter.
+
+  > Chemical cues matter, but mechanical perturbation alone redirects the tract, and Piezo1 knockdown causes pathfinding errors.
+
+:::
+
+**Compute.** Knocking Piezo1 down in *Xenopus* brain tissue lowered the median apparent elastic modulus from 432 Pa to 231 Pa. By what factor did the tissue soften? {{< qinput 1.87 tol=0.05 hints="432 divided by 231" >}} [@pillai2026long, Fig. 3d].
+
+:::{.qmulti}
+Thompson and colleagues report that the stiffness gradient precedes axon turning by 18 min. What does that timing by itself establish?
+
+- An order of events consistent with the gradient instructing turning, but not causation on its own.
+
+  > Correct. The causal argument rests on the mitotic block [@thompson2019rapid, Fig. 4e] and on the mechanical manipulations of @koser2016mechanosensing.
+
+- That the gradient causes the turn.
+
+  > Timing is necessary for causation, not sufficient; the 18 min is itself a projected onset extrapolated from linear fits [@thompson2019rapid, Fig. 2d-e].
+
+- That turning causes the gradient.
+
+  > The order is the wrong way round, and eye ablation shows the axons do not create the gradient [@koser2016mechanosensing].
+
+:::
+
+:::{.qmulti}
+Why can the 432 Pa of @pillai2026long not be compared directly with the 10 kPa stiff gels of @kreysing2025environmental?
+
+- They are different quantities (apparent elastic modulus *K* of tissue versus shear modulus *G* of a gel), on different materials by different methods.
+
+  > Correct: *K* = *E*/(1 − ν²) is not *G*.
+
+- Because one is *Xenopus* and the other is rat, which is the only problem.
+
+  > Species matters, but the deeper problem is that these are different mechanical quantities.
+
+- They can be compared; pascals are pascals.
+
+  > Shared units do not make shared meaning.
+
+:::
+
+:::{.qmulti}
+In the ageing rat brain, what is the evidence that OPC decline is caused by the niche rather than the cells?
+
+- Aged OPCs proliferate and differentiate again on neonatal ECM, on soft gels, or after Piezo1 knockdown.
+
+  > Correct [@segel2019niche, pp. 3–4].
+
+- Aged OPCs carry irreversible DNA damage.
+
+  > Not measured there; the transplantation and substrate experiments argue against irreversibility.
+
+- The aged brain softens, releasing the cells from mechanical constraint.
+
+  > It *stiffens*, from about ${frSegelNeonate} Pa to about ${frSegelAged} Pa in rat prefrontal cortex.
+
+:::
+
+::: {.callout-tip title="Answers" collapse="true"}
+1. Toward the softer tissue, the opposite of durotaxis [@koser2016mechanosensing, Fig. 3c, p. 7].
+2. 432/231 = ${frFold}, a close-to-twofold softening [@pillai2026long, Fig. 3d].
+3. It establishes order, not causation; the causal evidence is the mitotic block [@thompson2019rapid, Fig. 4e] and the mechanical manipulations of @koser2016mechanosensing.
+4. Different quantities: shear modulus *G* for gels [@kreysing2025environmental, Results] versus apparent elastic modulus *K* for tissue [@pillai2026long, Methods].
+5. Restoring the young mechanical environment, or removing Piezo1, restores function in aged cells [@segel2019niche, pp. 3–4].
+:::
+
+## Summary {#sec-frontier-summary}
+
+- Axons in the *Xenopus* optic tract turn toward softer tissue, and blocking mechanosensitive channels or Piezo1 causes pathfinding errors [@koser2016mechanosensing].
+- Brain stiffness in vivo changes within tens of minutes, tracks cell-body density (ρ = 0.97), leads axon turning by ~18 min, and must reach about 0.9 Pa/µm before axons turn [@thompson2019rapid].
+- Stiffness sets the *timing* of maturation: rat hippocampal neurons fire about 4 days earlier on 0.1 kPa than on 10 kPa gels, via Piezo1 and transthyretin [@kreysing2025environmental].
+- Piezo1 both senses stiffness and sets it: knocking it down in *Xenopus* brain tissue halves the modulus (432 → 231 Pa) through NCAM1 and N-cadherin, and is required for stiffness to induce Sema3A [@pillai2026long].
+- Stiffening is also an ageing signal: rat cortex stiffens from about ${frSegelNeonate} to ${frSegelAged} Pa over the lifespan, and softening the niche or removing Piezo1 restores aged OPC function [@segel2019niche].
+
+:::{.qflashcards}
+
+- What stiffness gradient is needed before *Xenopus* retinal axons turn?
+
+  > At least (0.9 ± 0.4) Pa/µm, and the gradient appears on average 18 min before the turn [@thompson2019rapid].
+
+- What happens to the brain's stiffness when Piezo1 is knocked down in *Xenopus* brain tissue?
+
+  > The median apparent elastic modulus falls from 432 Pa to 231 Pa, through loss of polysialylated NCAM1 and N-cadherin [@pillai2026long].
+
+- Do rat hippocampal neurons mature faster on soft or on stiff substrates?
+
+  > Faster on soft (0.1 kPa): spontaneous action potentials start about 4 days earlier than on 10 kPa, and Piezo1 knockdown abolishes the difference [@kreysing2025environmental].
+
+- Which way does the mammalian brain's stiffness go with age, and what does that do to OPCs?
+
+  > It rises (rat prefrontal cortex, about 250 → 470 Pa), and the stiff niche suppresses OPC proliferation and differentiation through Piezo1 [@segel2019niche].
+
+:::

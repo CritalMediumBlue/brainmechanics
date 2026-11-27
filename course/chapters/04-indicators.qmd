@@ -1,0 +1,273 @@
+---
+filters:
+  - shortiquiz
+---
+
+# Voltage and calcium indicators, including FLIPR {#sec-indicators}
+
+```{ojs}
+//| echo: false
+//| output: false
+// The calibration arithmetic of this chapter. Equation 9 of
+// @fairless2013membrane (p. 8) and its inverse; RT/F from the same paper (p. 5).
+indRTF = 25.43                 // RT/F in mV at 22 °C (Fairless et al., p. 5)
+indDE = (dff, z) => indRTF / z * Math.log(1 / (dff + 1))   // eq. 9: ΔF/F₀ → ΔE
+indDFF = (dE, z) => Math.exp(-z * dE / indRTF) - 1         // the same, inverted
+indEfold = indDE(1.72, -0.71).toFixed(1)
+indDRG = indDE(1.84, -0.71).toFixed(1)
+indFeeder = indDE(1.44, -0.71).toFixed(1)
+indPer10 = indDFF(10, -0.71).toFixed(2)
+indPer100 = indDFF(100, -0.71).toFixed(1)
+```
+
+A patch pipette reports one cell at a time (@sec-membrane). Most questions in brain mechanics need many cells at once, and are therefore answered with fluorescent indicators: Kreysing and colleagues scored the activity of rat hippocampal neurons on soft and stiff gels with the calcium dye Rhod-4 [@kreysing2025environmental, Methods], and Syeda and colleagues found the Piezo1 agonist Yoda1 with a calcium dye in a plate reader [@syeda2015chemical, Methods]. This chapter is about what those traces do, and do not, tell you.
+
+::: {.callout-note title="After this chapter you will be able to"}
+- define $\Delta F/F_0$ and the signal-to-noise ratio as the indicator papers do, and say why dye data are relative;
+- explain how a redistribution dye reports voltage, and convert a $\Delta F/F_0$ into millivolts;
+- say what a FLIPR assay is and what it buys over single-cell imaging;
+- compare calcium and voltage indicators on sensitivity and speed, and say why voltage imaging is photon-limited.
+:::
+
+## What a fluorescence trace is {#sec-indicators-what}
+
+Almost every indicator is read as a **relative fluorescence change**. With $F_t$ the intensity at time $t$ and $F_0$ a baseline [@fairless2013membrane, eq. 3, p. 8],
+
+$$
+\Delta F/F_0 = \frac{F_t - F_0}{F_0}.
+$$ {#eq-dff}
+
+The baseline is a convention you must state: the mean of the first ten images [@fairless2013membrane, p. 3], or the second before stimulation in the GCaMP screen of @chen2013ultrasensitive, whose Methods also define the **signal-to-noise ratio** as the peak $\Delta F/F_0$ over the standard deviation of that baseline second.
+
+This is a ratio, not a voltage. Dye methods suffer from "the difficulty of dye calibration, and thus the difficulty of obtaining absolute values", so "most data are reported as percentage changes in fluorescence over a basal fluorescence value" [@sundelacruz2009role, sec. "Membrane Potential Measurements"].
+
+Voltage-sensitive dyes come in two families [@fairless2013membrane, p. 11]. In **redistribution dyes** the dye moves across the membrane with the electric field, so the intracellular concentration, and therefore the brightness, follows the voltage; the classic example, DiBAC₄(3), is slow because of "the relatively slow migration of the oxonol across the lipid bilayer" [@whiteaker2001validation, p. 305]. In **membrane-bound dyes** the voltage changes the electronic structure of the chromophore instead: much faster, much less sensitive.
+
+## FMP and the plate reader {#sec-indicators-flipr}
+
+**FLIPR** is the fluorometric imaging plate reader: it images a whole 96-, 384- or 1536-well plate at once while compounds are added [@whiteaker2001validation, p. 306]. The **FMP (FLIPR membrane potential) dye** was made for it: a proprietary voltage-sensitive dye "containing additionally a membrane impermeant quencher" [@fairless2013membrane, Methods, p. 2], loaded in 15–30 min with no wash step [@baxter2002novel, p. 81].
+
+Its selling point against DiBAC₄(3) is speed. In guinea-pig bladder smooth muscle, FMP reached maximal responses "within 2–3 min after addition compared to 20–25 min using DiBAC₄(3)", with roughly double the signal (9,000–11,000 versus 5,000–6,000 fluorescence units on the same instrument) [@whiteaker2001validation, p. 307]. In CHO-K1 cells expressing the human K⁺ channel hElk-1, a 60 mM KCl step gave a half-maximal response at $t_{1/2}$ = 17 s against 240 s for DiBAC₄(3), which also needs at least an hour of loading [@baxter2002novel, Fig. 5, p. 83].
+
+Fast for a plate reader is still slow for a neuron: in single-cell imaging FMP equilibrates with time constants of 4–8 s, "definitely too slow for the resolution of single action potentials", and its oscillations "more likely reflect trains of action potentials" [@fairless2013membrane, pp. 11–12].
+
+The same format is used with calcium dyes. Syeda and colleagues screened about 3.25 million compounds at 5 µM on HEK293T cells expressing mouse Piezo1 and Piezo2, in 1536-well plates with the Calcium5 dye, took about 9,000 hits, and followed them up in 384-well plates with Fluo3 plus EGTA and thapsigargin controls, which separate calcium entering from outside from calcium released from stores [@syeda2015chemical, Methods, pp. 7–8]. The winner, Yoda1, had an apparent EC₅₀ of 17.1 µM (mouse) and 26.6 µM (human Piezo1) — but above about 20 µM the solutions turned opaque, so "compound (in)solubility precludes meaningful conclusions with respect to EC₅₀" [@syeda2015chemical, p. 3; p. 4].
+
+::: {.callout-warning title="The sources disagree about how sensitive FMP is"}
+- $\Delta F/F_0 \approx 0.5$ per 10 mV (about 50% per 10 mV): HEK cells and neurons imaged at 22 °C, over the range −10 to +50 mV where the relation is roughly linear; $\Delta F/F_0$ is of order 12 for 100 mV [@fairless2013membrane, pp. 9, 12–13].
+- 10–12% per 10 mV: CHO-K1 cells expressing hElk-1, against current clamp over 7.5–120 mM KCl, $r$ = 0.993 [@baxter2002novel, p. 82].
+- "10% per 100 mV" for voltage-sensitive dyes in general [@sundelacruz2009role, sec. "Membrane Potential Measurements"].
+
+Different cells, instruments, temperatures and ranges, and the last figure covers other dye chemistries. Report the condition with the number.
+:::
+
+## Turning $\Delta F/F_0$ into millivolts {#sec-indicators-calibration}
+
+FMP is a charged molecule that accumulates in the cytosol, so its partition can be modelled: at equilibrium the external and internal dye concentrations follow a Boltzmann distribution [@fairless2013membrane, eq. 7, p. 8]:
+
+$$
+\frac{\mathrm{FMP}_e}{\mathrm{FMP}_i} = \exp\!\left(\frac{z'F}{RT}\,E_{\mathrm{FMP}}\right),
+$$ {#eq-fmp-boltzmann}
+
+where $\mathrm{FMP}_e$ and $\mathrm{FMP}_i$ are the external and internal dye concentrations, $z'$ the **apparent charge** of the dye, $E_{\mathrm{FMP}}$ its equilibrium potential, $R$ the gas constant, $T$ the absolute temperature and $F$ Faraday's constant. With fluorescence proportional to $\mathrm{FMP}_i$ and constant external dye, this rearranges into the calibration equation [@fairless2013membrane, eq. 9, p. 8]:
+
+$$
+\Delta E = \frac{RT}{z'F}\,\ln\!\left(\frac{1}{\Delta F/F_0 + 1}\right),
+$$ {#eq-fmp-calib}
+
+with $\Delta E = E_t - E_0$ positive for depolarisation [@fairless2013membrane, eq. 10, p. 9]. At 22 °C, $RT/F$ = ${indRTF} mV. The apparent charge is "an empirical indicator of the voltage sensitivity of the dye because $z'$ determines simply the slope in eq. 9". Fitting @eq-fmp-calib to voltage-clamped HEK cells gave $z' = -0.71$; fitting high-K⁺ steps gave −0.64 in HEK cells and −0.71 (DRG), −0.72 (hippocampal) and −0.62 (retinal ganglion) in neurons [@fairless2013membrane, Fig. 4, p. 9]. A K⁺ step can therefore calibrate a dish without a patch clamp, provided it is large: below about 10 mM external K⁺ the response does not follow Nernst [@fairless2013membrane, p. 9].
+
+```{ojs}
+//| echo: false
+viewof indCal = Inputs.form({
+  dff: Inputs.range([-0.8, 6], { value: 1.84, step: 0.01, label: "measured ΔF/F₀" }),
+  z: Inputs.range([-1.5, -0.3], { value: -0.71, step: 0.01, label: "apparent charge z′" })
+})
+```
+
+```{ojs}
+//| echo: false
+//| label: fig-fmp-calibrator
+//| fig-cap: "Calibration of an FMP signal. The blue curve is eq. 9 of Fairless et al. 2013 (@eq-fmp-calib), ΔE = (RT/z′F)·ln(1/(ΔF/F₀+1)), drawn for the apparent charge z′ chosen with the slider (default −0.71, their voltage-clamp fit) and RT/F = 25.43 mV at 22 °C. The orange rule marks the ΔF/F₀ chosen with the other slider and the label gives the ΔE it implies. Orange dots: the two ΔF/F₀ values measured by Fairless et al. (p. 5) for a 5.4 → 25 mM external K⁺ step (hover for the source); the grey dashed line is the Nernst prediction for that step, 38.97 mV (Fairless et al., p. 5). Computed curve, not data; the mapping is only as good as z′ for your own preparation."
+{
+  const z = indCal.z;
+  const xs = d3.range(0, 601).map(i => -0.8 + i * 6.8 / 600);
+  const curve = xs.map(x => ({ x, y: indDE(x, z) }));
+  const pts = [
+    { x: 1.84, y: indDE(1.84, z), what: "DRG neurons, 5.4 → 25 mM K⁺, ΔF/F₀ = 1.84 ± 0.09 [fairless2013membrane, p. 5]" },
+    { x: 1.44, y: indDE(1.44, z), what: "astrocytic feeder cells, same step, ΔF/F₀ = 1.44 ± 0.07 [fairless2013membrane, p. 5]" }
+  ];
+  const here = { x: indCal.dff, y: indDE(indCal.dff, z) };
+  return Plot.plot({
+    width: Math.min(width, 640), height: 340,
+    x: { label: "measured ΔF/F₀ →", domain: [-0.8, 6] },
+    y: { label: "↑ implied ΔE (mV)", grid: true, domain: [-60, 110] },
+    marks: [
+      Plot.ruleY([0]),
+      Plot.ruleY([38.97], { stroke: "#9aa5b1", strokeDasharray: "4,3" }),
+      Plot.line(curve, { x: "x", y: "y", stroke: "#2a78d6", strokeWidth: 2 }),
+      Plot.ruleX([here.x], { stroke: "#eb6834", strokeDasharray: "3,3" }),
+      Plot.dot([here], { x: "x", y: "y", fill: "#eb6834", r: 5 }),
+      Plot.text([here], {
+        x: "x", y: "y", dy: -14, fill: "#eb6834",
+        text: d => `ΔF/F₀ = ${d.x.toFixed(2)} → ΔE = ${d.y.toFixed(1)} mV`
+      }),
+      Plot.dot(pts, { x: "x", y: "y", fill: "#eda100", r: 4, title: "what" })
+    ]
+  });
+}
+```
+
+Things to try with @fig-fmp-calibrator:
+
+- Set $\Delta F/F_0$ to 1.84, measured in DRG neurons for a 5.4 → 25 mM K⁺ step: with $z' = -0.71$ it returns ${indDRG} mV, near the 38.97 mV predicted by Nernst; the feeder cells, at 1.44, give only ${indFeeder} mV [@fairless2013membrane, p. 5].
+- Move $z'$ and watch the whole scale change. Values of −1.48 and −1.04, from a fit that assumed several permeant ions, turned a true +40 mV step into +19.30 and +27.43 mV, while $z' = -0.64$ gave +43.65 mV [@fairless2013membrane, p. 9].
+- Inverted, the equation gives $\Delta F/F_0$ = ${indPer10} for 10 mV but ${indPer100} for 100 mV, above the measured value: the real curve is sigmoidal [@fairless2013membrane, pp. 9, 12].
+
+::: {.callout-warning title="An inconsistency in the source"}
+Fairless et al. estimate that "a *e*-fold (2.72-fold) increase of the FMP fluorescence … is achieved with a 40 mV depolarisation", but print the matching $\Delta F/F_0$ as 0.72 [@fairless2013membrane, p. 9]. A 2.72-fold *ratio* $F_t/F_0$ means $\Delta F/F_0 = 1.72$ by @eq-dff, and that is the reading consistent with the rest of the paper: @eq-fmp-calib with $z' = -0.71$ maps 1.72 to ${indEfold} mV, near the quoted 40 mV, whereas 0.72 gives about 19 mV.
+:::
+
+## Genetically encoded calcium indicators {#sec-indicators-geci}
+
+A **genetically encoded calcium indicator (GECI)** is a protein the cell makes itself. GCaMP and its descendants "consist of circularly permuted green fluorescent protein (cpGFP), the calcium-binding protein calmodulin (CaM), and CaM-interacting M13 peptide"; calcium binding changes the CaM/M13 complex, which modulates solvent access and the pK$_a$ of the chromophore, so the protein brightens [@chen2013ultrasensitive, sec. "GCaMP protein engineering"].
+
+Chen and colleagues screened 447 variants in dissociated rat hippocampal cultures and kept GCaMP6s, 6m and 6f, for slow, medium and fast. Purified protein gives $K_d$ of 144 ± 4, 167 ± 3 and 375 ± 14 nM, with fitted Hill coefficients of 2.90 ± 0.17, 2.96 ± 0.04 and 2.27 ± 0.10 [@chen2013ultrasensitive, Supplementary Table 2]. In mouse V1 in vivo, one action potential gave 23 ± 3.2% $\Delta F/F_0$ with GCaMP6s and 19 ± 2.8% with GCaMP6f, detected with 99 ± 0.2% and 84 ± 6% efficiency at a 1% false-positive rate — but with decay half-times of 550 ± 52 and 142 ± 11 ms [@chen2013ultrasensitive, Supplementary Table 3]. That is the trade-off: "the more sensitive sensors having slower kinetics".
+
+Synthetic dyes remain the quick option: Kreysing and colleagues loaded 4 µM Rhod-4 for 30 min at 37 °C, imaged at about 12.5 Hz, and showed with 0.1 µM tetrodotoxin (TTX) that the transients vanish when action potentials are blocked — the control that makes a calcium signal a proxy for firing [@kreysing2025environmental, Methods].
+
+## Voltage indicators, and why they are hard {#sec-indicators-gevi}
+
+Calcium is a consequence of voltage, not voltage: calcium imaging "provides little or no data on the hyperpolarizing (inhibitory) and subthreshold depolarizing (excitatory) signals that occur continuously in most neurons" [@knopfel2019optical, p. 719]. On capsaicin-activated hVR-1 channels FMP returned to baseline in 200–300 s as the channel desensitised, while Fluo-3 stayed high for over 10 min [@baxter2002novel, p. 84].
+
+**Genetically encoded voltage indicators (GEVIs)** come in three families: voltage-sensing-domain proteins fused to fluorescent proteins, opsin-based indicators reading out protonation of the retinal Schiff base, and hybrid or **chemigenetic** indicators, "genetically targetable proteins that bind compounds that either are not proteins or do not occur naturally in brain tissue" [@knopfel2019optical, pp. 719–721]. Two definitions go with them: sensitivity $S = \Delta F/(F\,\Delta V)$, and molecular brightness $B_{\mathrm{mol}} = q_{em}\tau_b$ [@knopfel2019optical, Box 1, p. 721].
+
+Voltron is the hybrid worked example: a rhodopsin domain fused to a HaloTag that binds a synthetic dye, quenched by FRET on depolarisation. **All Voltron numbers here come from the bioRxiv preprint, not the published version** [@abdelfattah2019bright]. Voltron bound to JF525 changed fluorescence by −23 ± 1% for a step from −70 to +30 mV, with fast time constants of 0.64 ± 0.09 ms (activation) and 0.78 ± 0.12 ms (deactivation) in cultured rat neurons [@abdelfattah2019bright, Fig. 1E; Table S1]. Note the sign: it gets *dimmer* on depolarisation, so its baseline is an upper (80th) percentile [@abdelfattah2019bright, Methods].
+
+So a GEVI is about a hundred times faster than GCaMP6f and about a hundred times smaller in signal, which turns the experiment into a photon-counting problem. The number $n$ of photons per sampling interval is Poisson distributed, so the noise goes as $\sqrt{n}$ and the SNR as $\sqrt{n}$ [@knopfel2019optical, Box 2, p. 723]. The review's bound is
+
+$$
+\mathrm{SNR} \le \frac{\Delta F}{F}\sqrt{n_F(1-f_B)}\;\sqrt{f_C f_{em} q_D}\;\sqrt{\frac{q_{em}\,\Delta t}{q_b\,\tau_b}},
+$$ {#eq-gevi-snr}
+
+where $\Delta F/F$ is the fractional fluorescence change produced by the voltage signal of interest, $\Delta t$ the sampling interval, $f_C$ the fraction of emitted light collected by the objective, $f_{em}$ the fraction of the emission spectrum reaching the detector, $f_B$ the fraction of non-signalling background fluorescence, $q_D$ the detector quantum yield, $q_{em}$ the fluorescence quantum yield, $q_b$ the quantum yield of photobleaching and $\tau_b$ the photobleaching time constant, "the duration of the experiment until 1/e of the indicator is bleached"; $n_F$ is not defined in the paper's symbol list, so it is left undefined here [@knopfel2019optical, Box 2, p. 723]. The design point: SNR > 10 at 1 ms needs a *practical* $\Delta F/F$ above 5% and $\tau_b$ above 10 min — practical because $F$ includes background, which is why the SNR in tissue is often ten times lower than in culture [@knopfel2019optical, pp. 721, 723].
+
+```{ojs}
+//| echo: false
+//| label: fig-gevi-snr
+//| fig-cap: "Illustrative: how the shot-noise bound of @eq-gevi-snr scales with the indicator's practical ΔF/F when every other factor is held fixed. Only the proportionality SNR ∝ ΔF/F is shown; the constant lumping all other terms is chosen so that the curve passes through the design point stated by Knöpfel & Song 2019 (Box 2, p. 723) — ΔF/F = 5% giving SNR = 10 at a 1 ms sampling interval with τ_b > 10 min. The dashed rule marks Voltron525's −23% per 100 mV step (Abdelfattah et al., bioRxiv preprint, Fig. 1E), plotted as a magnitude. Not a measurement, and not valid if background, optics or bleaching change."
+{
+  const rows = d3.range(1, 301).map(i => ({ dff: i * 0.1, snr: 10 * (i * 0.1) / 5 }));
+  return Plot.plot({
+    width: Math.min(width, 560), height: 260,
+    x: { label: "practical ΔF/F (%) →", domain: [0, 30] },
+    y: { label: "↑ SNR bound (arbitrary, anchored at the design point)", grid: true },
+    marks: [
+      Plot.ruleY([10], { stroke: "#9aa5b1", strokeDasharray: "4,3" }),
+      Plot.ruleX([23], { stroke: "#eb6834", strokeDasharray: "3,3" }),
+      Plot.line(rows, { x: "dff", y: "snr", stroke: "#2a78d6", strokeWidth: 2 }),
+      Plot.dot([{ dff: 5, snr: 10 }], { x: "dff", y: "snr", fill: "#2a78d6", r: 4 })
+    ]
+  });
+}
+```
+
+## Check yourself {#sec-indicators-check}
+
+:::{.qmulti}
+A redistribution dye such as FMP or DiBAC₄(3) changes brightness because…
+
+- the dye molecules move across the membrane with the electric field, changing the intracellular concentration.
+
+  > Correct [@fairless2013membrane, p. 11; @whiteaker2001validation, p. 305]. This is also why these dyes are slow.
+
+- the voltage changes the electronic structure of the chromophore.
+
+  > That is the other family, the membrane-bound dyes, which are much faster and much less sensitive [@fairless2013membrane, p. 11].
+
+- the dye binds calcium that enters when the cell depolarises.
+
+  > That would be a calcium indicator. FMP responds to voltage changes whatever ion carries them [@fairless2013membrane, Abstract].
+
+:::
+
+**Compute.** You measure $\Delta F/F_0 = 1.00$ in cultured hippocampal neurons and calibrate with $z' = -0.72$ and $RT/F$ = 25.43 mV. @eq-fmp-calib gives $\Delta E$ = {{< qinput 24.5 tol=0.6 hints="ΔE = (25.43 / −0.72) × ln(1 / 2)" >}} mV [@fairless2013membrane, eq. 9; Fig. 4D].
+
+:::{.qmulti}
+Why can FMP not resolve single action potentials?
+
+- Its time constant is 4–8 s, far slower than an action potential.
+
+  > Correct [@fairless2013membrane, pp. 11–12]. Oscillations in FMP traces reflect trains of spikes, not single ones.
+
+- Its signal is too small.
+
+  > The opposite: ΔF/F₀ reaches about 0.5 per 10 mV in this preparation, which is large for a voltage dye [@fairless2013membrane, p. 9].
+
+- It cannot be imaged fast enough.
+
+  > Fairless et al. imaged at up to 20 frames/s with 5 ms exposures; the limit is the dye's redistribution, not the camera [@fairless2013membrane, pp. 2–3].
+
+:::
+
+:::{.qmulti}
+You need to know whether a neuron is receiving inhibitory, hyperpolarising input. Which readout can tell you?
+
+- A voltage indicator.
+
+  > Correct. Calcium imaging "provides little or no data on the hyperpolarizing (inhibitory) and subthreshold depolarizing (excitatory) signals" [@knopfel2019optical, p. 719].
+
+- GCaMP6s, because it is the most sensitive sensor available.
+
+  > Sensitivity to calcium does not help: hyperpolarisation produces no calcium influx to report.
+
+:::
+
+:::{.qmulti}
+In a FLIPR screen a compound makes the FMP signal fall far more than the reference drug does, and the fall is not reversed by the reference antagonist. The most likely explanation is…
+
+- apparent quenching: an optical artifact independent of target activation.
+
+  > Correct [@whiteaker2001validation, p. 310]. The antagonist-reversal test is what distinguishes pharmacology from optics.
+
+- a very potent new channel opener.
+
+  > Possible in principle, but a response larger than the reference opener's and insensitive to the antagonist is the signature of quenching.
+
+:::
+
+::: {.callout-tip title="Answers" collapse="true"}
+1. The dye redistributes across the membrane [@fairless2013membrane, p. 11; @whiteaker2001validation, p. 305].
+2. $\Delta E = (25.43/-0.72)\ln(1/2) = 24.5$ mV [@fairless2013membrane, eq. 9, p. 8].
+3. Its 4–8 s time constant [@fairless2013membrane, pp. 11–12].
+4. A voltage indicator; calcium reports only influx [@knopfel2019optical, p. 719].
+5. Apparent quenching, an artifact [@whiteaker2001validation, p. 310].
+:::
+
+## Summary {#sec-indicators-summary}
+
+- Indicator data are relative: $\Delta F/F_0$ against a baseline you define, with SNR measured against baseline noise [@fairless2013membrane, eq. 3; @chen2013ultrasensitive, Methods]. Absolute values need a calibration, which is the hard part [@sundelacruz2009role].
+- FMP is a redistribution dye plus quencher, made for plate readers: 2–3 min to maximum against 20–25 min for DiBAC₄(3) [@whiteaker2001validation, p. 307], $t_{1/2}$ 17 s against 240 s [@baxter2002novel, p. 83], but 4–8 s time constants in single-cell imaging, too slow for single spikes [@fairless2013membrane].
+- A Boltzmann partition model converts $\Delta F/F_0$ into millivolts (@eq-fmp-calib) once the apparent charge $z'$ is fitted, −0.62 to −0.72 across HEK cells and three neuronal types [@fairless2013membrane, p. 9].
+- GCaMP6 indicators detect single action potentials in vivo (99% for GCaMP6s at a 1% false-positive rate) but decay over hundreds of milliseconds; $K_d$ is 144–375 nM across the family [@chen2013ultrasensitive].
+- Voltage indicators are fast (sub-millisecond for Voltron525) and small in signal (−23% per 100 mV, preprint values), so their limit is the photon budget set by @eq-gevi-snr [@abdelfattah2019bright; @knopfel2019optical].
+
+:::{.qflashcards}
+
+- What is $\Delta F/F_0$?
+
+  > $(F_t - F_0)/F_0$: the fluorescence change relative to a stated baseline (@eq-dff).
+
+- What does the apparent charge $z'$ do in the FMP calibration?
+
+  > It sets the slope that converts $\Delta F/F_0$ into millivolts (@eq-fmp-calib); it is fitted per preparation, from −0.62 to −0.72 in Fairless et al.
+
+- Give one number for FMP speed and one for GCaMP6f speed.
+
+  > FMP: 4–8 s time constant. GCaMP6f: 142 ± 11 ms decay half-time for one action potential in mouse V1.
+
+- Why is voltage imaging harder than calcium imaging?
+
+  > The fractional signals are small and must be sampled in about a millisecond, so SNR is limited by the number of photons collected before the indicator bleaches.
+
+:::

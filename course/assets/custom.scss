@@ -1,0 +1,16 @@
+/*-- scss:defaults --*/
+$font-family-monospace: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+$primary: #2a78d6;
+$code-block-bg: #f6f8fa;
+
+/*-- scss:rules --*/
+// Justified body text.
+#quarto-document-content p { text-align: justify; hyphens: auto; }
+
+// Interactive figures get a little breathing room.
+.cell-output-display .js-plotly-plot,
+.observablehq canvas { margin: 0.5rem 0 1rem; }
+
+// Figures in .mono-plots follow the theme: see AUTHORING.md, Plotly.
+.mono-plots img,
+.mono-plots .js-plotly-plot { transition: filter 0.2s ease; }

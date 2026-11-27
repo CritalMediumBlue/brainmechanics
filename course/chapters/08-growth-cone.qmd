@@ -1,0 +1,310 @@
+---
+filters:
+  - shortiquiz
+---
+
+# Growth cones and the cytoskeleton {#sec-growth-cone}
+
+```{ojs}
+//| echo: false
+import { predictGate as gcPredictGate, locked as gcLocked } from "./pedagogy/predict.js"
+```
+
+```{ojs}
+//| echo: false
+//| output: false
+// Numbers used in the prose, computed from the cited values.
+gcRatio = (537 / 71).toFixed(1)            // DRG vs hippocampal traction, Tyler 2012, p. 873
+gcTensionNN = (150e-6 * 1e-5 * 1e9).toFixed(1) // 150 µdyn (Van Essen 1997, p. 313) in nN; 1 dyn = 1e-5 N
+gcTowRatio = Math.round(10000 / 70)        // 10 mm/day (Franze 2013, p. 243) vs ~70 µm/day (Dotti 1988, p. 1457)
+
+// Forces reported in the sources, in pN. "cite" is the citekey and locator.
+gcForces = [
+  { label: "Actin filament, stall force", value: 1, shown: "≈ 1 pN", level: "single molecule", system: "polymerising actin filament", cite: "tyler2012mechanobiology, p. 869" },
+  { label: "Microtubule, stall force", value: 5, shown: "≈ 5 pN", level: "single molecule", system: "single microtubule", cite: "tyler2012mechanobiology, p. 870" },
+  { label: "Integrin–fibronectin bond", value: 20, shown: "≈ 20 pN", level: "single molecule", system: "bond-breaking force of one integrin", cite: "tyler2012mechanobiology, p. 871" },
+  { label: "N-cadherin bond", value: 40, shown: "≈ 40 pN", level: "single molecule", system: "binding force of N-cadherin", cite: "tyler2012mechanobiology, p. 871" },
+  { label: "Microtubule, buckling (reinforced)", value: 100, shown: "> 100 pN", level: "single molecule", system: "microtubule reinforced by other cytoskeletal elements", cite: "tyler2012mechanobiology, p. 870" },
+  { label: "Hippocampal growth cone, traction", value: 71, shown: "≈ 71 pN", level: "growth cone", system: "traction force microscopy; species not stated in the review", cite: "tyler2012mechanobiology, p. 873" },
+  { label: "Retinal growth cone, protrusion", value: 100, shown: "≈ 100 pN", level: "growth cone", system: "average peak protrusive force, retinal ganglion cells; species not stated in the review", cite: "franze2013mechanics, p. 239" },
+  { label: "DRG growth cone, traction", value: 537, shown: "≈ 537 pN", level: "growth cone", system: "dorsal root ganglion neurons; species not stated in the review", cite: "tyler2012mechanobiology, p. 873" },
+  { label: "Filopodia, myosin IIB knockout", value: 660, shown: "≈ 660 pN", level: "growth cone", system: "superior cervical ganglion neurons, knockout mice", cite: "tyler2012mechanobiology, p. 873" },
+  { label: "Filopodia, wild type", value: 970, shown: "≈ 970 pN", level: "growth cone", system: "superior cervical ganglion neurons, wild-type mice", cite: "tyler2012mechanobiology, p. 873" },
+  { label: "Neurite tension", value: 1500, shown: "150 µdyn ≈ 1.5 nN", level: "neurite or tissue", system: "chick sensory neurons in vitro, adhesive substrate", cite: "vanessen1997tension, p. 313" },
+  { label: "Brain explant, soft gel (40 Pa)", value: 3000, shown: "≈ 3 nN", level: "neurite or tissue", system: "median maximum traction, Xenopus hypothalamic explants (stage 37/38)", cite: "pillai2026long, sec. \"Environmental stiffness regulates guidance cue expression ex vivo\"" },
+  { label: "Brain explant, stiff gel (450 Pa)", value: 13000, shown: "≈ 13 nN", level: "neurite or tissue", system: "median maximum traction, Xenopus hypothalamic explants (stage 37/38)", cite: "pillai2026long, sec. \"Environmental stiffness regulates guidance cue expression ex vivo\"" },
+  { label: "AFM indentation of brain", value: 7000, shown: "7 nN (maximum)", level: "applied by experimenters", system: "in vivo AFM, Xenopus brain", cite: "koser2016mechanosensing, PDF p. 13" },
+  { label: "Local compression of brain", value: 30000, shown: "30 nN", level: "applied by experimenters", system: "sustained compression for ~6 h, Xenopus brain", cite: "koser2016mechanosensing, PDF p. 6" }
+]
+
+// Stresses (σ) and stiffnesses (moduli) reported in the sources, in Pa.
+gcStresses = [
+  { label: "Growth cone, internal stress", value: 30, shown: "≈ 30 Pa", level: "stress", system: "species not stated in the review", cite: "franze2013mechanics, p. 239; tyler2012mechanobiology, p. 869" },
+  { label: "Compression of frog brain", value: 30, shown: "≈ 30 Pa", level: "stress", system: "applied stress, 30 nN, Xenopus brain", cite: "koser2016mechanosensing, PDF p. 6" },
+  { label: "Growth cone, elastic modulus", value: 106, shown: "106 ± 21 Pa", level: "stiffness (modulus)", system: "short timescales; relaxes in ~10 s; species not stated in the reviews", cite: "tyler2012mechanobiology, p. 869; franze2013mechanics, p. 234" },
+  { label: "Brain regions, AFM, 5% strain", lo: 150, hi: 300, shown: "150–300 Pa", level: "stiffness (modulus)", system: "25-µm sphere, 1 Hz; rat according to the cited study's title", cite: "franze2013mechanics, p. 232" },
+  { label: "Glial cells", value: 400, shown: "≈ 400 Pa", level: "stiffness (modulus)", system: "AFM; glia next to hippocampal and retinal neurons; species not stated in the review", cite: "franze2013mechanics, p. 233" },
+  { label: "Frog brain, control (stage 40)", value: 432, shown: "median K = 432 Pa", level: "stiffness (modulus)", system: "in vivo AFM, Xenopus", cite: "pillai2026long, sec. \"Piezo1, but not Sema3A, depletion leads to brain tissue softening\"" },
+  { label: "Neurons", value: 1000, shown: "≈ 1 kPa", level: "stiffness (modulus)", system: "AFM; primary hippocampal and retinal neurons; species not stated in the review", cite: "franze2013mechanics, p. 233" },
+  { label: "Substrate where clutch behaviour changes", value: 1000, shown: "≈ 1 kPa", level: "stiffness (modulus)", system: "substrate modulus; embryonic chick forebrain filopodia", cite: "franze2013mechanics, p. 239; tyler2012mechanobiology, p. 869" },
+  { label: "Brain, all published values", lo: 40, hi: 20000, shown: "40 Pa – 20 kPa", level: "stiffness (modulus)", system: "all methods and timescales mixed", cite: "franze2013mechanics, p. 231" }
+]
+```
+
+The **growth cone**, the motile tip of a growing axon, crawls through the embryo and lays down the axon behind it [@mitchison1988cytoskeletal, p. 761; @tessierlavigne1996molecular, p. 1123]. To move, it pushes and pulls on its surroundings, so this is where the neuron's machinery meets the mechanics of the tissue. This chapter covers that machinery and the size of its forces. @sec-guidance asks how the growth cone chooses a direction.
+
+::: {.callout-note title="After this chapter you will be able to"}
+- name the parts of a growth cone and the cytoskeletal polymer that dominates each;
+- explain retrograde actin flow and the dynamic instability of microtubules;
+- explain how a molecular clutch turns retrograde flow into protrusion and traction;
+- place reported forces and stresses on one scale, and convert pN/µm² to Pa.
+:::
+
+## Anatomy of a growth cone {#sec-growth-cone-anatomy}
+
+The growth cone is "a flattened, fan-shaped structure ... with many long, thin spikes that radiate outward much like fingers on a glove" [@kolodkin2010mechanisms, Introduction]. Its edge carries two kinds of protrusion [@mitchison1988cytoskeletal, p. 762]:
+
+- the **lamellipodium**, "an extended, thin veil at the periphery of the growth cone that excludes most organelles";
+- **filopodia**, "long, thin extensions with a dense actin core".
+
+The axon shaft is dominated by stable microtubules and serves transport. The growth cone is dominated by dynamic actin filaments and serves movement [@mitchison1988cytoskeletal, pp. 761–762]. Between them lies the **neck**, where most microtubules end; Mitchison and Kirschner propose that the direction of growth is decided there [@mitchison1988cytoskeletal, p. 761].
+
+Axons and dendrites grow at different speeds. In cultured hippocampal neurons from embryonic day 18 (E18) rats, axons grew by about 70 µm per day for the first few days, and dendrites by about 12 µm per day between days 5 and 7 [@dotti1988establishment, p. 1457].
+
+Axons and dendrites also differ inside. In axons, all microtubules point their plus end away from the cell body; dendrites contain microtubules of both orientations [@craig1994neuronal, p. 276]. **Tau**, a protein that binds and stabilises microtubules, is needed for the axon: blocking its synthesis selectively inhibited axon outgrowth in cultured cerebellar neurons (species not stated in the review) [@craig1994neuronal, p. 294, Fig. 4].
+
+## Actin: protrusion and retrograde flow {#sec-growth-cone-actin}
+
+The fast-growing **barbed (plus) ends** of actin filaments face the leading edge, where new subunits are added [@mitchison1988cytoskeletal, p. 762; @dickson2002molecular, p. 1961]. Whole filaments meanwhile move backwards and are taken apart further back. This **retrograde flow** runs at about 3 µm/min in growth cones of the sea slug *Aplysia*, which corresponds to 18 actin subunits added per second [@mitchison1988cytoskeletal, p. 763]. A filopodium extends or retracts depending on the balance between polymerisation at its tip and retrograde flow [@dickson2002molecular, p. 1961].
+
+The flow is driven by myosin. Mitchison and Kirschner proposed myosin I [@mitchison1988cytoskeletal, p. 764]; a later review says "nonmuscle myosin" [@kolodkin2010mechanisms, sec. "Guidance Cues and the Control of Cytoskeletal Dynamics"].
+
+## Microtubules: dynamic instability {#sec-growth-cone-mt}
+
+Microtubules switch at random between growing and shrinking: **dynamic instability**. Tubulin carrying GTP adds to the end, the GTP is hydrolysed shortly afterwards, and the GDP lattice left behind is "intrinsically unstable and poised to depolymerize" [@mitchison1988cytoskeletal, p. 766]. In fibroblasts (not neurons), microtubules grow at 5 µm/min, shrink at 14 µm/min and last about 5 min on average [@mitchison1988cytoskeletal, p. 766].
+
+Microtubules in the growth cone are dynamic, whereas those in the axon are stable; in neurites of the PC12 and N115 cell lines they are saturated with tau [@mitchison1988cytoskeletal, pp. 765–767]. Dynamic microtubules grow along the actin bundles of filopodia, and capturing them in one filopodium may be what turns the growth cone [@dickson2002molecular, p. 1961].
+
+## The molecular clutch {#sec-growth-cone-clutch}
+
+If actin flows back as fast as it is added, the edge does not advance: a "futile cycle" [@mitchison1988cytoskeletal, Fig. 5, p. 764]. Advance needs a link to the outside. **Integrins** (receptors for the extracellular matrix) and **cadherins** (receptors for proteins on other cells) can grip actin through linker proteins such as **talin** [@mitchison1988cytoskeletal, p. 765]. When the link holds, the filament is anchored. Myosin's pull then becomes **tension** on the substrate, and subunits added at the barbed end push the membrane forward [@mitchison1988cytoskeletal, Fig. 5, pp. 764–765].
+
+Because retrograde flow is continuous but advance is variable, the coupling must slip; Mitchison and Kirschner named it a **molecular clutch** [@mitchison1988cytoskeletal, p. 765]. In a later formulation, "Substrate attachment secures the growth cone, allowing for tension to develop and subsequent growth-cone extension; detachment from the substrate has the opposite effect" [@kolodkin2010mechanisms, sec. "Guidance Cues and the Control of Cytoskeletal Dynamics"].
+
+```{mermaid}
+%%| label: fig-gc-clutch
+%%| fig-cap: "Schematic of the molecular clutch, drawn from the descriptions in @mitchison1988cytoskeletal [Fig. 5, pp. 764–765] and @kolodkin2010mechanisms. Left: no link to the substrate; actin cycles without net advance. Right: integrin and talin link actin to the substrate; flow slows, tension is passed to the substrate and polymerisation pushes the edge forward. Schematic, not to scale."
+flowchart LR
+  subgraph OFF["Clutch disengaged"]
+    direction TB
+    a1["Actin added at the leading edge"] --> a2["Myosin pulls filaments back<br/>(fast retrograde flow)"]
+    a2 --> a3["Filaments taken apart<br/>further back"]
+    a3 -.->|"subunits recycled"| a1
+    a2 --> a4["No net advance<br/>('futile cycle')"]
+  end
+  subgraph ON["Clutch engaged"]
+    direction TB
+    b1["Integrin–talin links actin<br/>to the substrate"] --> b2["Retrograde flow slows"]
+    b2 --> b3["Myosin pull becomes<br/>tension on the substrate"]
+    b2 --> b4["Polymerisation pushes<br/>the edge forward"]
+  end
+  OFF -->|"adhesion engages"| ON
+```
+
+The clutch also senses stiffness. On substrates softer than about 1 kPa, filopodia of embryonic chick forebrain neurons showed "load-and-fail" behaviour, with slow retrograde flow and high traction. On stiffer substrates they showed "frictional slippage", with fast flow and low traction [@franze2013mechanics, p. 239; @tyler2012mechanobiology, p. 869]. @sec-tissue-mechanics explains what a stiffness of 1 kPa means.
+
+## How large are the forces? {#sec-growth-cone-forces}
+
+Forces at this scale are measured in **piconewtons** (pN, $10^{-12}$ N). A force spread over an area is a **stress** [@franze2013mechanics, p. 230; @koser2016mechanosensing, PDF p. 6]:
+
+$$
+\sigma = \frac{F}{A},
+$$ {#eq-gc-stress}
+
+where $\sigma$ is the stress, $F$ the force and $A$ the area it acts on. The unit of stress is the pascal, and 1 Pa = 1 pN/µm² [@tyler2012mechanobiology, p. 869]. An internal stress of about 30 Pa in a growth cone [@franze2013mechanics, p. 239] therefore means about 30 pN on each square micrometre.
+
+A polymerising actin filament stalls at about 1 pN, and a single microtubule at about 5 pN [@tyler2012mechanobiology, pp. 869–870]. One integrin–fibronectin bond breaks at about 20 pN, and an N-cadherin bond holds about 40 pN [@tyler2012mechanobiology, p. 871]. Whole growth cones produce far more. Traction force measurements gave about 537 pN for dorsal root ganglion (DRG) growth cones and 71 pN for hippocampal ones, a ${gcRatio}-fold difference [@tyler2012mechanobiology, p. 873]. Growth cones are also very soft: about 100 Pa at short timescales, relaxing within about 10 s and flowing like a liquid at longer times [@franze2013mechanics, p. 234].
+
+Before you look at the scale, make a prediction.
+
+```{ojs}
+//| echo: false
+viewof gcGuess = gcPredictGate({
+  prompt: "A hippocampal growth cone pulls on its substrate with about 71 pN. How does that compare with the stall force of one polymerising actin filament?",
+  confidence: true,
+  spec: {
+    kind: "choice",
+    options: ["tens to hundreds of times larger", "about the same", "smaller"],
+    answer: "tens to hundreds of times larger",
+    feedback: {
+      "tens to hundreds of times larger": "Right: about 1 pN per filament against 71–537 pN per growth cone. A growth cone's force adds up from many filaments, motors and bonds.",
+      "about the same": "A single filament stalls at about 1 pN, so a growth cone's traction is that of many filaments, motors and bonds acting together.",
+      "smaller": "The single-molecule forces are the smallest on the scale: about 1 pN for actin and 5 pN for a microtubule."
+    }
+  }
+})
+```
+
+```{ojs}
+//| echo: false
+viewof gcScale = Inputs.radio(["Forces (pN)", "Stresses and stiffnesses (Pa)"], { value: "Forces (pN)", label: "Show" })
+```
+
+```{ojs}
+//| echo: false
+//| label: fig-gc-ladder
+//| fig-cap: "Forces (top option, pN) and stresses or stiffnesses (bottom option, Pa) reported in the sources, on log axes. Each dot is one published value; bars join the ends of a published range. Hover over a dot to see the system, species and source (citekey and page). Values from Tyler 2012, Franze et al. 2013, Van Essen 1997 (150 µdyn converted to 1.5 nN), Koser et al. 2016 and Pillai et al. 2026. The values were measured with different methods, in different species and at different timescales, so the scale shows orders of magnitude, not a comparison under equal conditions. Stresses and moduli share the unit Pa but are different quantities: a stress is a force per area, a modulus is a stress per strain (@sec-tissue-mechanics)."
+{
+  if (!gcGuess.committed) return gcLocked()
+  const isForce = gcScale === "Forces (pN)"
+  const rows = isForce ? gcForces : gcStresses
+  const levels = isForce
+    ? ["single molecule", "growth cone", "neurite or tissue", "applied by experimenters"]
+    : ["stress", "stiffness (modulus)"]
+  const colors = isForce ? ["#2a78d6", "#eb6834", "#1baf7a", "#9aa5b1"] : ["#eb6834", "#2a78d6"]
+  const order = rows.slice().sort((a, b) => (a.value ?? a.lo) - (b.value ?? b.lo)).map(d => d.label)
+  const pts = rows.flatMap(d => d.lo !== undefined ? [{ ...d, x: d.lo }, { ...d, x: d.hi }] : [{ ...d, x: d.value }])
+  const ranges = rows.filter(d => d.lo !== undefined)
+  const tip = d => `${d.label}: ${d.shown}\n${d.system}\nSource: ${d.cite}`
+  return Plot.plot({
+    width: Math.min(width, 720),
+    height: 26 * rows.length + 70,
+    marginLeft: Math.min(230, width * 0.45),
+    marginRight: 20,
+    x: { type: "log", label: isForce ? "force (pN) →" : "stress or modulus (Pa) →", grid: true,
+         domain: isForce ? [0.5, 60000] : [10, 30000] },
+    y: { domain: order, label: null },
+    color: { domain: levels, range: colors, legend: true },
+    marks: [
+      Plot.ruleY(ranges, { y: "label", x1: "lo", x2: "hi", stroke: "level", strokeWidth: 4, strokeOpacity: 0.6 }),
+      Plot.dot(pts, { x: "x", y: "label", fill: "level", r: 6, title: tip })
+    ]
+  })
+}
+```
+
+Things to notice:
+
+- Single molecules sit at 1–40 pN; a growth cone pulls with tens to hundreds of times more, and a brain explant with nanonewtons.
+- *Xenopus* brain explants (stage 37/38) pulled about four times harder on the stiffer gel [@pillai2026long].
+- A growth cone (about 100 Pa) is softer than a whole neuron (about 1 kPa).
+
+## Tension and towed growth {#sec-growth-cone-tension}
+
+The axon shaft is under tension, and microtubules may act as struts that resist it [@mitchison1988cytoskeletal, p. 765]. Mitchison and Kirschner noted that "external force can promote axon outgrowth" [@mitchison1988cytoskeletal, p. 767] and called tension "an ideal second messenger", because it is quickly distributed to the interface between actin and the membrane [@mitchison1988cytoskeletal, p. 768].
+
+Neurites of chick sensory neurons on an adhesive substrate generate a tension of about 150 µdyn (about ${gcTensionNN} nN). They lengthen in proportion to an applied tension, like a spring, and the tension relaxes over minutes. Above a threshold tension they actively elongate; when the tension is fully released they retract [@vanessen1997tension, p. 313]. This is **towed growth**.
+
+Once connected, axons can "grow passively by being stretched" [@franze2013mechanics, p. 228]. In bioreactors, stretched axons have grown 10 mm per day [@franze2013mechanics, p. 243], about ${gcTowRatio} times the rate of rat hippocampal axons in culture [@dotti1988establishment, p. 1457], although the systems differ.
+
+## Check yourself {#sec-growth-cone-check}
+
+:::{.qmulti}
+A growth cone has fast retrograde actin flow, but its integrins suddenly link actin to a laminin-coated substrate. What happens at the leading edge?
+
+- Retrograde flow slows, tension is passed to the substrate, and polymerisation pushes the edge forward.
+
+  > Correct. This is the molecular clutch [@mitchison1988cytoskeletal, Fig. 5, pp. 764–765; @kolodkin2010mechanisms].
+
+- Retrograde flow speeds up, because myosin now has something to pull against.
+
+  > Anchoring the filaments slows their backward flow; myosin's pull is transmitted to the substrate as tension instead.
+
+- Nothing changes, because protrusion depends only on the rate of actin polymerisation.
+
+  > Without a link, polymerisation is cancelled by retrograde flow (the "futile cycle"). Advance needs both.
+
+:::
+
+**Compute.** Traction force microscopy gave about 537 pN for DRG growth cones and 71 pN for hippocampal ones [@tyler2012mechanobiology, p. 873]. The DRG value is {{< qinput 7.6 tol=0.2 hints="537 / 71" >}} times larger.
+
+:::{.qmulti}
+You stain microtubules in a cultured rat hippocampal neuron and find a process whose microtubules point in both directions. What is it most likely to be?
+
+- A dendrite.
+
+  > Correct: dendrites contain microtubules of both orientations, while all axonal microtubules point their plus end away from the cell body [@craig1994neuronal, p. 276].
+
+- The axon.
+
+  > Axonal microtubules all point plus end distal.
+
+- A filopodium.
+
+  > Filopodia are built around a dense core of actin, not microtubules [@mitchison1988cytoskeletal, p. 762].
+
+:::
+
+:::{.qmulti}
+A growth cone's internal stress is about 30 Pa. How much force acts on each square micrometre?
+
+- About 30 pN.
+
+  > Correct: 1 Pa = 1 pN/µm² [@tyler2012mechanobiology, p. 869].
+
+- About 30 nN.
+
+  > That would be 30 kPa. Check the conversion 1 Pa = 1 pN/µm².
+
+- About 0.03 pN.
+
+  > The conversion is one-to-one: 1 Pa = 1 pN/µm².
+
+:::
+
+:::{.qmulti}
+In Van Essen's summary, what happens to a chick sensory neurite when its tension is completely released?
+
+- It actively retracts.
+
+  > Correct. Above a threshold tension neurites elongate; with no tension they retract [@vanessen1997tension, p. 313].
+
+- It keeps growing at the same rate.
+
+  > Growth depends on tension, which acts as a negative-feedback signal on length.
+
+- It stiffens until the tension returns.
+
+  > The review describes shortening, waviness and active retraction, not stiffening.
+
+:::
+
+::: {.callout-tip title="Answers" collapse="true"}
+1. Flow slows, tension develops, the edge advances: the molecular clutch [@mitchison1988cytoskeletal, Fig. 5, pp. 764–765; @kolodkin2010mechanisms, sec. "Guidance Cues and the Control of Cytoskeletal Dynamics"].
+2. $537/71 \approx 7.6$ [@tyler2012mechanobiology, p. 873].
+3. A dendrite [@craig1994neuronal, p. 276].
+4. About 30 pN, because 1 Pa = 1 pN/µm² [@tyler2012mechanobiology, p. 869; @franze2013mechanics, p. 239].
+5. It actively retracts [@vanessen1997tension, p. 313].
+:::
+
+## Summary {#sec-growth-cone-summary}
+
+- The growth cone's lamellipodium and filopodia are built from dynamic actin. The axon behind it is built around stable microtubules, which in axons all point plus end distal but in dendrites point both ways [@mitchison1988cytoskeletal, pp. 761–762; @craig1994neuronal, p. 276].
+- Actin is added at the leading edge and flows backwards, at about 3 µm/min in *Aplysia* growth cones. Microtubules switch between growth and shrinkage (dynamic instability) [@mitchison1988cytoskeletal, pp. 763, 766].
+- A molecular clutch of integrins and linkers such as talin anchors actin to the substrate. It turns retrograde flow into tension and protrusion, and its behaviour changes with substrate stiffness [@mitchison1988cytoskeletal, pp. 764–765; @franze2013mechanics, p. 239].
+- Forces range from about 1 pN per actin filament to hundreds of pN per growth cone and nanonewtons per piece of tissue. Stresses are given in Pa, and 1 Pa = 1 pN/µm² [@tyler2012mechanobiology, pp. 869–873; @pillai2026long].
+- Neurites are under tension, and tension above a threshold drives towed growth [@vanessen1997tension, p. 313].
+
+:::{.qflashcards}
+
+- What is retrograde actin flow?
+
+  > The backward movement of whole actin filaments away from the leading edge, about 3 µm/min in *Aplysia* growth cones.
+
+- What does the molecular clutch do?
+
+  > It links actin to the substrate through integrins and talin, so that myosin's pull becomes tension and polymerisation becomes protrusion.
+
+- Stall force of one actin filament, and of one microtubule?
+
+  > About 1 pN and about 5 pN.
+
+- How do you convert a stress in Pa to a force per area?
+
+  > 1 Pa = 1 pN/µm².
+
+- What is towed growth?
+
+  > Active elongation of a neurite when it is stretched above a threshold tension.
+
+:::

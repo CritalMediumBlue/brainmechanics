@@ -1,0 +1,43 @@
+# Welcome {.unnumbered}
+
+This course is for a new PhD student in biological engineering or biophysics who has just joined a brain-mechanics group. It assumes you are comfortable with physics and mathematics and that you have never taken a neuroscience course. Its aim is narrow: to let you read the group's papers, and sit in its meetings, without having to stop at every second noun.
+
+## How to use it
+
+The full course is chapters 1–12 in order, about two hours including the exercises. Part I builds the vocabulary (membrane potential, activity, calcium, indicators, culture, anatomy, extracellular matrix, growth cones, guidance, tissue mechanics, Piezo1); Part II is the frontier chapter that puts them together.
+
+If you have half an hour, read the condensed version (@sec-condensed) instead: one short section per chapter with the facts and equations worth remembering, and the same citations.
+
+## Conventions
+
+- **Every factual claim carries a citation** with a page, figure or section, so you can check it in an afternoon.
+- **Species and age are always labelled** (mouse, rat, *Xenopus*, human, cell line; E-day, P-day, Nieuwkoop–Faber stage, days in vitro). Results from one species are never silently transferred to another.
+- Orientation that is *not* from the sources sits in an amber "Not from the literature" box, and never contains numbers.
+- Figures built from published values name the source in the caption and on hover; figures that are drawings or toy models say "illustrative" or "schematic".
+- Each chapter ends with self-tests whose answers, with citations, are in a collapsed box, plus a few flashcards.
+
+## Concept map
+
+```{mermaid}
+flowchart TD
+  A[Ions and membrane potential] --> B[Electrical activity and the GABA switch]
+  B --> C[Calcium signalling]
+  C --> D[Voltage and calcium indicators]
+  A --> D
+  E[Neuronal culture] --> D
+  E --> F[Growth cone and cytoskeleton]
+  F --> G[Axon guidance]
+  C --> G
+  E --> H[Mouse embryo brain anatomy]
+  H --- I[Extracellular matrix]
+  I --> J[Tissue mechanics]
+  J --> K[Mechanosensing and Piezo1]
+  K --> L[Frontier: stiffness as a developmental signal]
+  G --> L
+```
+
+The through-line: neurons are electrical *and* mechanical cells. Stiffness is measured, sensed by channels such as Piezo1, and used to steer axons and to time maturation.
+
+## Sources
+
+Everything here comes from the 39 papers on the group's reading list, read in full. The references page lists all of them, including two entries whose text was not available to the author (Hodgkin & Huxley 1952; Hille 2001); they support no claim in this course.

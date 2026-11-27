@@ -1,0 +1,207 @@
+---
+filters:
+  - shortiquiz
+---
+
+# Axon guidance {#sec-guidance}
+
+```{ojs}
+//| echo: false
+//| output: false
+// Numbers used in the prose, computed from the cited values.
+gdEphKolodkin = 8 + 6   // EphA + EphB receptors, Kolodkin & Tessier-Lavigne 2010, sec. "Ephrins"
+gdEphrinKolodkin = 5 + 3 // ephrin-A + ephrin-B ligands, same section
+```
+
+Axons can grow "as much as several centimeters, or more than a thousand times the diameter of the cell body" to reach their targets [@tessierlavigne1996molecular, p. 1124]. How does the growth cone (@sec-growth-cone) find its way? The classical answer is chemical: cells along the path display or secrete guidance cues, and receptors on the growth cone read them. A newer answer, from *Xenopus* embryos, is that tissue stiffness also steers axons. This chapter covers the chemical framework and ends with a short look at mechanics.
+
+::: {.callout-note title="After this chapter you will be able to"}
+- name the four guidance forces and give an example cue for each;
+- match the four canonical cue families with their receptors and say whether each attracts or repels;
+- explain how commissural axons cross the midline once and do not return;
+- explain how calcium and cyclic nucleotides can switch a growth cone from attraction to repulsion.
+:::
+
+## Four guidance forces {#sec-guidance-forces}
+
+A long trajectory is broken into short segments, "each perhaps a few hundred micrometers long" [@tessierlavigne1996molecular, p. 1124]. Segments often end at **choice points** (intermediate targets): specialised cells that tell the axon where to go next. There, growth cones may slow down and grow more filopodia [@tessierlavigne1996molecular, p. 1124].
+
+Tessier-Lavigne and Goodman sorted guidance into four mechanisms: **contact attraction**, **chemoattraction**, **contact repulsion** and **chemorepulsion** [@tessierlavigne1996molecular, p. 1123]. "Contact" cues are bound to cells or matrix and act at short range; "chemo" cues are secreted and act at long range [@tessierlavigne1996molecular, p. 1124, Fig. 1].
+
+Note for anyone who coats culture dishes: "many adhesive substrates fail to support axon growth" [@tessierlavigne1996molecular, p. 1124]. Repulsion, in turn, can deflect, stop or collapse a growth cone [@tessierlavigne1996molecular, p. 1124].
+
+The four forces act together. An axon may be "pushed" from behind by a chemorepellent, "pulled" by a chemoattractant and "hemmed in" by local cues (@fig-gd-forces) [@tessierlavigne1996molecular, p. 1124]. Each decision reflects the balance of attraction and repulsion [@tessierlavigne1996molecular, p. 1130].
+
+```{mermaid}
+%%| label: fig-gd-forces
+%%| fig-cap: "The four guidance forces, with example cues for each as listed by @tessierlavigne1996molecular [Fig. 1, p. 1124; netrin repulsion and secreted semaphorins from p. 1126]. Green borders: attraction; red borders: repulsion. A chemoattractant pulls, a chemorepellent pushes, and contact cues hem the axon into a corridor. The match between molecules and forces is not one-to-one: some cues are bifunctional. Schematic."
+flowchart TB
+  CA["Chemoattraction<br/>long range, secreted<br/>e.g. netrins"]
+  KA["Contact attraction<br/>short range, bound<br/>e.g. Ig CAMs, cadherins, laminins"]
+  GC(("Growth<br/>cone"))
+  KR["Contact repulsion<br/>short range, bound<br/>e.g. Eph ligands, transmembrane<br/>semaphorins, tenascins"]
+  CR["Chemorepulsion<br/>long range, secreted<br/>e.g. netrins, secreted semaphorins"]
+  CA -->|"pull"| GC
+  KA -->|"hem in"| GC
+  KR -->|"hem in"| GC
+  CR -->|"push"| GC
+  classDef attr stroke:#1baf7a,stroke-width:3px
+  classDef rep stroke:#e34948,stroke-width:3px
+  class CA,KA attr
+  class CR,KR rep
+```
+
+## Four families of cues {#sec-guidance-families}
+
+Four families of cues are the best understood, each with its own receptors (@tbl-gd-cues) [@dickson2002molecular, p. 1959; @kolodkin2010mechanisms, sec. "Diversity of Guidance Cues for Developing Neuronal Processes"].
+
+| Cue family | Receptors | Typical effect | Range | Sources |
+|---|---|---|---|---|
+| Netrins | DCC family (attraction); UNC5 family (repulsion) | Bifunctional: attract some axons, repel others | Long (diffusing a few hundred µm in some settings) or short | @kolodkin2010mechanisms [sec. "Netrins"]; @tessierlavigne1996molecular [p. 1126] |
+| Slits | Robo | Repulsion | Secreted; short-range at the fly midline | @dickson2002molecular [p. 1960]; @kolodkin2010mechanisms [sec. "Slits"] |
+| Semaphorins | Plexins; for secreted class 3, neuropilin + plexin | Mostly repulsion; some can attract | Long and short | @dickson2002molecular [p. 1960]; @kolodkin2010mechanisms [sec. "Semaphorins"] |
+| Ephrins | Eph receptors (ephrin-A binds EphA, ephrin-B binds EphB) | Attraction or repulsion; topographic maps | Short only | @dickson2002molecular [p. 1961]; @kolodkin2010mechanisms [sec. "Ephrins"] |
+
+: The four canonical families of guidance cues and their receptors. {#tbl-gd-cues}
+
+**Netrins** have attracted axons towards the midline "across more than 600 million years of evolution" [@dickson2002molecular, p. 1959]. In mouse embryos lacking netrin-1, commissural axons "give the appearance of wandering" [@tessierlavigne1996molecular, p. 1126].
+
+**Slits** at the *Drosophila* midline stop axons from crossing, or from recrossing. Mice lacking Slit1 and Slit2 have no obvious spinal midline defects (Slit3 is still there) but striking defects at the optic chiasm, where retinal axons cross [@dickson2002molecular, p. 1960].
+
+**Semaphorins** usually repel. Sema3A surrounds many peripheral nerves and keeps axons on track by "surround repulsion" [@kolodkin2010mechanisms, sec. "Semaphorins"]. Yet Sema3A attracts the apical dendrites of pyramidal neurons but repels their axons [@dickson2002molecular, p. 1962].
+
+**Ephrins** must be clustered to activate their receptors, so they act only at short range [@kolodkin2010mechanisms, sec. "Ephrins"].
+
+::: {.callout-important title="Where the reviews disagree"}
+- **Size of the Sema domain** (the signature region of semaphorins): about 420 amino acids according to @dickson2002molecular [p. 1960]; about 500 according to @kolodkin2010mechanisms [sec. "Semaphorins"] and @tessierlavigne1996molecular [p. 1125].
+- **Range of netrins**: "up to a few millimeters" in some cases according to @dickson2002molecular [p. 1959]; "a few hundred micrometers in some settings" according to @kolodkin2010mechanisms [sec. "Netrins"].
+- **Number of Eph receptors and ephrins**: 13 receptors and 8 ephrins in mammals according to @dickson2002molecular [p. 1961]. @kolodkin2010mechanisms [sec. "Ephrins"] list 8 EphA + 6 EphB = ${gdEphKolodkin} receptors and 5 + 3 = ${gdEphrinKolodkin} ephrins, without naming a species.
+:::
+
+## Topographic maps {#sec-guidance-maps}
+
+Ephrin-A ligands form a gradient across the tectum (the superior colliculus in mammals), and EphA receptors form a complementary gradient across the retina. Retinal axons with more EphA stop lower on the ephrin-A gradient, through repulsion [@dickson2002molecular, p. 1961]. When the ephrin-A gradient was removed in the mouse superior colliculus, retinal axons still filled the whole structure, but their order was disrupted. Mapping thus depends on an axon's EphA level relative to its neighbours, not on its absolute level [@dickson2002molecular, p. 1961].
+
+## Switching at the midline {#sec-guidance-midline}
+
+**Commissural axons** connect the two sides of the central nervous system. They grow to the midline, cross it once and never turn back [@dickson2002molecular, p. 1963]. Before crossing, they are attracted by netrin and ignore the midline repellents Slit and certain class 3 semaphorins. After crossing, they ignore netrin (shown at least in the vertebrate hindbrain) and are repelled by Slit and semaphorins [@dickson2002molecular, p. 1963, Fig. 3].
+
+Slit silences netrin attraction through a direct interaction between Robo and DCC. In *Drosophila*, the protein Comm sends newly made Robo for degradation until the axon has crossed [@dickson2002molecular, p. 1963]. In general, growth cones "extinguish their responses to certain cues and acquire responsiveness to others at key choice points" [@kolodkin2010mechanisms, Introduction].
+
+## Inside the growth cone {#sec-guidance-signals}
+
+Cues act on the cytoskeleton of @sec-growth-cone, through Rho GTPases among others [@kolodkin2010mechanisms, sec. "Guidance Cues and the Control of Cytoskeletal Dynamics"]. Filopodia may steer "by differential adhesion, generating mechanical force, or transducing distal signals" [@dickson2002molecular, p. 1961]. Forces do change: on immobilised netrin-1, growth cones of spinal commissural neurons increased their traction about tenfold, enough to redirect the axon [@franze2013mechanics, p. 240].
+
+**Calcium.** In cultured *Xenopus* spinal neurons, turning towards netrin-1 needs Ca²⁺ influx and Ca²⁺ release from internal stores. A local Ca²⁺ rise, made by releasing caged Ca²⁺ with light, causes turning without netrin [@dickson2002molecular, p. 1962]. In the *Xenopus* spinal cord in vivo, growth cones with frequent spontaneous Ca²⁺ transients (@sec-calcium) extended slowly; transients in filopodia regulate turning onto preferred substrates [@rosenberg2011calcium, sec. "Calcium-Mediated Regulation of Axon Outgrowth and Pathfinding"]. Dickson had judged evidence for a role in turning in vivo not yet "compelling" [@dickson2002molecular, p. 1962].
+
+**Cyclic nucleotides.** Lowering cAMP or cGMP turns attraction into repulsion, and raising them turns repulsion into attraction [@dickson2002molecular, p. 1962]. *Xenopus* retinal axons are attracted by netrin-1 at the exit of the eye and repelled by it at the tectum, following a decline in cAMP [@dickson2002molecular, p. 1962]. Timing matters too: cultured *Xenopus* neurons are repelled by netrin-1 early and attracted 8–10 h later, and blocking Ca²⁺ channels at late stages turns attraction back into repulsion [@moody2005ion, p. 906].
+
+## Mechanical guidance, in brief {#sec-guidance-mechanics}
+
+In *Xenopus*, retinal axons make a caudal turn in the brain "thought to be mainly controlled by the repellent chemical cues Slit1, Slit2 and Semaphorin3A" [@koser2016mechanosensing, PDF p. 2]. Three studies add mechanics:
+
+- Stiffness maps of the living brain (stages 39–40) showed tissue stiffer in front of the tract than behind it. The axons turned towards the softer tissue, also on gradient gels without chemical cues [@koser2016mechanosensing, sec. "Axons grow towards soft tissue"]. This is the opposite of non-neuronal cells, which usually move towards stiffer substrates (**durotaxis**) [@koser2016mechanosensing, PDF p. 7].
+- Live mapping (stages 33/34–37/38) showed the gradient appearing on average 18 min before the turn, and a gradient of at least (0.9 ± 0.4) Pa/µm was needed for axons to change direction [@thompson2019rapid, p. 3].
+- Knocking down the mechanosensitive channel Piezo1 in the brain tissue around the axons lowered the expression of Slit1 and Sema3A [@pillai2026long, sec. "Piezo1 regulates expression of long-range guidance cues in vivo"].
+
+Chemical and mechanical guidance are therefore linked. @sec-piezo introduces Piezo1, and @sec-frontier weighs this evidence.
+
+## Check yourself {#sec-guidance-check}
+
+**Match each cue with its receptor** [@kolodkin2010mechanisms; @dickson2002molecular]:
+
+- Netrin-1, when it attracts commissural axons: {{< qselect "DCC|Robo|EphA|Neuropilin" >}}
+- Netrin, when it repels: {{< qselect "UNC5|DCC|Robo|EphB" >}}
+- Slit: {{< qselect "Robo|DCC|Plexin|EphA" >}}
+- Secreted class 3 semaphorins such as Sema3A: {{< qselect "Neuropilin and plexin|Robo|DCC|EphB" >}}
+- Ephrin-A in the tectum: {{< qselect "EphA|EphB|Robo|UNC5" >}}
+
+:::{.qmulti}
+A commissural axon has just crossed the floor plate. Why does it not turn back towards the netrin source?
+
+- It has lost its attraction to netrin and gained repulsion by Slit and semaphorins.
+
+  > Correct [@dickson2002molecular, p. 1963].
+
+- Netrin is no longer made at the midline.
+
+  > Netrin is still there; the axon's response to it changes.
+
+- The axon now lacks a growth cone.
+
+  > The growth cone continues to the axon's target on the other side.
+
+:::
+
+:::{.qmulti}
+A cultured *Xenopus* spinal neuron turns towards netrin-1. You lower cAMP inside the growth cone. What do you expect?
+
+- The growth cone now turns away from netrin-1.
+
+  > Correct: lowering cAMP or cGMP converts attraction to repulsion [@dickson2002molecular, p. 1962].
+
+- It turns towards netrin-1 more strongly.
+
+  > Raising cyclic nucleotides favours attraction; lowering them favours repulsion.
+
+- It stops responding to any cue.
+
+  > The response switches sign; it does not disappear.
+
+:::
+
+:::{.qmulti}
+In the *Xenopus* optic tract, which way do retinal axons turn relative to a stiffness gradient?
+
+- Towards the softer tissue.
+
+  > Correct [@koser2016mechanosensing, sec. "Axons grow towards soft tissue"].
+
+- Towards the stiffer tissue, like fibroblasts in durotaxis.
+
+  > That is what most non-neuronal cells do. Koser et al. found the opposite for these axons.
+
+- Stiffness gradients do not affect them.
+
+  > Axons turned towards the soft side even on gels with a stiffness gradient and no chemical gradient.
+
+:::
+
+::: {.callout-tip title="Answers" collapse="true"}
+1. Netrin attraction: DCC; netrin repulsion: UNC5; Slit: Robo; class 3 semaphorins: neuropilin with plexin; ephrin-A: EphA [@kolodkin2010mechanisms, secs. "Netrins", "Slits", "Semaphorins", "Ephrins"; @dickson2002molecular, pp. 1960–1961].
+2. It switches from netrin attraction to Slit and semaphorin repulsion [@dickson2002molecular, p. 1963].
+3. It turns away: lower cAMP converts attraction to repulsion [@dickson2002molecular, p. 1962].
+4. Towards softer tissue [@koser2016mechanosensing, sec. "Axons grow towards soft tissue"].
+:::
+
+## Summary {#sec-guidance-summary}
+
+- Growth cones are guided by contact attraction, chemoattraction, contact repulsion and chemorepulsion, acting together along short segments between choice points [@tessierlavigne1996molecular, pp. 1123–1124].
+- The four canonical cue families and their receptors are netrins (DCC attracts, UNC5 repels), Slits (Robo), semaphorins (plexins, with neuropilins for class 3) and ephrins (Eph receptors) [@kolodkin2010mechanisms; @dickson2002molecular].
+- Commissural axons cross the midline once because they switch from netrin attraction to Slit and semaphorin repulsion [@dickson2002molecular, p. 1963].
+- Ca²⁺ signals and cAMP/cGMP levels inside the growth cone set whether a cue attracts or repels (cultured *Xenopus* neurons) [@dickson2002molecular, p. 1962; @moody2005ion, p. 906].
+- In *Xenopus*, axons also turn towards softer tissue, and tissue mechanics regulates where chemical cues are made [@koser2016mechanosensing; @thompson2019rapid; @pillai2026long].
+
+:::{.qflashcards}
+
+- What are the four guidance forces?
+
+  > Contact attraction, chemoattraction, contact repulsion and chemorepulsion.
+
+- What does "bifunctional" mean for a guidance cue?
+
+  > It attracts some axons and repels others, depending on the receptors they carry (netrin: DCC vs UNC5).
+
+- Which receptor makes commissural axons sensitive to Slit after crossing?
+
+  > Robo.
+
+- What sets the position of a retinal axon in the tectum?
+
+  > Its EphA level relative to its neighbours, read against an ephrin-A gradient.
+
+- Which way do *Xenopus* retinal axons turn on a stiffness gradient?
+
+  > Towards the softer side.
+
+:::

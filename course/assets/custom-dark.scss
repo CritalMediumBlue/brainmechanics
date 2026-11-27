@@ -1,0 +1,18 @@
+/*-- scss:defaults --*/
+$font-family-monospace: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+$primary: #6fb1ff;
+
+/*-- scss:rules --*/
+#quarto-document-content p { text-align: justify; hyphens: auto; }
+
+// Transparent Plotly figures and matplotlib images are inverted in dark mode;
+// hue-rotate(180deg) brings the colours back to (roughly) their original hue.
+body.quarto-dark .mono-plots img,
+body.quarto-dark .mono-plots video,
+body.quarto-dark .mono-plots .js-plotly-plot { filter: invert(1) hue-rotate(180deg); }
+
+// Plotly's default text is dark grey. For figures that are NOT inverted, make
+// axis labels and legends readable on the dark background.
+body.quarto-dark .js-plotly-plot:not(.mono-plots .js-plotly-plot) .main-svg text {
+  fill: #d0d7e2 !important;
+}

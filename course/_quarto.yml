@@ -1,0 +1,62 @@
+project:
+  type: book
+  output-dir: _book
+  resources:
+    - assets/atlas/*.glb
+    - assets/atlas/atlas-groups.json
+    - assets/atlas/PROVENANCE.md
+    - js/*.js
+
+bibliography: references.bib
+link-citations: true
+
+book:
+  title: "Brain Mechanics"
+  subtitle: "A starter course on the electrical and mechanical life of developing neurons"
+  date: today
+  site-url: https://CritalMediumBlue.github.io/brainmechanics/
+  repo-url: https://github.com/CritalMediumBlue/brainmechanics
+  repo-subdir: course
+  repo-actions: [source]
+  # No full-text search index (same policy as quarto-gallery).
+  search: false
+  chapters:
+    - index.qmd
+    - part: "Foundations"
+      chapters:
+        - chapters/01-membrane.qmd
+        - chapters/02-activity.qmd
+        - chapters/03-calcium.qmd
+        - chapters/04-indicators.qmd
+        - chapters/05-culture.qmd
+        - chapters/06-anatomy.qmd
+        - chapters/07-ecm.qmd
+        - chapters/08-growth-cone.qmd
+        - chapters/09-guidance.qmd
+        - chapters/10-tissue-mechanics.qmd
+        - chapters/11-piezo.qmd
+    - part: "Frontier"
+      chapters:
+        - chapters/12-frontier.qmd
+    - part: "Quick version"
+      chapters:
+        - condensed.qmd
+    - references.qmd
+
+format:
+  html:
+    theme:
+      light: [cosmo, assets/custom.scss]
+      dark: [darkly, assets/custom-dark.scss]
+    css:
+      - assets/observable.css
+      - assets/pedagogy.css
+      - assets/course.css
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-fold: true
+    code-tools: true
+    code-summary: "Show the code"
+    code-overflow: scroll
+    html-math-method: mathjax

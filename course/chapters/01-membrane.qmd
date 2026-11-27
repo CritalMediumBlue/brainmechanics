@@ -1,0 +1,273 @@
+---
+filters:
+  - shortiquiz
+---
+
+# Membrane potential and ion channels {#sec-membrane}
+
+```{ojs}
+//| echo: false
+import { predictGate, locked } from "./pedagogy/predict.js"
+```
+
+```{ojs}
+//| echo: false
+//| output: false
+// Every number in the prose of this chapter is computed here from the
+// equations of @fairless2013membrane (eqs. 1 and 2, p. 5).
+RTF = 25.43  // RT/F in mV at 22 °C, as given by Fairless et al. (p. 5)
+nernstDE = (Kx, Kr) => RTF * Math.log(Kx / Kr)
+ghkDE = (Kx, Kr, p) => {
+  // Na+ is lowered by as much as K+ is raised (constant osmolarity, as in Fairless' Methods);
+  // internal Cl- = 30 mM (the value assumed in Fairless' Fig. S1).
+  const Nax = p.Nar - (Kx - Kr)
+  const num = p.PK * Kx + p.PNa * Nax + p.PCl * p.Cli
+  const den = p.PK * Kr + p.PNa * p.Nar + p.PCl * p.Cli
+  return RTF * Math.log(num / den)
+}
+exNernst = nernstDE(25, 5.4).toFixed(2)
+exNernstLow = nernstDE(1, 4).toFixed(2)
+exNernstHigh = nernstDE(120, 4).toFixed(2)
+tenfold = (RTF * Math.log(10)).toFixed(1)
+ghkHigh = ghkDE(25, 5.4, { PK: 1, PNa: 0.18, PCl: 0.10, Nar: 140, Cli: 30 }).toFixed(1)
+ghkLow = ghkDE(25, 5.4, { PK: 1, PNa: 0.10, PCl: 0.10, Nar: 140, Cli: 30 }).toFixed(1)
+```
+
+A mechanics course starts with electricity because the two meet at the cell membrane. When a membrane is stretched, mechanosensitive ion channels open. Piezo1 lets positive ions in and depolarises the cell, while the K⁺ channel TRAAK pulls the voltage the other way, towards the equilibrium potential of K⁺ [@brohawn2014mechanosensitivity, sec. "Mechanical Gating of K2P Channels"]. Recent work found that the stiffness of the culture substrate changes how much Na⁺ current young hippocampal neurons (from rat) carry [@kreysing2025environmental, Fig. 2c]. To read papers like these, you need the vocabulary of this chapter.
+
+::: {.callout-note title="After this chapter you will be able to"}
+- define the membrane potential, depolarisation and hyperpolarisation;
+- compute the equilibrium potential of an ion from its concentrations with the Nernst equation;
+- explain why the Goldman–Hodgkin–Katz (GHK) equation predicts a smaller voltage change than the Nernst equation when several ions can cross the membrane;
+- explain what a voltage clamp measures and why currents are normalised to membrane capacitance.
+:::
+
+## What the membrane potential is {#sec-membrane-what}
+
+The **transmembrane potential** ($V_\mathrm{mem}$, also written $V_m$) is "the voltage difference across a cell's bilayer membrane that is established by the balance of intracellular and extracellular ionic concentrations", and it is maintained by passive and active ion transport [@sundelacruz2009role, Introduction]. By convention it is the potential of the inside relative to the outside. Resting values of different cell types lie roughly between −10 and −90 mV [@sundelacruz2009role, sec. "Proliferation"].
+
+A cell is **depolarised** when its potential becomes less negative and **hyperpolarised** when it becomes more negative [@sundelacruz2009role, sec. "Proliferation"]. These words matter beyond neurons: quiescent, differentiated cells tend to be hyperpolarised, whereas embryonic and proliferating cells tend to be depolarised [@sundelacruz2009role, sec. "Proliferation"]. Developing cerebellar granule neurons, for example, hyperpolarise from about −25 to −55 mV as they mature [@sundelacruz2009role, sec. "Functional Role of Vmem Signaling During Differentiation"].
+
+How is it measured? In **sharp microelectrode recording** a glass electrode impales the cell, and the voltage is measured against a bath electrode. In the **whole-cell patch clamp**, a pipette first seals tightly onto the membrane (a *gigaseal*), and the patch under it is then ruptured by suction or a current pulse. Only the whole-cell configuration in *current-clamp* mode measures the membrane potential directly [@sundelacruz2009role, sec. "Membrane Potential Measurements"]. Fluorescent dyes, the subject of @sec-indicators, are an indirect alternative.
+
+## Ion channels and ion gradients {#sec-membrane-channels}
+
+An **ion channel** is a membrane protein with a pore through which ions flow down their electrochemical gradient. Channels are classified by what opens them. For Ca²⁺ entry, for example, there are *voltage-operated channels* (opened by depolarisation), *receptor-operated channels* (opened by an extracellular ligand), and store-operated and transient receptor potential (TRP) channels [@berridge2003calcium, Box 1, pp. 519–521]. *Mechanosensitive channels* open in response to force; a list of those found in the brain, from K⁺ channels such as TRAAK and TREK1 to NMDA receptors, is given by @tyler2012mechanobiology [Table 1]. Piezo1 has a chapter of its own (@sec-piezo).
+
+Channels let ions *flow*; they cannot *build* a gradient. The gradients are built by transporters that use energy. Rivera and colleagues stress this for Cl⁻: conductive Cl⁻ channels "cannot generate an electrochemical ionic gradient"; the K⁺/Cl⁻ co-transporter KCC2 sets the Cl⁻ gradient in mature neurons [@rivera1999kcc2, p. 254]. @sec-activity shows how this transporter switches the effect of the neurotransmitter GABA during development.
+
+## The equilibrium potential: Nernst {#sec-membrane-nernst}
+
+Suppose a membrane is permeable to a single ion. Ions diffuse down their concentration gradient until the voltage they create stops further net flow. The voltage at which this happens is the ion's **equilibrium potential**.
+
+Fairless and colleagues give the statistical rule behind it for a charged dye molecule: at equilibrium, its concentrations outside ($c_e$) and inside ($c_i$) follow a Boltzmann distribution [@fairless2013membrane, eq. 7, p. 8],
+
+$$
+\frac{c_e}{c_i} = \exp\!\left(\frac{zF}{RT}\,E\right),
+$$ {#eq-boltzmann}
+
+where $z$ is the charge of the species, $E$ its equilibrium potential, $R$ the gas constant, $T$ the absolute temperature and $F$ Faraday's constant. Taking the logarithm gives the **Nernst equation** (a one-line rearrangement of @eq-boltzmann):
+
+$$
+E = \frac{RT}{zF}\,\ln\frac{c_e}{c_i}.
+$$ {#eq-nernst}
+
+At 22 °C, $RT/F$ = ${RTF}$ mV [@fairless2013membrane, p. 5]. If only the external K⁺ concentration changes, from a reference value $K_r$ to a new value $K_x$, the internal concentration cancels and the potential changes by [@fairless2013membrane, eq. 1, p. 5]
+
+$$
+\Delta E = \frac{RT}{F}\,\ln\frac{K_x}{K_r}.
+$$ {#eq-dE-nernst}
+
+**Worked example.** Raising external K⁺ from 5.4 to 25 mM gives $\Delta E = 25.43~\mathrm{mV}\times\ln(25/5.4)$ = ${exNernst}$ mV, the value Fairless et al. report [@fairless2013membrane, p. 5]. A tenfold gradient gives $25.43 \times \ln 10 \approx$ ${tenfold}$ mV at 22 °C. That is why Brohawn and colleagues quote an equilibrium potential of −59 mV for K⁺ in a tenfold gradient [@brohawn2014mechanosensitivity, sec. "Mechanical Gating of K2P Channels"]: the small difference comes from temperature, because $RT/F$ grows with $T$.
+
+## Several ions at once: Goldman–Hodgkin–Katz {#sec-membrane-ghk}
+
+Real membranes are permeable to several ions at once. The GHK equation weights each ion's concentration by its **permeability** $P$. This is how easily the membrane lets that ion through. Written, as by Fairless et al., for a change of the external K⁺ and Na⁺ concentrations with internal Cl⁻ ($Cl_i$) held constant [@fairless2013membrane, eq. 2, p. 5]:
+
+$$
+\Delta E = \frac{RT}{F}\,\ln\frac{P_K K_x + P_{Na} Na_x + P_{Cl} Cl_i}{P_K K_r + P_{Na} Na_r + P_{Cl} Cl_i}.
+$$ {#eq-dE-ghk}
+
+Fairless et al. lowered Na⁺ by as much as they raised K⁺, to keep the osmolarity constant. With permeability ratios $P_K : P_{Na} : P_{Cl}$ of 1.00 : 0.18 : 0.10 (high Na⁺ permeability) they predicted a depolarisation of 10.36 mV for the 5.4 → 25 mM step; with 1.00 : 0.10 : 0.10 (low Na⁺ permeability), 15.06 mV [@fairless2013membrane, p. 5]. Both are far below the Nernst value of ${exNernst}$ mV. Na⁺ permeability keeps the membrane from following the K⁺ gradient all the way.
+
+Before you explore, make a prediction.
+
+```{ojs}
+//| echo: false
+viewof guess = predictGate({
+  prompt: "In the figure below, external K⁺ is raised from 4 mM to 120 mM. Compared with the Nernst prediction, the GHK prediction (which includes Na⁺ and Cl⁻ permeability) is…",
+  confidence: true,
+  spec: {
+    kind: "choice",
+    options: ["smaller, and the gap grows with P_Na/P_K", "the same, because K⁺ dominates", "larger, because Na⁺ adds charge"],
+    answer: "smaller, and the gap grows with P_Na/P_K",
+    feedback: {
+      "smaller, and the gap grows with P_Na/P_K": "Right: the Na⁺ and Cl⁻ terms dilute the effect of K⁺ in both the numerator and denominator of the GHK ratio.",
+      "the same, because K⁺ dominates": "K⁺ dominates only if P_Na and P_Cl are zero. With P_Na/P_K = 0.18 the Na⁺ term is large, because external Na⁺ is high.",
+      "larger, because Na⁺ adds charge": "Na⁺ was lowered in these experiments while K⁺ was raised, and its term enters both parts of the ratio. It makes the change smaller, not larger."
+    }
+  }
+})
+```
+
+```{ojs}
+//| echo: false
+viewof perm = Inputs.form({
+  PNa: Inputs.range([0, 0.4], { value: 0.18, step: 0.01, label: "P_Na / P_K" }),
+  PCl: Inputs.range([0, 0.4], { value: 0.10, step: 0.01, label: "P_Cl / P_K" })
+})
+```
+
+```{ojs}
+//| echo: false
+//| label: fig-nernst-ghk
+//| fig-cap: "Predicted change of membrane potential ΔE when external K⁺ is changed from the reference K_r = 4 mM to K_x (1–120 mM, log axis). Blue: Nernst (@eq-dE-nernst). Orange: GHK (@eq-dE-ghk) with the permeability ratios set by the sliders. Assumptions (not all stated by Fairless et al. for this experiment): RT/F = 25.43 mV (22 °C); Na⁺ lowered by as much as K⁺ is raised from Na_r = 140 mM; internal Cl⁻ = 30 mM (the value Fairless et al. assume in their Fig. S1). Dots: the Nernst values reported by Fairless et al. (p. 7) for 1 and 120 mM. Computed curves, not measurements."
+{
+  if (!guess.committed) return locked()
+  const p = { PK: 1, PNa: perm.PNa, PCl: perm.PCl, Nar: 140, Cli: 30 }
+  const Ks = d3.range(0, 121).map(i => Math.exp(Math.log(1) + i * Math.log(120) / 120))
+  const rows = Ks.flatMap(K => [
+    { K, dE: nernstDE(K, 4), model: "Nernst" },
+    { K, dE: ghkDE(K, 4, p), model: "GHK" }
+  ])
+  return Plot.plot({
+    width: Math.min(width, 640), height: 340,
+    x: { type: "log", label: "external K⁺, K_x (mM) →", domain: [1, 120] },
+    y: { label: "↑ ΔE (mV)", grid: true },
+    color: { domain: ["Nernst", "GHK"], range: ["#2a78d6", "#eb6834"], legend: true },
+    marks: [
+      Plot.ruleY([0]),
+      Plot.ruleX([4], { strokeDasharray: "3,3" }),
+      Plot.line(rows, { x: "K", y: "dE", stroke: "model", strokeWidth: 2 }),
+      Plot.dot([{ K: 1, dE: -35.25 }, { K: 120, dE: 86.49 }], { x: "K", y: "dE", fill: "#2a78d6", r: 4 })
+    ]
+  })
+}
+```
+
+With the assumptions in the caption, the code gives ${ghkHigh} mV and ${ghkLow} mV for the 5.4 → 25 mM step. That is close to, but not exactly, the 10.36 and 15.06 mV of @fairless2013membrane [p. 5]. The paper does not state every concentration it used, so this small difference is expected.
+
+Things to try:
+
+- Set $P_{Na}/P_K$ and $P_{Cl}/P_K$ to 0: the orange curve lies on the blue one, because GHK reduces to Nernst for a membrane permeable only to K⁺.
+- Raise $P_{Na}/P_K$: the GHK curve flattens, and at low $K_x$ it barely moves below zero.
+
+::: {.callout-warning title="Common mistake"}
+"The resting potential equals $E_K$." It does only if K⁺ is the only permeant ion. Every other permeability pulls the potential towards that ion's own equilibrium potential, which is exactly what the GHK weighting expresses.
+:::
+
+## Currents and the voltage clamp {#sec-membrane-clamp}
+
+In **voltage clamp**, an amplifier holds the membrane at a chosen voltage and measures the current needed to do so. This current equals the current through the open channels. Stepping the voltage changes the membrane potential "within microseconds", whereas in current clamp the change is limited by the membrane time constant, about 35 ms in the HEK cells of @fairless2013membrane [p. 3].
+
+Kreysing and colleagues stepped rat hippocampal neurons in 10 mV increments from −120 to +70 mV, from a holding potential of −60 mV, to separate the fast inward Na⁺ current from the outward K⁺ currents [@kreysing2025environmental, Methods, "Patch-clamp recordings"]. Because bigger cells carry bigger currents, they divided each current by the cell's **membrane capacitance** $C_m$, which "is proportional to the surface area" [@kreysing2025environmental, Results]:
+
+$$
+j = \frac{I}{C_m}.
+$$ {#eq-current-density}
+
+The result, the **current density** $j$, is in pA/pF. This normalisation matters in development: the capacitance of these neurons rose about fourfold between days 2 and 14 in culture [@kreysing2025environmental, Results; Supplementary Fig. 3]. Peak Na⁺ current density was lower on stiff (10 kPa) than on soft (0.1 kPa) substrates, whereas K⁺ current densities were not [@kreysing2025environmental, Fig. 2c]. @sec-frontier returns to this result.
+
+::: {.callout-note title="Not covered: the Hodgkin–Huxley model" collapse="true"}
+The classic quantitative model of the action potential [@hodgkin1952quantitative] was not available as a source for this course, and none of the sources that were read writes its equations out. It is therefore not presented here.
+:::
+
+## Check yourself {#sec-membrane-check}
+
+:::{.qmulti}
+A neuron depolarises from −70 mV to −50 mV. What happened to its membrane potential?
+
+- It became less negative: the inside became more positive relative to the outside.
+
+  > Correct. Depolarised means less negative [@sundelacruz2009role].
+
+- It became more negative.
+
+  > That is hyperpolarisation.
+
+- Its magnitude grew from 50 to 70 mV.
+
+  > The magnitude shrank. "Depolarised" refers to the sign convention (inside relative to outside), not to a larger number.
+
+:::
+
+**Compute.** Using $RT/F$ = 25.43 mV, external K⁺ is lowered from 4 mM to 1 mM. The Nernst equation predicts $\Delta E$ = {{< qinput -35.25 tol=0.1 hints="25.43 × ln(1/4)" >}} mV [@fairless2013membrane, p. 7].
+
+:::{.qmulti}
+Why did Fairless et al. predict only 10–15 mV of depolarisation for a 5.4 → 25 mM K⁺ step, when the Nernst equation gives about 39 mV?
+
+- Because the membrane is also permeable to Na⁺ and Cl⁻, which the GHK equation weights by their permeabilities.
+
+  > Correct [@fairless2013membrane, p. 5].
+
+- Because the internal K⁺ concentration rises when external K⁺ rises.
+
+  > Fairless et al. explicitly assume that internal concentrations stay unchanged during short exposures.
+
+- Because the temperature was low.
+
+  > Temperature enters both equations through RT/F in the same way; it cannot explain the difference between them.
+
+:::
+
+:::{.qmulti}
+A Cl⁻ channel opens in a neuron. Can it, on its own, create a Cl⁻ gradient across the membrane?
+
+- No: channels only let ions flow down existing gradients; transporters such as KCC2 build them.
+
+  > Correct [@rivera1999kcc2, p. 254].
+
+- Yes, if it stays open long enough.
+
+  > An open channel moves ions towards equilibrium, which dissipates a gradient instead of building it.
+
+:::
+
+:::{.qmulti}
+Why are whole-cell currents divided by membrane capacitance?
+
+- Capacitance is proportional to membrane area, so the ratio compares cells of different sizes.
+
+  > Correct [@kreysing2025environmental, Results]. This matters when cells grow, as they do in culture.
+
+- Capacitance corrects for the series resistance of the pipette.
+
+  > Series resistance is a separate correction. Capacitance stands in for surface area.
+
+:::
+
+::: {.callout-tip title="Answers" collapse="true"}
+1. Less negative: depolarisation [@sundelacruz2009role, sec. "Proliferation"].
+2. $\Delta E = 25.43 \ln(1/4) = -35.25$ mV, as reported by @fairless2013membrane [p. 7].
+3. Na⁺ and Cl⁻ permeability (GHK, @eq-dE-ghk) [@fairless2013membrane, p. 5].
+4. No; gradients are built by transporters [@rivera1999kcc2, p. 254].
+5. To normalise for membrane area [@kreysing2025environmental, Results].
+:::
+
+## Summary {#sec-membrane-summary}
+
+- The membrane potential is the inside-minus-outside voltage. It is set by ion gradients and permeabilities, and lies between about −10 and −90 mV at rest across cell types [@sundelacruz2009role].
+- The Nernst equation gives the equilibrium potential of one ion. For K⁺, a tenfold gradient corresponds to about −59 mV [@brohawn2014mechanosensitivity; @fairless2013membrane].
+- When several ions can cross the membrane, the GHK equation weights them by permeability. The voltage then changes less than Nernst predicts for K⁺ alone [@fairless2013membrane, p. 5].
+- Channels dissipate gradients and transporters build them [@rivera1999kcc2].
+- Voltage clamp measures currents at fixed voltages. Dividing by capacitance gives current density, which is comparable between cells of different sizes [@kreysing2025environmental].
+
+:::{.qflashcards}
+
+- What is the equilibrium potential of an ion?
+
+  > The membrane potential at which that ion's diffusion and electrical forces balance, so it has no net flow (@eq-nernst).
+
+- What does the GHK equation add to the Nernst equation?
+
+  > Several ions at once, each weighted by its membrane permeability.
+
+- What does "depolarised" mean?
+
+  > The membrane potential has become less negative.
+
+- Why divide currents by membrane capacitance?
+
+  > Capacitance is proportional to membrane area, so the current density (pA/pF) can be compared between cells of different sizes.
+
+:::

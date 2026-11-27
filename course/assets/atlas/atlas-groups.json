@@ -1,0 +1,2103 @@
+{
+ "atlas": "DevCCFv1 (Developmental Mouse Brain Common Coordinate Framework, version 1)",
+ "source": "https://doi.org/10.6084/m9.figshare.26377171.v1",
+ "licence": "CC BY 4.0",
+ "units": "micrometre",
+ "axes": {
+  "x": "anterior (+) / posterior (-)",
+  "y": "dorsal (+) / ventral (-)",
+  "z": "right (+) / left (-), assuming the NIfTI RAS convention of the source files (the templates are symmetric)"
+ },
+ "frameNote": "DevCCF world coordinates (RAS, mm) permuted to (A, S, R), scaled to micrometres, then centred on each age's bounding-box centre. Each age is its own template space: positions are not comparable across ages.",
+ "ages": [
+  {
+   "age": "E11.5",
+   "file": "E11.5.glb",
+   "bytes": 1083404,
+   "sourceAnnotation": "E11-5_DevCCF_Annotations_31.5um.nii.gz",
+   "voxelSizeUm": 31.5,
+   "volumeDims": [
+    198,
+    320,
+    229
+   ],
+   "boundingBoxUm": {
+    "min": [
+     -2074.2,
+     -1766,
+     -1091.8
+    ],
+    "max": [
+     2074.2,
+     1766,
+     1091.8
+    ],
+    "size": [
+     4148.5,
+     3532,
+     2183.5
+    ]
+   },
+   "centreOffsetUm": {
+    "anterior": 3921.4420166015625,
+    "dorsal": -2819.0584716796875,
+    "right": 3117.2560424804688,
+    "note": "subtracted from DevCCF world coordinates (RAS, mm*1000) after axis permutation"
+   },
+   "meshes": {
+    "pallium": {
+     "vertices": 4763,
+     "triangles": 9530
+    },
+    "subpallium": {
+     "vertices": 2446,
+     "triangles": 4890
+    },
+    "hypothalamus": {
+     "vertices": 1911,
+     "triangles": 3824
+    },
+    "diencephalon": {
+     "vertices": 3043,
+     "triangles": 6090
+    },
+    "midbrain": {
+     "vertices": 3483,
+     "triangles": 7074
+    },
+    "hindbrain": {
+     "vertices": 5532,
+     "triangles": 11218
+    },
+    "ventricles": {
+     "vertices": 8686,
+     "triangles": 17370
+    }
+   }
+  },
+  {
+   "age": "E13.5",
+   "file": "E13.5.glb",
+   "bytes": 1083160,
+   "sourceAnnotation": "E13-5_DevCCF_Annotations_34um.nii.gz",
+   "voxelSizeUm": 34,
+   "volumeDims": [
+    223,
+    188,
+    323
+   ],
+   "boundingBoxUm": {
+    "min": [
+     -2866.8,
+     -1808.1,
+     -1444.6
+    ],
+    "max": [
+     2866.8,
+     1808.1,
+     1444.6
+    ],
+    "size": [
+     5733.5,
+     3616.2,
+     2889.2
+    ]
+   },
+   "centreOffsetUm": {
+    "anterior": 5785.9962158203125,
+    "dorsal": -2804.2219848632812,
+    "right": 3780.816162109375,
+    "note": "subtracted from DevCCF world coordinates (RAS, mm*1000) after axis permutation"
+   },
+   "meshes": {
+    "pallium": {
+     "vertices": 8190,
+     "triangles": 16400
+    },
+    "subpallium": {
+     "vertices": 3191,
+     "triangles": 6396
+    },
+    "hypothalamus": {
+     "vertices": 1922,
+     "triangles": 3838
+    },
+    "diencephalon": {
+     "vertices": 2624,
+     "triangles": 5240
+    },
+    "midbrain": {
+     "vertices": 3805,
+     "triangles": 7610
+    },
+    "hindbrain": {
+     "vertices": 5409,
+     "triangles": 10860
+    },
+    "ventricles": {
+     "vertices": 4718,
+     "triangles": 9634
+    }
+   }
+  },
+  {
+   "age": "E15.5",
+   "file": "E15.5.glb",
+   "bytes": 1058364,
+   "sourceAnnotation": "E15-5_DevCCF_Annotations_37.5um.nii.gz",
+   "voxelSizeUm": 37.5,
+   "volumeDims": [
+    256,
+    220,
+    320
+   ],
+   "boundingBoxUm": {
+    "min": [
+     -3361.2,
+     -1825,
+     -2407
+    ],
+    "max": [
+     3361.2,
+     1825,
+     2407
+    ],
+    "size": [
+     6722.4,
+     3650,
+     4814
+    ]
+   },
+   "centreOffsetUm": {
+    "anterior": 6077.346923828125,
+    "dorsal": -2363.3753356933594,
+    "right": 4781.0478515625,
+    "note": "subtracted from DevCCF world coordinates (RAS, mm*1000) after axis permutation"
+   },
+   "meshes": {
+    "pallium": {
+     "vertices": 8732,
+     "triangles": 17812
+    },
+    "subpallium": {
+     "vertices": 3905,
+     "triangles": 7850
+    },
+    "hypothalamus": {
+     "vertices": 2034,
+     "triangles": 4086
+    },
+    "diencephalon": {
+     "vertices": 2661,
+     "triangles": 5322
+    },
+    "midbrain": {
+     "vertices": 3479,
+     "triangles": 7008
+    },
+    "hindbrain": {
+     "vertices": 4689,
+     "triangles": 9384
+    },
+    "ventricles": {
+     "vertices": 3395,
+     "triangles": 8240
+    }
+   }
+  },
+  {
+   "age": "E18.5",
+   "file": "E18.5.glb",
+   "bytes": 1057108,
+   "sourceAnnotation": "E18-5_DevCCF_Annotations_40um.nii.gz",
+   "voxelSizeUm": 40,
+   "volumeDims": [
+    272,
+    256,
+    320
+   ],
+   "boundingBoxUm": {
+    "min": [
+     -3955.1,
+     -2207.7,
+     -2926
+    ],
+    "max": [
+     3955.1,
+     2207.7,
+     2926
+    ],
+    "size": [
+     7910.2,
+     4415.4,
+     5852
+    ]
+   },
+   "centreOffsetUm": {
+    "anterior": 6510.6038818359375,
+    "dorsal": -3380.0070190429688,
+    "right": 5419.992919921875,
+    "note": "subtracted from DevCCF world coordinates (RAS, mm*1000) after axis permutation"
+   },
+   "meshes": {
+    "pallium": {
+     "vertices": 9986,
+     "triangles": 21324
+    },
+    "subpallium": {
+     "vertices": 3609,
+     "triangles": 7226
+    },
+    "hypothalamus": {
+     "vertices": 2089,
+     "triangles": 4590
+    },
+    "diencephalon": {
+     "vertices": 2757,
+     "triangles": 5514
+    },
+    "midbrain": {
+     "vertices": 2946,
+     "triangles": 5888
+    },
+    "hindbrain": {
+     "vertices": 4297,
+     "triangles": 8694
+    },
+    "ventricles": {
+     "vertices": 3099,
+     "triangles": 6704
+    }
+   }
+  }
+ ],
+ "groups": [
+  {
+   "key": "pallium",
+   "name": "Pallium (cortex anlage)",
+   "color": "#2a78d6",
+   "ontology": [
+    {
+     "acronym": "Pall",
+     "id": 15903,
+     "name": "pallium"
+    },
+    {
+     "acronym": "TelR",
+     "id": 15740,
+     "name": "roof plate of evaginated telencephalic vesicle"
+    }
+   ]
+  },
+  {
+   "key": "subpallium",
+   "name": "Subpallium (basal ganglia anlage)",
+   "color": "#eb6834",
+   "ontology": [
+    {
+     "acronym": "SPall",
+     "id": 15751,
+     "name": "subpallium"
+    }
+   ]
+  },
+  {
+   "key": "hypothalamus",
+   "name": "Hypothalamus and preoptic area",
+   "color": "#1baf7a",
+   "ontology": [
+    {
+     "acronym": "PHy",
+     "id": 16211,
+     "name": "peduncular (caudal) hypothalamus"
+    },
+    {
+     "acronym": "THy",
+     "id": 15622,
+     "name": "terminal hypothalamus (rostral hypothalamus)"
+    },
+    {
+     "acronym": "POTel",
+     "id": 15569,
+     "name": "preoptic telencephalon"
+    }
+   ]
+  },
+  {
+   "key": "diencephalon",
+   "name": "Diencephalon (prosomeres p1-p3)",
+   "color": "#eda100",
+   "ontology": [
+    {
+     "acronym": "D",
+     "id": 16308,
+     "name": "diencephalon"
+    }
+   ]
+  },
+  {
+   "key": "midbrain",
+   "name": "Midbrain (mesencephalon m1-m2)",
+   "color": "#8e5ed6",
+   "ontology": [
+    {
+     "acronym": "M",
+     "id": 16649,
+     "name": "midbrain"
+    }
+   ]
+  },
+  {
+   "key": "hindbrain",
+   "name": "Hindbrain (rhombomeres r0-r11)",
+   "color": "#e34948",
+   "ontology": [
+    {
+     "acronym": "H",
+     "id": 16808,
+     "name": "hindbrain"
+    }
+   ]
+  },
+  {
+   "key": "ventricles",
+   "name": "Ventricles",
+   "color": "#9aa5b1",
+   "ontology": [
+    {
+     "acronym": "ventricles",
+     "id": 21558,
+     "name": "ventricles, neural plate"
+    }
+   ]
+  }
+ ],
+ "labels": [
+  {
+   "id": 15565,
+   "acronym": "NP",
+   "name": "neural plate",
+   "group": null,
+   "ages": [
+    "E13.5"
+   ],
+   "excludedBecause": "only assigned to the root neural plate (NP); stray voxels"
+  },
+  {
+   "id": 15576,
+   "acronym": "POA",
+   "name": "preoptic alar plate",
+   "group": "hypothalamus",
+   "ages": [
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15623,
+   "acronym": "THyA",
+   "name": "alar part of terminal hypothalamus",
+   "group": "hypothalamus",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15666,
+   "acronym": "THyB",
+   "name": "basal part of terminal hypothalamus",
+   "group": "hypothalamus",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15736,
+   "acronym": "THyF",
+   "name": "floor of terminal hypothalamus",
+   "group": "hypothalamus",
+   "ages": [
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15740,
+   "acronym": "TelR",
+   "name": "roof plate of evaginated telencephalic vesicle",
+   "group": "pallium",
+   "ages": [
+    "E15.5"
+   ]
+  },
+  {
+   "id": 15751,
+   "acronym": "SPall",
+   "name": "subpallium",
+   "group": "subpallium",
+   "ages": [
+    "E11.5"
+   ]
+  },
+  {
+   "id": 15753,
+   "acronym": "DgSe",
+   "name": "diagonal part of septum",
+   "group": "subpallium",
+   "ages": [
+    "E13.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15754,
+   "acronym": "DgSev",
+   "name": "ventricular zone of DgSe",
+   "group": "subpallium",
+   "ages": [
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15756,
+   "acronym": "DgSep",
+   "name": "periventricular stratum of DgSe",
+   "group": "subpallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15759,
+   "acronym": "DgSei",
+   "name": "intermediate stratum of DgSe",
+   "group": "subpallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15762,
+   "acronym": "DgSes",
+   "name": "superficial stratum of DgSe",
+   "group": "subpallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15765,
+   "acronym": "PalSe",
+   "name": "pallidal septum",
+   "group": "subpallium",
+   "ages": [
+    "E13.5"
+   ]
+  },
+  {
+   "id": 15766,
+   "acronym": "PalSev",
+   "name": "ventricular zone of PalSe",
+   "group": "subpallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15768,
+   "acronym": "PalSep",
+   "name": "periventricular stratum of PalSe",
+   "group": "subpallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15770,
+   "acronym": "PalSei",
+   "name": "intermediate stratum of PalSe",
+   "group": "subpallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15773,
+   "acronym": "PalSes",
+   "name": "superficial stratum of PalSe",
+   "group": "subpallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15774,
+   "acronym": "StrSe",
+   "name": "striatal septum",
+   "group": "subpallium",
+   "ages": [
+    "E13.5"
+   ]
+  },
+  {
+   "id": 15775,
+   "acronym": "StrSev",
+   "name": "ventricular zone of StrSe",
+   "group": "subpallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15777,
+   "acronym": "StrSep",
+   "name": "periventricular part of StrSe",
+   "group": "subpallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15781,
+   "acronym": "StrSei",
+   "name": "intermediate part of StrSe",
+   "group": "subpallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15783,
+   "acronym": "StrSes",
+   "name": "superficial part of StrSe",
+   "group": "subpallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15785,
+   "acronym": "SeDg",
+   "name": "septodiagonal transition area",
+   "group": "subpallium",
+   "ages": [
+    "E13.5"
+   ]
+  },
+  {
+   "id": 15786,
+   "acronym": "SeDgv",
+   "name": "ventricular zone of SeDg",
+   "group": "subpallium",
+   "ages": [
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15788,
+   "acronym": "SeDgp",
+   "name": "periventricular stratum of SeDg",
+   "group": "subpallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15792,
+   "acronym": "SeDgi",
+   "name": "intermediate stratum of SeDg",
+   "group": "subpallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15795,
+   "acronym": "SeDgs",
+   "name": "superficial stratum of SeDg",
+   "group": "subpallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15797,
+   "acronym": "SePal",
+   "name": "septopallidal transition area",
+   "group": "subpallium",
+   "ages": [
+    "E13.5"
+   ]
+  },
+  {
+   "id": 15798,
+   "acronym": "SePalv",
+   "name": "ventricular zone of SePal",
+   "group": "subpallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15800,
+   "acronym": "SePalp",
+   "name": "periventricular stratum of SePal",
+   "group": "subpallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15803,
+   "acronym": "SePali",
+   "name": "intermediate stratum of SePal",
+   "group": "subpallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15806,
+   "acronym": "SePals",
+   "name": "superficial stratum of SePal",
+   "group": "subpallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15809,
+   "acronym": "SeStr",
+   "name": "septostriatal transition area (accumbens)",
+   "group": "subpallium",
+   "ages": [
+    "E13.5"
+   ]
+  },
+  {
+   "id": 15810,
+   "acronym": "SeStrv",
+   "name": "ventricular zone of SeStr",
+   "group": "subpallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15812,
+   "acronym": "SeStrp",
+   "name": "periventricular stratum of SeStr",
+   "group": "subpallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15814,
+   "acronym": "SeStri",
+   "name": "intermediate stratum of SeStr",
+   "group": "subpallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15816,
+   "acronym": "SeStrs",
+   "name": "superficial stratum of SeStr",
+   "group": "subpallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15819,
+   "acronym": "Dg",
+   "name": "diagonal domain",
+   "group": "subpallium",
+   "ages": [
+    "E13.5"
+   ]
+  },
+  {
+   "id": 15820,
+   "acronym": "Dgv",
+   "name": "ventricular zone of Dg",
+   "group": "subpallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15822,
+   "acronym": "Dgp",
+   "name": "periventricular stratum of Dg",
+   "group": "subpallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15828,
+   "acronym": "Dgi",
+   "name": "intermediate stratum of Dg",
+   "group": "subpallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15831,
+   "acronym": "Dgs",
+   "name": "superficial stratum of Dg",
+   "group": "subpallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15834,
+   "acronym": "Pal",
+   "name": "pallidum (globus pallidus complex)",
+   "group": "subpallium",
+   "ages": [
+    "E13.5"
+   ]
+  },
+  {
+   "id": 15835,
+   "acronym": "Palv",
+   "name": "ventricular zone of Pal",
+   "group": "subpallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15837,
+   "acronym": "Palp",
+   "name": "periventricular stratum of Pal",
+   "group": "subpallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15842,
+   "acronym": "Pali",
+   "name": "intermediate stratum of Pal",
+   "group": "subpallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15845,
+   "acronym": "Pals",
+   "name": "superficial stratum of Pal",
+   "group": "subpallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15851,
+   "acronym": "Str",
+   "name": "striatum (corpus striatum)",
+   "group": "subpallium",
+   "ages": [
+    "E13.5",
+    "E15.5"
+   ]
+  },
+  {
+   "id": 15852,
+   "acronym": "Strv",
+   "name": "ventricular zone of Str",
+   "group": "subpallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15854,
+   "acronym": "Strp",
+   "name": "periventricular stratum of Str",
+   "group": "subpallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15856,
+   "acronym": "Stri",
+   "name": "intermediate stratum of Str",
+   "group": "subpallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15861,
+   "acronym": "Strs",
+   "name": "superficial stratum of Str",
+   "group": "subpallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15873,
+   "acronym": "AStri",
+   "name": "intermediate stratum of AStr",
+   "group": "subpallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15877,
+   "acronym": "AStrs",
+   "name": "superficial stratum of AStr",
+   "group": "subpallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15878,
+   "acronym": "APal",
+   "name": "pallidal amygdala",
+   "group": "subpallium",
+   "ages": [
+    "E13.5"
+   ]
+  },
+  {
+   "id": 15881,
+   "acronym": "APalp",
+   "name": "periventricular stratum of APal",
+   "group": "subpallium",
+   "ages": [
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15883,
+   "acronym": "APali",
+   "name": "intermediate stratum of APal",
+   "group": "subpallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15885,
+   "acronym": "APals",
+   "name": "superficial stratum of APal",
+   "group": "subpallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15886,
+   "acronym": "ADg",
+   "name": "diagonal amygdala",
+   "group": "subpallium",
+   "ages": [
+    "E13.5"
+   ]
+  },
+  {
+   "id": 15891,
+   "acronym": "ADgi",
+   "name": "intermediate stratum of ADg",
+   "group": "subpallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15892,
+   "acronym": "ADgs",
+   "name": "superficial stratum of ADg",
+   "group": "subpallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 15903,
+   "acronym": "Pall",
+   "name": "pallium",
+   "group": "pallium",
+   "ages": [
+    "E11.5"
+   ]
+  },
+  {
+   "id": 16212,
+   "acronym": "PHyA",
+   "name": "alar part of peduncular hypothalamus",
+   "group": "hypothalamus",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 16247,
+   "acronym": "PHyB",
+   "name": "basal peduncular hypothalamus",
+   "group": "hypothalamus",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 16306,
+   "acronym": "PHyF",
+   "name": "floor of peduncular hypothalamus",
+   "group": "hypothalamus",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 16311,
+   "acronym": "p3R",
+   "name": "roof plate of p3",
+   "group": "diencephalon",
+   "ages": [
+    "E13.5"
+   ]
+  },
+  {
+   "id": 16313,
+   "acronym": "p3A",
+   "name": "alar plate of p3 (alar prethalamus)",
+   "group": "diencephalon",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 16353,
+   "acronym": "p3B",
+   "name": "basal plate of p3",
+   "group": "diencephalon",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 16368,
+   "acronym": "p3F",
+   "name": "floor plate of p3",
+   "group": "diencephalon",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 16377,
+   "acronym": "p2R",
+   "name": "roof plate of p2 (epithalamic roofplate)",
+   "group": "diencephalon",
+   "ages": [
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 16382,
+   "acronym": "p2A",
+   "name": "alar plate of p2 (alar thalamus)",
+   "group": "diencephalon",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 16487,
+   "acronym": "p2B",
+   "name": "basal plate of p2",
+   "group": "diencephalon",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 16502,
+   "acronym": "p2F",
+   "name": "floor plate of p2",
+   "group": "diencephalon",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 16511,
+   "acronym": "p1R",
+   "name": "roof plate of p1",
+   "group": "diencephalon",
+   "ages": [
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 16519,
+   "acronym": "p1A",
+   "name": "alar plate of p1",
+   "group": "diencephalon",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 16624,
+   "acronym": "p1B",
+   "name": "basal plate of p1",
+   "group": "diencephalon",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 16641,
+   "acronym": "p1F",
+   "name": "floor plate of p1",
+   "group": "diencephalon",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 16652,
+   "acronym": "m1R",
+   "name": "roof plate of m1",
+   "group": "midbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 16658,
+   "acronym": "m1A",
+   "name": "alar plate of m1",
+   "group": "midbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 16726,
+   "acronym": "m1B",
+   "name": "basal plate of m1",
+   "group": "midbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 16742,
+   "acronym": "m1F",
+   "name": "floor plate of m1",
+   "group": "midbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 16753,
+   "acronym": "m2R",
+   "name": "m2 roof",
+   "group": "midbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 16754,
+   "acronym": "m2A",
+   "name": "m2 alar plate",
+   "group": "midbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 16791,
+   "acronym": "m2B",
+   "name": "m2 basal plate",
+   "group": "midbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 16805,
+   "acronym": "m2F",
+   "name": "m2 floor plate",
+   "group": "midbrain",
+   "ages": [
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 16811,
+   "acronym": "r0R",
+   "name": "r0 roof plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 16813,
+   "acronym": "r0A",
+   "name": "r0 alar plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 16876,
+   "acronym": "r0B",
+   "name": "r0 basal plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 16911,
+   "acronym": "r0F",
+   "name": "r0 floor plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 16916,
+   "acronym": "r1R",
+   "name": "r1 roof plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 16919,
+   "acronym": "r1A",
+   "name": "r1 alar plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 16967,
+   "acronym": "r1B",
+   "name": "r1 basal plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 17022,
+   "acronym": "r1F",
+   "name": "r1 floor plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 17024,
+   "acronym": "r2R",
+   "name": "r2 roof plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 17025,
+   "acronym": "r2A",
+   "name": "r2 alar plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 17053,
+   "acronym": "r2B",
+   "name": "r2 basal plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 17091,
+   "acronym": "r2F",
+   "name": "r2 floor plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 17094,
+   "acronym": "r3R",
+   "name": "r3 roof plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 17095,
+   "acronym": "r3A",
+   "name": "r3 alar plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 17123,
+   "acronym": "r3B",
+   "name": "r3 basal plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 17155,
+   "acronym": "r3F",
+   "name": "r3 floor plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 17157,
+   "acronym": "r4R",
+   "name": "r4 roof plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 17158,
+   "acronym": "r4A",
+   "name": "r4 alar plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 17182,
+   "acronym": "r4B",
+   "name": "r4 basal plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 17219,
+   "acronym": "r4F",
+   "name": "r4 floor plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 17222,
+   "acronym": "r5R",
+   "name": "r5 roof plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 17223,
+   "acronym": "r5A",
+   "name": "r5 alar plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 17250,
+   "acronym": "r5B",
+   "name": "r5 basal plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 17289,
+   "acronym": "r5F",
+   "name": "r5 floor plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 17291,
+   "acronym": "r6R",
+   "name": "r6 roof plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 17292,
+   "acronym": "r6A",
+   "name": "r6 alar plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 17318,
+   "acronym": "r6B",
+   "name": "r6 basal plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 17351,
+   "acronym": "r6F",
+   "name": "r6 floor plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 17354,
+   "acronym": "r7R",
+   "name": "r7 roof plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 17355,
+   "acronym": "r7A",
+   "name": "r7 alar plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 17380,
+   "acronym": "r7B",
+   "name": "r7 basal plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 17415,
+   "acronym": "r7F",
+   "name": "r7 floor plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 17417,
+   "acronym": "r8R",
+   "name": "r8 roof plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 17418,
+   "acronym": "r8A",
+   "name": "r8 alar plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 17437,
+   "acronym": "r8B",
+   "name": "r8 basal plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 17475,
+   "acronym": "r8F",
+   "name": "r8 floor plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 17477,
+   "acronym": "r9R",
+   "name": "r9 roof plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 17478,
+   "acronym": "r9A",
+   "name": "r9 alar plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 17500,
+   "acronym": "r9B",
+   "name": "r9 basal plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 17537,
+   "acronym": "r9F",
+   "name": "r9 floor plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 17539,
+   "acronym": "r10R",
+   "name": "r10 roof plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 17540,
+   "acronym": "r10A",
+   "name": "r10 alar plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 17562,
+   "acronym": "r10B",
+   "name": "r10 basal plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 17595,
+   "acronym": "r10F",
+   "name": "r10 floor plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 17597,
+   "acronym": "r11R",
+   "name": "r11 roof plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 17598,
+   "acronym": "r11A",
+   "name": "r11 alar plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 17620,
+   "acronym": "r11B",
+   "name": "r11 basal plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 17650,
+   "acronym": "r11F",
+   "name": "r11 floor plate",
+   "group": "hindbrain",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 17652,
+   "acronym": "SpR",
+   "name": "SpC roof plate",
+   "group": null,
+   "ages": [
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ],
+   "excludedBecause": "spinal cord (not part of the brain groups)"
+  },
+  {
+   "id": 17653,
+   "acronym": "SpA",
+   "name": "SpC alar plate",
+   "group": null,
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ],
+   "excludedBecause": "spinal cord (not part of the brain groups)"
+  },
+  {
+   "id": 17692,
+   "acronym": "SpB",
+   "name": "SpC basal plate (anterior horn)",
+   "group": null,
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ],
+   "excludedBecause": "spinal cord (not part of the brain groups)"
+  },
+  {
+   "id": 17734,
+   "acronym": "SpF",
+   "name": "SpC floor plate",
+   "group": null,
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ],
+   "excludedBecause": "spinal cord (not part of the brain groups)"
+  },
+  {
+   "id": 18026,
+   "acronym": "NeoCx",
+   "name": "neocortex",
+   "group": "pallium",
+   "ages": [
+    "E13.5"
+   ]
+  },
+  {
+   "id": 18027,
+   "acronym": "NeoCxs",
+   "name": "superficial stratum of NeoCx",
+   "group": "pallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 18028,
+   "acronym": "NeoCxi",
+   "name": "intermediate stratum of NeoCx",
+   "group": "pallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 18029,
+   "acronym": "NeoCxp",
+   "name": "periventricular stratum of NeoCx",
+   "group": "pallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 18030,
+   "acronym": "NeoCxv",
+   "name": "ventricular zone of NeoCx",
+   "group": "pallium",
+   "ages": [
+    "E18.5"
+   ]
+  },
+  {
+   "id": 18031,
+   "acronym": "MesoCx",
+   "name": "mesocortex",
+   "group": "pallium",
+   "ages": [
+    "E13.5"
+   ]
+  },
+  {
+   "id": 18032,
+   "acronym": "MesoCxs",
+   "name": "superficial stratum of MesoCx",
+   "group": "pallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 18033,
+   "acronym": "MesoCxi",
+   "name": "intermediate stratum of MesoCx",
+   "group": "pallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 18034,
+   "acronym": "MesoCxp",
+   "name": "periventricular stratum of MesoCx",
+   "group": "pallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 18035,
+   "acronym": "MesoCxv",
+   "name": "ventricular zone of MesoCx",
+   "group": "pallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 18036,
+   "acronym": "OlfCx",
+   "name": "olfactory cortex",
+   "group": "pallium",
+   "ages": [
+    "E13.5"
+   ]
+  },
+  {
+   "id": 18037,
+   "acronym": "OlfCxs",
+   "name": "superficial stratum of OlfCx",
+   "group": "pallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 18038,
+   "acronym": "OlfCxi",
+   "name": "intermediate stratum of OlfCx",
+   "group": "pallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 18039,
+   "acronym": "OlfCxp",
+   "name": "periventricular stratum of OlfCx",
+   "group": "pallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 18040,
+   "acronym": "OlfCxv",
+   "name": "ventricular zone of OlfCx",
+   "group": "pallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 18041,
+   "acronym": "HCCx",
+   "name": "hippocampal cortex",
+   "group": "pallium",
+   "ages": [
+    "E13.5"
+   ]
+  },
+  {
+   "id": 18042,
+   "acronym": "HCCxs",
+   "name": "superficial stratum of HCCx",
+   "group": "pallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 18043,
+   "acronym": "HCCxi",
+   "name": "intermediate stratum of HCCx",
+   "group": "pallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 18044,
+   "acronym": "HCCxp",
+   "name": "periventricular stratum of HCCx",
+   "group": "pallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 18045,
+   "acronym": "HCCxv",
+   "name": "ventricular zone of HCCx",
+   "group": "pallium",
+   "ages": [
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 18051,
+   "acronym": "APall",
+   "name": "pallial amygdala",
+   "group": "pallium",
+   "ages": [
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  },
+  {
+   "id": 21558,
+   "acronym": "ventricles",
+   "name": "ventricles, neural plate",
+   "group": "ventricles",
+   "ages": [
+    "E11.5",
+    "E13.5",
+    "E15.5",
+    "E18.5"
+   ]
+  }
+ ]
+}

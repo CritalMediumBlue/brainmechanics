@@ -1,0 +1,17 @@
+---
+nocite: |
+  @*
+---
+
+# References {.unnumbered}
+
+All entries of the course bibliography are listed. Two entries had no text available to the author
+(@hodgkin1952quantitative; @hille2001ion); they are listed for completeness and support no claim in
+this course. Seven sources were read as full text from PubMed Central without the PDF
+(@coste2010piezo; @pathak2014stretch; @brohawn2014mechanosensitivity; @kolodkin2010mechanisms;
+@rosenberg2011calcium; @thompson2014high; @sundelacruz2009role); page numbers are therefore not
+available for them, and citations give the section instead. @abdelfattah2019bright was read as the
+bioRxiv preprint; numbers cited from it come from the preprint.
+
+::: {#refs}
+:::

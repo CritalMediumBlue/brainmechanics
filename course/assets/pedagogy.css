@@ -1,0 +1,141 @@
+/* Widgets for the reader-interaction chapters (checks, predict-then-check, quizzes).
+   Only Bootstrap CSS variables are used, so the light and dark themes both work. */
+
+/* ---- Predict, then check (chapters/pedagogy/predict.js) ------------------ */
+.pq-gate {
+  border: 1px solid var(--bs-border-color);
+  border-left: 4px solid var(--bs-primary);
+  border-radius: 0.4rem;
+  padding: 0.8rem 1rem;
+  margin: 0.5rem 0 1rem;
+  background: rgba(127, 127, 127, 0.08);
+}
+.pq-prompt { font-weight: 600; margin-bottom: 0.5rem; }
+.pq-controls { display: flex; flex-wrap: wrap; gap: 0.4rem 1.2rem; align-items: center; margin-bottom: 0.6rem; }
+.pq-controls input[type="range"] { width: min(320px, 70vw); }
+.pq-option { cursor: pointer; }
+.pq-readout { font-family: var(--bs-font-monospace); min-width: 4.5em; }
+.pq-commit, .pq-retry { margin-right: 0.5rem; }
+.pq-verdict { margin-top: 0.6rem; }
+.pq-correct { color: var(--bs-success); }
+.pq-wrong { color: var(--bs-danger); }
+.pq-verdict.pq-correct, .pq-verdict.pq-wrong { color: inherit; border-left: 3px solid; padding-left: 0.6rem; }
+.pq-verdict.pq-correct { border-color: var(--bs-success); }
+.pq-verdict.pq-wrong { border-color: var(--bs-danger); }
+.pq-verdict.pq-correct strong { color: var(--bs-success); }
+.pq-verdict.pq-wrong strong { color: var(--bs-danger); }
+.pq-hint { color: var(--bs-secondary-color, var(--bs-secondary)); }
+
+.pq-locked {
+  border: 2px dashed var(--bs-border-color);
+  border-radius: 0.4rem;
+  padding: 2.5rem 1rem;
+  text-align: center;
+  color: var(--bs-secondary-color, var(--bs-secondary));
+  margin: 0.5rem 0 1rem;
+}
+
+.pq-meter { margin: 0.4rem 0 1rem; }
+.pq-meter-bar {
+  height: 0.7rem;
+  border-radius: 0.35rem;
+  background: var(--bs-secondary-bg, #e9ecef);
+  overflow: hidden;
+  margin-bottom: 0.3rem;
+  max-width: 480px;
+}
+.pq-meter-fill { height: 100%; background: var(--bs-primary); transition: width 0.15s ease; }
+.pq-meter-fill.pq-meter-hit { background: var(--bs-success); }
+.pq-meter-text { color: var(--bs-secondary-color, var(--bs-secondary)); }
+
+/* ---- Check report of the literate chapter (chapters/05-literate.qmd) ----- */
+.check-report ul { list-style: none; padding-left: 0; }
+.check-report li { margin-bottom: 0.2rem; }
+
+/* ---- shortiquiz adjustments (chapters/07-quizzes.qmd) -------------------- */
+/* The book's text column is too narrow for two side-by-side Parsons panes:
+   stack them so that lines of code are not cut off. */
+#quarto-document-content .qparson__ready .block__container { flex-direction: column; }
+#quarto-document-content .qparson__ready .block-container { width: 100%; }
+
+/* shortiquiz ships light colours only, and its syntax highlighting (Prism,
+   light theme) is unreadable on dark panes. In the dark theme the Parsons
+   panes therefore stay light, with dark text. */
+body.quarto-dark .qparson__ready .block-container,
+body.quarto-dark .qparson__ready .sort-item { color: #212529; }
+
+/* ---- Confidence rating in predict-then-check ----------------------------- */
+.pq-confidence-label { font-weight: 600; margin-right: 0.3rem; }
+.pq-calibration { margin-top: 0.4rem; font-style: italic; }
+
+/* ---- Prerequisite check (chapters/pedagogy/prereq.js) -------------------- */
+.pr-check, .eb-box {
+  border: 1px solid var(--bs-border-color);
+  border-left: 4px solid var(--bs-info, #0dcaf0);
+  border-radius: 0.4rem;
+  padding: 0.8rem 1rem;
+  margin: 0.5rem 0 1rem;
+  background: rgba(127, 127, 127, 0.06);
+}
+.pr-title { font-weight: 600; margin: 0.2rem 0 0.5rem; }
+.pr-question { margin-bottom: 0.6rem; }
+.pr-question .pq-option { display: inline-block; margin-right: 1.2rem; }
+.pr-prompt { margin-bottom: 0.2rem; }
+.pr-result { margin-top: 0.6rem; }
+
+/* ---- Explain it back (chapters/pedagogy/explainback.js) ------------------ */
+.eb-box { border-left-color: var(--bs-warning, #ffc107); }
+.eb-text { width: 100%; font-family: inherit; margin: 0.4rem 0; }
+.eb-status { color: var(--bs-secondary-color, var(--bs-secondary)); font-size: 0.9em; margin-bottom: 0.4rem; }
+.eb-reveal { margin-top: 0.8rem; }
+.eb-model { border-left: 3px solid var(--bs-border-color); padding-left: 0.8rem; margin-bottom: 0.8rem; }
+.eb-points { list-style: none; padding-left: 0; }
+.eb-seen { color: var(--bs-secondary-color, var(--bs-secondary)); font-size: 0.85em; }
+.eb-tally { font-weight: 600; }
+
+/* ---- Step-through (chapters/pedagogy/stepper.js) ------------------------- */
+.st-stepper { margin: 0.5rem 0; outline-offset: 4px; }
+.st-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem; }
+.st-range { width: min(260px, 50vw); margin: 0 0.5rem; }
+.st-counter { font-family: var(--bs-font-monospace); font-size: 0.9em; }
+.st-code {
+  font-size: 0.85em;
+  line-height: 1.5;
+  padding: 0.5rem 0;
+  background: var(--bs-tertiary-bg, #f6f8fa);
+  border-radius: 0.3rem;
+  overflow-x: auto;
+}
+.st-line { display: block; padding: 0 0.6rem; border-left: 3px solid transparent; }
+.st-lineno { color: var(--bs-secondary-color, #888); user-select: none; }
+.st-active { background: rgba(235, 104, 52, 0.18); border-left-color: #eb6834; }
+.st-note { min-height: 3em; margin: 0.4rem 0; }
+
+/* ---- Linked terms (chapters/pedagogy/linked.js) -------------------------- */
+[class*="term-"] { cursor: default; transition: opacity 0.15s ease; }
+span[class*="term-"] { border-bottom: 1px dotted currentColor; }
+span.term-active, mjx-container .term-active {
+  background: rgba(235, 104, 52, 0.22);
+  border-radius: 3px;
+}
+svg .term-active { stroke-width: 4px; opacity: 1; }
+.terms-linking svg [class*="term-"]:not(.term-active) { opacity: 0.2; }
+.st-panels { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1rem; align-items: start; }
+@media (max-width: 700px) { .st-panels { grid-template-columns: minmax(0, 1fr); } }
+.st-state { font-size: 0.85em; width: 100%; }
+.st-state td, .st-state th { padding: 0.1rem 0.4rem; }
+.st-queue { font-family: var(--bs-font-monospace); font-size: 0.85em; margin-top: 0.4rem; }
+
+/* ---- Developmental timeline (chapters/pedagogy/timeline.js) -------------- */
+.tl-timeline { margin: 0.5rem 0 1rem; max-width: 100%; overflow-x: auto; }
+.tl-svg { color: var(--bs-body-color); font-size: 12px; }
+.tl-axis { stroke: currentColor; stroke-width: 1; }
+.tl-guide { stroke: currentColor; stroke-opacity: 0.15; }
+.tl-tick, .tl-lane, .tl-birth { fill: currentColor; }
+.tl-birth { font-style: italic; }
+.tl-event { cursor: pointer; outline: none; }
+.tl-event circle { stroke: var(--bs-body-bg); stroke-width: 1.5; }
+.tl-event:hover circle, .tl-event:focus circle, .tl-event.tl-selected circle { stroke: currentColor; stroke-width: 2.5; }
+.tl-note { font-size: 0.85em; color: var(--bs-secondary-color, var(--bs-secondary)); margin: 0.2rem 0; }
+.tl-detail { border-left: 3px solid var(--bs-primary); padding: 0.4rem 0.7rem; margin-top: 0.4rem; background: rgba(127,127,127,0.06); }
+.tl-cite { color: var(--bs-secondary-color, var(--bs-secondary)); }

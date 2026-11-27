@@ -1,0 +1,11 @@
+/* Compact OJS inputs that work in the light and dark themes. */
+.observablehq label { font-size: 0.95em !important; }
+.observablehq input[type="range"] { height: 5px !important; width: 200px !important; }
+.observablehq input[type="number"] { font-size: 0.95em !important; width: 90px !important; }
+.observablehq button {
+  font-size: 0.95em !important;
+  padding: 2px 10px !important;
+  color: white !important;
+  background-color: #2a78d6 !important;
+  border: none; border-radius: 4px;
+}

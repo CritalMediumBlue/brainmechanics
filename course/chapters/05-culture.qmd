@@ -1,0 +1,249 @@
+---
+filters:
+  - shortiquiz
+---
+
+# Neuronal culture {#sec-culture}
+
+```{ojs}
+//| echo: false
+import { stepper } from "./pedagogy/stepper.js"
+```
+
+```{ojs}
+//| echo: false
+//| output: false
+// Growth rates reported by @dotti1988establishment (pp. 1455, 1457), used in the prose.
+culAxonRate = 70      // µm/d, mean axonal rate over the first few days (p. 1457)
+culDendRate = 12      // µm/d, dendrites between day 5 and day 7 (p. 1457)
+culRatio = (culAxonRate / culDendRate).toFixed(1)
+```
+
+Nearly every number in this course was measured in a dish: the voltage-sensitive dye signals of @sec-indicators, the calcium transients of @sec-calcium, and the stiffness experiments of @sec-frontier, where neurons are grown on gels of chosen elastic modulus. Culture is also where the mechanical environment is easiest to set deliberately, by plating cells on a gel of chosen stiffness. This chapter is the minimum you need to read such a Methods section, and to plan your own.
+
+::: {.callout-note title="After this chapter you will be able to"}
+- describe the standard dissociated hippocampal culture and what it is used for;
+- name the five stages by which a cultured neuron becomes polarised, with their approximate timings and growth rates;
+- say what the substrate contributes, and why a thin soft gel does not feel soft;
+- read a culture protocol and extract species, age, substrate, density and readout.
+:::
+
+## The standard preparation {#sec-culture-standard}
+
+The reference protocol is still the one Dotti, Sullivan and Banker published in 1988 for **rat** embryonic day 18 (E18) hippocampus: hippocampi from 18-day rat fetuses, 0.25% trypsin for 15 min at 37 °C, trituration through a constricted Pasteur pipette, and 2,000–6,000 cells plated per dish on an acid-cleaned glass coverslip treated with polylysine [@dotti1988establishment, p. 1455]. Cells attach in minimal essential medium with 10% horse serum; after 3–4 h the medium is replaced by a serum-free one with HEPES, pyruvate and the N2 supplement. Survival is supported by a separate coverslip carrying a confluent astroglial monolayer, placed face-down above the neurons on a glass ring so that the two populations share medium without touching [@dotti1988establishment, p. 1455].
+
+Two properties make this preparation the standard model of **neuronal polarity**, the division of a neuron into one axon and several dendrites. First, it is nearly pure: "about 90% of the neurons in hippocampal cultures are pyramidal cells; the rest are interneurons of several types", with few non-neuronal cells, and the cells survive "for a month or more" [@craig1994neuronal, p. 269]. Second, neurons polarise in culture without synapses or specific cell contacts, which argues that the program is endogenous [@craig1994neuronal, pp. 268–269]. Dotti and colleagues made the point directly by filming a neuron born by mitosis in the dish, with no contacts: within about 20 h after division both daughters had polarised [@dotti1988establishment, pp. 1460–1461].
+
+## The five stages {#sec-culture-stages}
+
+```{ojs}
+//| echo: false
+//| output: false
+culStages = [
+  {
+    n: 1, day: "≈ 0.25 d",
+    title: "Lamellipodia",
+    text: "Shortly after the cells attach, motile lamellipodia — flat, veil-like structures, constantly in motion — develop around the periphery of the soma (Dotti et al. 1988, pp. 1457, 1461). Attachment itself happens in the first hour or two (p. 1457).",
+    veil: true,
+    processes: []
+  },
+  {
+    n: 2, day: "≈ 0.5 d",
+    title: "Minor processes",
+    text: "The lamellipodia condense into several short 'minor processes', on average 4.9 per cell at 24 h (n = 17), each about 10 µm long and reaching 10–15 µm within a few hours, after which they stop elongating (Dotti et al. 1988, pp. 1455, 1457, 1461). None of them looks like an axon yet.",
+    processes: [1, 1, 1, 1, 1]
+  },
+  {
+    n: 3, day: "≈ 1.5 d",
+    title: "Axonal outgrowth",
+    text: "One minor process abruptly increases its rate of elongation almost 10-fold and can be identified as the axon within 2 h (Dotti et al. 1988, p. 1459). The cell is now polarised. Over 9 filmed cells this happened 8–30 h after plating (Table 1, p. 1459), and the axon reached about 40 µm by 1 day (p. 1457).",
+    processes: [3.6, 1, 1, 1, 1]
+  },
+  {
+    n: 4, day: "≈ 4 d",
+    title: "Dendritic outgrowth",
+    text: "The remaining minor processes begin to grow slowly into dendrites, about 12 µm/d between days 5 and 7, while the axon has been advancing at roughly 70 µm/d (Dotti et al. 1988, pp. 1455, 1457). The axon branches mainly by collaterals sprouting from the shaft behind the growth cone, seen in 16 of 19 cells (p. 1455).",
+    processes: [5.2, 1.8, 1.8, 1.8, 1.8],
+    collaterals: true
+  },
+  {
+    n: 5, day: "> 7 d",
+    title: "Maturation",
+    text: "Dendrites become short, tapering, MAP2-positive processes while the axon stays long, thin and uniform; in the cell of their Fig. 1 the axon reached 300 µm and dendrites up to 75 µm by day 7 (Dotti et al. 1988, pp. 1454, 1455). Maturation 'continues for some weeks' (p. 1461).",
+    processes: [6.4, 2.6, 2.6, 2.6, 2.6],
+    collaterals: true,
+    taper: true
+  }
+];
+culAngles = [20, 150, 200, 255, 310];
+culDraw = (st) => {
+  const w = 460, h = 190, cx = 150, cy = 95, soma = 15, unit = 13;
+  const parts = [];
+  if (st.veil) {
+    parts.push(`<circle cx="${cx}" cy="${cy}" r="${soma + 11}" fill="none" stroke="#eda100"
+       stroke-width="2.5" stroke-dasharray="4 4" opacity="0.9"/>`);
+    parts.push(`<text x="${cx + 32}" y="${cy - 26}" fill="#eda100" font-size="12">lamellipodia</text>`);
+  }
+  st.processes.forEach((len, i) => {
+    const a = culAngles[i] * Math.PI / 180;
+    const L = len * unit;
+    const x1 = cx + Math.cos(a) * soma, y1 = cy - Math.sin(a) * soma;
+    const x2 = cx + Math.cos(a) * (soma + L), y2 = cy - Math.sin(a) * (soma + L);
+    const isAxon = i === 0 && st.n >= 3;
+    const colour = isAxon ? "#eb6834" : (st.n >= 4 ? "#2a78d6" : "#9aa5b1");
+    const wdt = isAxon ? 2.5 : (st.taper ? 4 : 2.5);
+    parts.push(`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${colour}"
+       stroke-width="${wdt}" stroke-linecap="round"/>`);
+    parts.push(`<circle cx="${x2}" cy="${y2}" r="${isAxon ? 4 : 2.5}" fill="${colour}"/>`);
+    if (isAxon && st.collaterals) {
+      [0.45, 0.7].forEach(f => {
+        const bx = cx + Math.cos(a) * (soma + L * f), by = cy - Math.sin(a) * (soma + L * f);
+        parts.push(`<line x1="${bx}" y1="${by}" x2="${bx + 14}" y2="${by - 22}"
+           stroke="#eb6834" stroke-width="2"/>`);
+      });
+    }
+  });
+  parts.push(`<circle cx="${cx}" cy="${cy}" r="${soma}" fill="none" stroke="currentColor" stroke-width="2"/>`);
+  if (st.n >= 3) parts.push(`<text x="${cx + 60}" y="${cy + 30}" fill="#eb6834" font-size="12">axon</text>`);
+  if (st.n >= 4) parts.push(`<text x="${cx - 120}" y="${cy - 30}" fill="#2a78d6" font-size="12">dendrites</text>`);
+  parts.push(`<text x="8" y="18" fill="currentColor" font-size="13">Stage ${st.n}: ${st.title} (${st.day})</text>`);
+  parts.push(`<text x="8" y="${h - 8}" fill="#9aa5b1" font-size="11">schematic, not to scale</text>`);
+  const holder = document.createElement("div");
+  holder.innerHTML = `<svg viewBox="0 0 ${w} ${h}" width="100%" style="max-width:460px"
+     role="img" aria-label="Stage ${st.n}, ${st.title}">${parts.join("")}</svg>`;
+  return holder.firstElementChild;
+};
+```
+
+```{ojs}
+//| echo: false
+viewof culStep = stepper(culStages, { delay: 2200 })
+```
+
+```{ojs}
+//| echo: false
+//| label: fig-polarity-stages
+//| fig-cap: "Step through the five stages of polarisation of a dissociated rat E18 hippocampal neuron. Entry times are those given by Dotti et al. 1988 (Fig. 9, p. 1466): 0.25, 0.5, 1.5, 4 and more than 7 days in culture. Orange: the process that becomes the axon, with shaft collaterals from stage 4; blue: dendrites; grey: minor processes not yet specified; yellow dashed ring: lamellipodia. The drawings are schematic and not to scale — the axon and the minor processes differ by a factor of about 8 in length at 1–2 days (80–100 µm against 10–15 µm, p. 1455), far more than drawn."
+html`<figure>${culDraw(culStep)}
+<figcaption style="font-size:0.9em">${culStep.text}</figcaption></figure>`
+```
+
+The quantitative core of the sequence, shown stage by stage in @fig-polarity-stages, is the growth-rate difference. The axon of the cell in their Fig. 1 grew at about 60 µm/d, and averaged over 11 cells about ${culAxonRate} µm/d for the first few days, while dendrites elongated at about ${culDendRate} µm/d between days 5 and 7 — a factor of ${culRatio} here, quoted in the paper as 5–10 times [@dotti1988establishment, pp. 1455, 1457]. Per-cell time-lapse gives the same picture at finer grain: over the 18 h after the start of stage 3 the mean axonal rate was 6.3 µm/h, but the fastest 2 h interval of each cell averaged 20.3 µm/h [@dotti1988establishment, Table 1, p. 1459]. Growth is intermittent, not steady.
+
+::: {.callout-warning title="Where the sources disagree"}
+- *When dendrites start.* Fig. 9 and the Discussion give about 4 days; the legend of Fig. 4 says "after day 3"; the Results say "between days 3 and 5" [@dotti1988establishment, pp. 1457, 1459, 1464]. Quote the figure you rely on.
+- *When the axon starts.* The text gives 8–27 h after plating, Table 1 on the same page lists 8–30 h [@dotti1988establishment, p. 1459].
+- *How long minor processes are.* The primary paper gives 10–15 µm [@dotti1988establishment, p. 1455]; the review that popularised the stages gives "four to five short neurites, typically 15–25 µm in length" [@craig1994neuronal, p. 290]. Cite the primary numbers.
+:::
+
+## The substrate {#sec-culture-substrate}
+
+Coatings are not neutral. Rat sympathetic neurons on polylysine alone, without glia or serum, make one axon and no dendrites; laminin increases the number of axons and the growth rate; Matrigel, "a basement membrane extract that contains a complex mixture of ECM proteins", induces dendrites [@craig1994neuronal, p. 296, Fig. 5]. In hippocampal neurons laminin raises the axonal growth rate but not the number of axons [@craig1994neuronal, p. 297]. And stickiness alone is not the point: "axon growth requires a physical substrate that is both adhesive and permissive for growth (many adhesive substrates fail to support axon growth)" [@tessierlavigne1996molecular, p. 1124].
+
+For mechanics the coating sits on a gel whose stiffness you choose. Kreysing and colleagues cultured E17–E18 rat hippocampal neurons on hydroxy-polyacrylamide gels of shear elastic modulus about 0.1 kPa ("soft") and about 10 kPa ("stiff"), coated with 10–100 µg/ml poly-D-lysine overnight and then 1–2 µg/ml laminin for 4 h, and plated 150,000 cells per dish [@kreysing2025environmental, Methods, "Preparation and coating of hydrogels"; Methods, "Cell culture"]. The polyacrylamide recipe itself goes back to the gels Engler and colleagues used for stem cells, cast 70–100 µm thick and coated with 0.25–1 µg/cm² of collagen I [@engler2006matrix, p. 687].
+
+::: {.callout-warning title="A thin soft gel is not soft"}
+Cells feel roughly as deep as their adhesions reach. A gel only about 0.5–1 µm thick on glass "fosters cell spreading similar to that of cells on stiffer gels" [@engler2006matrix, p. 685]. If your gel is thin, your cells are on glass with a soft coat. Cast gels tens of micrometres thick and report the thickness.
+:::
+
+## Reading a protocol {#sec-culture-protocols}
+
+Five things identify a culture: species, age, substrate, density and readout. The table collects the protocols used by the sources of this course; note that no two are the same, and that rat ages are never interchangeable with mouse ages.
+
+| Species, age | Region / cell | Substrate | Density | Readout | Source |
+|---|---|---|---|---|---|
+| Rat, E18 | Hippocampus | Polylysine on glass + astroglial feeder coverslip | 2,000–6,000 per dish | Time-lapse morphology, MAP2 | @dotti1988establishment [p. 1455] |
+| Rat, E17–E18 | Hippocampus | Polyacrylamide 0.1 or 10 kPa + PDL + laminin | 150,000 per dish | Patch clamp, Rhod-4 calcium, synapse staining | @kreysing2025environmental [Methods] |
+| Rat, age not stated | Hippocampus | Matrigel, 24-well glass bottom | 225,000 viable cells per well | GCaMP screen with field stimulation | @chen2013ultrasensitive [Methods] |
+| Rat, P0–P1 | Hippocampus | Poly-D-lysine on glass, NbActiv4, 8–10 DIV | not stated | Voltage imaging with Voltron (preprint) | @abdelfattah2019bright [Methods] |
+| Mouse, newborn (P0) | Hippocampus | Poly-D-lysine, serum then Neurobasal/B27, 7–12 DIV | not stated | FMP voltage dye imaging | @fairless2013membrane [p. 2] |
+| Mouse, adult | Dorsal root ganglia | Poly-L-lysine on glass, 7–12 DIV | not stated | FMP imaging, menthol and capsaicin | @fairless2013membrane [p. 2] |
+| Mouse, E10.5 | Neural stem cells, neurospheres | Laminin-coated coverslips | 30,000 per cm² | Differentiation markers, proliferation | @nourse2022piezo [Methods] |
+
+Three details in that table are worth copying into your own protocols. Chen and colleagues added 4 µM AraC to the growth medium to stop glia from proliferating, because a screen of neuronal fluorescence cannot afford a glial carpet [@chen2013ultrasensitive, Methods, "Neuronal culture screen"]. Nourse and colleagues grew mouse E10.5 neural stem cells as neurospheres with bFGF and EGF and then started differentiation by withdrawing the growth factors, scoring neurons and astrocytes at 4 days and oligodendrocytes at 10 days — timings set by the lineage, not by convenience [@nourse2022piezo, Methods]. And Fairless and colleagues imaged mouse hippocampal cultures only between 7 and 12 days in vitro, which is also when those neurons show the depolarising GABA responses of @sec-activity [@fairless2013membrane, p. 2; p. 10].
+
+::: {.callout-note title="What culture cannot tell you" collapse="true"}
+The authors of the stage model were careful about this. Lamellipodia of the kind seen in stage 1 "have not been observed in neurons developing in situ" and may reflect "adaptation to growth on an artificial, 2-dimensional substrate", and the relationship of minor processes to anything in the intact brain is uncertain [@dotti1988establishment, p. 1461]. The review makes the general version of the complaint: nearly all developmental work on polarity relies on culture, and how closely it parallels development in situ is unclear [@craig1994neuronal, p. 290].
+:::
+
+## Check yourself {#sec-culture-check}
+
+:::{.qmulti}
+In the Dotti staging, what marks the transition from stage 2 to stage 3?
+
+- One of the minor processes abruptly grows much faster and becomes the axon.
+
+  > Correct: an almost 10-fold rate increase, identifiable within 2 h [@dotti1988establishment, p. 1459].
+
+- The cell attaches to the substrate and spreads lamellipodia.
+
+  > That is the entry into stage 1, during the first hour or two [@dotti1988establishment, p. 1457].
+
+- MAP2 becomes restricted to the dendrites.
+
+  > MAP2 and tau are not differentially distributed when cells first polarise [@dotti1988establishment, p. 1466].
+
+:::
+
+**Compute.** An axon growing at the mean rate of @dotti1988establishment [p. 1457] for the first few days, 70 µm/d, is how many times faster than a dendrite at 12 µm/d? {{< qinput 5.8 tol=0.2 hints="70 ÷ 12" >}} [@dotti1988establishment, pp. 1455, 1457].
+
+:::{.qmulti}
+You cast 1 µm polyacrylamide gels of 0.1 kPa on glass and see no difference from glass controls. The most likely reason is…
+
+- the cells sense the rigid glass through the thin gel.
+
+  > Correct: a gel about 0.5–1 µm thick behaves like a stiff substrate [@engler2006matrix, p. 685].
+
+- 0.1 kPa is too stiff to matter.
+
+  > 0.1 kPa is at the soft end of the brain-like range used in these experiments [@kreysing2025environmental; @engler2006matrix].
+
+:::
+
+:::{.qmulti}
+A paper reports "hippocampal neurons, E18, DIV 10". Which claim may you transfer to a mouse experiment at E18?
+
+- None directly: E18 rat and E18 mouse are different developmental points, and the species must be stated with every claim.
+
+  > Correct. Rat ages are not transferable to mouse; the sources of this course differ in both species and age [@dotti1988establishment; @fairless2013membrane].
+
+- All of them, since both are rodents.
+
+  > Gestation and developmental timing differ; the course convention is to label every biological claim with species and age.
+
+:::
+
+::: {.callout-tip title="Answers" collapse="true"}
+1. One minor process starts growing much faster and becomes the axon [@dotti1988establishment, p. 1459].
+2. 70 / 12 ≈ 5.8, consistent with the paper's "5–10 times" [@dotti1988establishment, p. 1457].
+3. The cells feel the glass through the thin gel [@engler2006matrix, p. 685].
+4. None; species and age go with every claim.
+:::
+
+## Summary {#sec-culture-summary}
+
+- Dissociated rat E18 hippocampal culture on polylysine with an astroglial feeder is the standard polarity preparation: about 90% pyramidal neurons, viable for a month or more [@dotti1988establishment, p. 1455; @craig1994neuronal, p. 269].
+- Polarisation runs through five stages entered at about 0.25, 0.5, 1.5, 4 and more than 7 days in culture [@dotti1988establishment, Fig. 9, p. 1466].
+- The axon is defined by its growth rate: about 70 µm/d against about 12 µm/d for dendrites, 5–10 times faster, and it grows in bursts [@dotti1988establishment, pp. 1455, 1457, Table 1].
+- The substrate changes the outcome: polylysine, laminin and Matrigel give different numbers of axons and dendrites, and adhesion alone is not sufficient for growth [@craig1994neuronal, p. 296; @tessierlavigne1996molecular, p. 1124].
+- Stiffness experiments need gels thick enough to hide the glass; cells feel through a gel of about 0.5–1 µm [@engler2006matrix, p. 685], and brain-like gels of 0.1 and 10 kPa with PDL and laminin are the current standard for rat hippocampal neurons [@kreysing2025environmental, Methods].
+
+:::{.qflashcards}
+
+- Name the five stages of neuronal polarisation in culture.
+
+  > Lamellipodia; minor processes; axonal outgrowth; dendritic outgrowth; maturation (entered at about 0.25, 0.5, 1.5, 4 and >7 days).
+
+- What distinguishes the axon at stage 3?
+
+  > Its rate: an abrupt, almost 10-fold increase in elongation, 5–10 times faster than the other processes.
+
+- Why does gel thickness matter in a stiffness experiment?
+
+  > Cells sense through a thin gel to the rigid glass below; around 0.5–1 µm a soft gel behaves stiff.
+
+- Which five facts identify a culture protocol?
+
+  > Species, age, substrate (and stiffness), plating density and readout.
+
+:::

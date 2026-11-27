@@ -1,0 +1,291 @@
+---
+filters:
+  - shortiquiz
+---
+
+# The extracellular matrix {#sec-ecm}
+
+```{ojs}
+//| echo: false
+//| output: false
+// Descriptions shown on hover in @fig-ecm-pnn. All from Fawcett et al. 2019 (Box 1, p. 452; Box 3, p. 456; p. 451).
+ecmParts = ({
+  membrane: { name: "Neuronal membrane", color: "#9aa5b1",
+    text: "Perineuronal nets surround the soma and the proximal and middle dendrites of a neuron, often including the axon initial segment.",
+    cite: "Fawcett et al. 2019, p. 451" },
+  synthase: { name: "Hyaluronan synthase", color: "#e34948",
+    text: "An enzyme in the membrane of the net-bearing neuron that produces the hyaluronan backbone.",
+    cite: "Fawcett et al. 2019, Box 1, p. 452" },
+  hyaluronan: { name: "Hyaluronan", color: "#2a78d6",
+    text: "A glycosaminoglycan chain: the backbone to which the other components bind.",
+    cite: "Fawcett et al. 2019, Box 1, p. 452" },
+  lectican: { name: "Lectican (aggrecan, brevican, neurocan, versican)", color: "#eb6834",
+    text: "Chondroitin sulfate proteoglycans that bind hyaluronan via their link domain. Aggrecan is a major constituent of all perineuronal nets.",
+    cite: "Fawcett et al. 2019, Box 1, p. 452" },
+  csgag: { name: "Chondroitin sulfate chains (CS-GAGs)", color: "#eda100",
+    text: "Repeating disaccharides attached to the lectican core, sulfated at the 4 or 6 position or disulfated. The sulfo groups give the chains their charge and binding properties.",
+    cite: "Fawcett et al. 2019, Box 1, p. 452; Box 3, p. 456" },
+  link: { name: "Link protein (HAPLN1, HAPLN4)", color: "#1baf7a",
+    text: "Stabilises the binding between lectican and hyaluronan.",
+    cite: "Fawcett et al. 2019, Box 1, p. 452" },
+  tenascin: { name: "Tenascin-R", color: "#8e5ed6",
+    text: "An ECM glycoprotein that links lecticans to each other.",
+    cite: "Fawcett et al. 2019, Box 1, p. 452" }
+})
+```
+
+The brain is soft, and its extracellular matrix is part of the reason. In the adult brain, low stiffness coincides with the near absence of the scaffold-forming matrix found in most other soft tissues [@franze2013mechanics, sec. 2.3, p. 235]. The matrix is also what you coat a culture dish with, and what a hydrogel imitates. Matrix chemistry and matrix stiffness are therefore both experimental variables in brain mechanics.
+
+::: {.callout-note title="After this chapter you will be able to"}
+- define the extracellular matrix, proteoglycans, glycosaminoglycans and lecticans;
+- explain how brain ECM differs from the ECM of other soft tissues;
+- describe how hyaluronan, lecticans, link proteins and tenascin-R assemble into a perineuronal net, and when such nets form in rodents;
+- name four ways of using ECM in vitro: coatings, tunable hydrogels, decellularised scaffolds and enzymatic digestion.
+:::
+
+## What the matrix is made of {#sec-ecm-what}
+
+The **extracellular matrix (ECM)** is "the complex network of proteins that surrounds cells within a tissue". It was once thought of "purely as a scaffold", but it does much more [@long2019extracellular, sec. 1, p. 1].
+
+**Proteoglycans** are core proteins carrying one or more **glycosaminoglycan (GAG)** chains, either heparan sulfate or chondroitin sulfate [@long2019extracellular, sec. 2.1.1, p. 2]. GAGs are chains of repeating disaccharides, and hyaluronan is a GAG too [@fawcett2019roles, p. 453, glossary]. Chondroitin sulfate proteoglycans (**CSPGs**) include the **lecticans** (brevican, neurocan, versican, aggrecan) [@long2019extracellular, sec. 2.1.1, p. 2]. These are "the major family of soluble CSPGs within the developing CNS" [@long2019extracellular, sec. 3.1, p. 5].
+
+**Laminins** are built from α, β and γ subunits. @long2019extracellular [sec. 2.1.2, p. 3] count five α, four β and three γ subunits, forming 15 distinct laminins. The older review of @tessierlavigne1996molecular [Fig. 2 legend, p. 1125] lists "at least five α, three β, and two γ chains" in vertebrates. The main cell-surface receptors for ECM are **integrins** [@long2019extracellular, sec. 2.1.2, p. 3]. Ig-superfamily members and proteoglycans also act as receptors [@tessierlavigne1996molecular, p. 1126].
+
+## Why brain ECM is unusual {#sec-ecm-brain}
+
+Neurons and astrocytes carry integrins, but the normal brain is "conspicuously devoid of fibrillar collagens or fibronectin fibrils" except in the meninges, the vasculature and the blood–brain barrier. The adult brain's ECM consists largely of softer elements: hyaluronan and other GAGs, tenascin C and many proteoglycans. In the brain, the ECM seems to be "less a structural support" than a trophic and guidance cue [@franze2013mechanics, sec. 2.3, p. 235]. @sec-tissue-mechanics shows what this means for stiffness.
+
+Development is different again. Hyaluronan is more abundant in the developing brain than in the adult. It is thought to help newborn neurons migrate by raising the tissue's water content [@long2019extracellular, sec. 3.1, p. 5]. In the mouse embryonic cortex, integrin β1 anchors radial glia: their basal endfeet to the pial basement membrane, their apical processes to the ventricular surface (@sec-anatomy-wall) [@long2019extracellular, sec. 2.3.1, pp. 4–5].
+
+Most brain ECM is diffuse. Only 2% of CNS CSPGs sit in the stable, condensed compartment of perineuronal nets and perinodal matrix; the other 98% are in the general matrix [@fawcett2019roles, p. 453].
+
+## Perineuronal nets {#sec-ecm-pnn}
+
+**Perineuronal nets (PNNs)** are "pericellular condensed extracellular matrix (ECM) structures" around the soma and the proximal and middle dendrites of neurons, often including the axon initial segment [@fawcett2019roles, p. 451]. In cortex, they surround mainly fast-spiking, parvalbumin-positive GABAergic interneurons [@fawcett2019roles, p. 451].
+
+Their build follows one plan, which @fawcett2019roles [Box 1, p. 452] call "a ternary structure not unlike that of cartilage". A **hyaluronan** backbone is made by hyaluronan synthase in the neuron's membrane. **Lecticans** bind to it via their link domain. **Link proteins** (HAPLN1, HAPLN4) stabilise that binding, and **tenascin-R** links lecticans to each other. In vitro, these four components (hyaluronan, a lectican, a link protein and tenascin-R) are all needed to form a condensed pericellular matrix [@fawcett2019roles, p. 453]. @fig-ecm-pnn assembles them.
+
+```{ojs}
+//| echo: false
+//| label: fig-ecm-pnn
+//| fig-cap: "Schematic, not to scale, of the molecular assembly of a perineuronal net, drawn from the description in Fawcett et al. 2019 (Box 1, p. 452; p. 453). Grey band: neuronal membrane with hyaluronan synthase (red). Blue: hyaluronan backbone. Orange: lectican core proteins with chondroitin sulfate chains (yellow). Green: link proteins at the lectican–hyaluronan junction. Purple: tenascin-R linking lecticans. Hover over, or tab to, a component for its role and source. Shapes, sizes, numbers and spacing are illustrative; no stiffness or mechanical property is implied, because the source gives none."
+{
+  const W = 660, H = 300;
+  const root = d3.create("div");
+  const svg = root.append("svg").attr("viewBox", `0 0 ${W} ${H}`).attr("width", "100%")
+    .style("max-width", `${W}px`).style("font-size", "12px")
+    .attr("role", "group").attr("aria-label", "Schematic of a perineuronal net");
+  const info = root.append("div").attr("class", "tl-detail")
+    .text("Hover over, or tab to, a component.");
+  svg.append("text").attr("x", 10).attr("y", 16).attr("fill", "currentColor")
+    .attr("font-style", "italic").text("schematic, not to scale");
+  const part = (key) => {
+    const g = svg.append("g").attr("tabindex", 0).attr("data-part", key)
+      .attr("aria-label", ecmParts[key].name).style("cursor", "pointer").style("outline", "none");
+    g.append("title").text(ecmParts[key].name);
+    return g;
+  };
+  // membrane
+  part("membrane").append("rect").attr("x", 20).attr("y", 262).attr("width", 620).attr("height", 22)
+    .attr("rx", 6).attr("fill", "#9aa5b1").attr("fill-opacity", 0.45).attr("stroke", "currentColor");
+  // hyaluronan backbone (wavy line from the synthase)
+  const haY = (x) => 215 + 7 * Math.sin(x / 22);
+  const haPts = d3.range(70, 641, 4).map(x => [x, haY(x)]);
+  const ha = part("hyaluronan");
+  ha.append("path").attr("d", "M60 262 C 60 240, 62 225, 70 " + haY(70))
+    .attr("fill", "none").attr("stroke", "#2a78d6").attr("stroke-width", 5);
+  ha.append("path").attr("d", d3.line()(haPts)).attr("fill", "none")
+    .attr("stroke", "#2a78d6").attr("stroke-width", 5).attr("stroke-linecap", "round");
+  // synthase
+  part("synthase").append("rect").attr("x", 50).attr("y", 256).attr("width", 20).attr("height", 34)
+    .attr("rx", 4).attr("fill", "#e34948").attr("stroke", "currentColor");
+  // lecticans with CS-GAG chains and link proteins
+  const xs = [140, 250, 360, 470, 580], yTop = 85;
+  const csg = part("csgag"), lec = part("lectican"), lnk = part("link");
+  for (const x of xs) {
+    const y0 = haY(x) - 6;
+    lec.append("line").attr("x1", x).attr("x2", x).attr("y1", y0).attr("y2", yTop)
+      .attr("stroke", "#eb6834").attr("stroke-width", 5).attr("stroke-linecap", "round");
+    lec.append("circle").attr("cx", x).attr("cy", y0 - 4).attr("r", 8).attr("fill", "#eb6834").attr("stroke", "currentColor");
+    for (let y = yTop + 18; y < y0 - 20; y += 16) {
+      for (const s of [-1, 1]) {
+        csg.append("line").attr("x1", x).attr("y1", y).attr("x2", x + s * 22).attr("y2", y - 8)
+          .attr("stroke", "#eda100").attr("stroke-width", 2.5).attr("stroke-linecap", "round");
+      }
+    }
+    lnk.append("ellipse").attr("cx", x + 13).attr("cy", y0 + 2).attr("rx", 8).attr("ry", 5)
+      .attr("fill", "#1baf7a").attr("stroke", "currentColor");
+  }
+  // tenascin-R: a small hub with arms to the C-terminal ends of neighbouring lecticans
+  const tn = part("tenascin");
+  for (const [a, b, c] of [[xs[0], xs[1], xs[2]], [xs[2], xs[3], xs[4]]]) {
+    const hx = b, hy = yTop - 40;
+    for (const x of [a, b, c]) {
+      tn.append("line").attr("x1", hx).attr("y1", hy).attr("x2", x).attr("y2", yTop)
+        .attr("stroke", "#8e5ed6").attr("stroke-width", 3);
+      tn.append("circle").attr("cx", x).attr("cy", yTop).attr("r", 5).attr("fill", "#8e5ed6");
+    }
+    tn.append("circle").attr("cx", hx).attr("cy", hy).attr("r", 7).attr("fill", "#8e5ed6").attr("stroke", "currentColor");
+  }
+  // labels
+  const lab = [[24, 298, "neuronal membrane"], [80, 250, "hyaluronan synthase"], [598, 246, "hyaluronan"],
+               [606, 110, "lectican"], [497, 112, "CS chains"], [158, 236, "link protein"], [262, 36, "tenascin-R"]];
+  for (const [x, y, t] of lab) svg.append("text").attr("x", x).attr("y", y).attr("fill", "currentColor").text(t);
+  // hover / focus behaviour
+  const groups = svg.selectAll("g[data-part]");
+  const show = (key) => {
+    groups.attr("opacity", function () { return this.dataset.part === key ? 1 : 0.3; });
+    const p = ecmParts[key];
+    info.html("");
+    info.append("strong").text(p.name + ". ");
+    info.append("span").text(p.text + " ");
+    info.append("span").attr("class", "tl-cite").text("Source: " + p.cite + ".");
+  };
+  groups.on("mouseenter focus", function () { show(this.dataset.part); })
+        .on("mouseleave blur", () => groups.attr("opacity", 1));
+  return root.node();
+}
+```
+
+PNNs are late structures. In mice and rats they form starting around P23, over about 10 days; in humans, from 2 years, maturing by 8 years. Their formation coincides with the closure of **critical periods**, the late developmental windows of enhanced plasticity [@fawcett2019roles, p. 453]. Hyaluronan and some CSPGs are expressed already in the embryo. In cortex, link proteins, aggrecan and brevican are upregulated later, when the nets form [@fawcett2019roles, p. 453].
+
+The sulfation of the CS chains changes too. Embryonic brain CS chains are mostly 6-sulfated. At birth, 18% are 6-sulfated and 60% 4-sulfated; after the critical period, 2.5% and 91% (species not stated in the review) [@fawcett2019roles, Box 3, p. 456]. This matters for growth: 6-sulfated chains are permissive to axon growth, whereas 4-sulfated ones are inhibitory [@fawcett2019roles, Box 3, p. 456].
+
+A similar matrix, the **perinodal ECM**, surrounds the nodes of Ranvier on axons. In mice lacking its link protein HAPLN2, CNS conduction velocity was markedly decreased, without any change in Na⁺-channel clustering [@fawcett2019roles, Box 2, p. 454].
+
+: ECM components of the brain, their roles, and the sources. {#tbl-ecm-components}
+
+| Component | What it does | Source |
+|---|---|---|
+| Hyaluronan | Backbone of PNNs; more abundant in the developing brain, thought to aid migration by raising water content | @fawcett2019roles [Box 1]; @long2019extracellular [sec. 3.1] |
+| Lecticans (aggrecan, brevican, neurocan, versican) | Main soluble CSPGs of the developing CNS; bind hyaluronan | @long2019extracellular [sec. 3.1]; @fawcett2019roles [Box 1] |
+| Link proteins (HAPLN1, HAPLN4; HAPLN2 at nodes) | Stabilise lectican–hyaluronan binding; HAPLN2 loss slows conduction | @fawcett2019roles [Box 1; Box 2] |
+| Tenascin-R | Links lecticans to each other | @fawcett2019roles [Box 1] |
+| CS sulfation | 6-sulfated chains permissive, 4-sulfated chains inhibitory to axon growth | @fawcett2019roles [Box 3] |
+| Laminins | Loss of laminin γ1 disrupts neuronal migration to the marginal zone (mouse); laminin raises axon growth rate in culture (rat) | @long2019extracellular [sec. 3.2]; @craig1994neuronal [p. 296] |
+| Integrins | Main ECM receptors | @long2019extracellular [sec. 2.1.2] |
+| Reelin | Secreted in the marginal zone; needed for migration and cortical layering | @long2019extracellular [sec. 3.2] |
+
+## ECM steers growth {#sec-ecm-growth}
+
+Many ECM molecules (laminins, tenascins, collagens, thrombospondins, fibronectin, vitronectin and proteoglycans) can either promote or inhibit neurite outgrowth in vitro. Yet "little is known about actual guidance functions in vivo" [@tessierlavigne1996molecular, p. 1126]. Adhesion alone is not enough: "many adhesive substrates fail to support axon growth" [@tessierlavigne1996molecular, p. 1124].
+
+The coating changes the neuron. Rat sympathetic neurons grown on polylysine, without glia or serum, form one axon and no dendrites. On laminin they form more axons, which grow faster. Thrombospondin and collagen IV raise only the growth rate, and the basement-membrane extract Matrigel induces dendrites [@craig1994neuronal, p. 296; Fig. 5]. @sec-culture and @sec-guidance build on this.
+
+## ECM in the dish {#sec-ecm-vitro}
+
+Mechanics experiments separate the matrix's chemistry from its stiffness:
+
+- **Coated synthetic gels.** Polyacrylamide gels of chosen elasticity are coated with a thin layer of ECM protein. Engler and colleagues used collagen I and a brain-like range of 0.1–1 kPa for human mesenchymal stem cells [@engler2006matrix, pp. 678, 687]. Dupont and colleagues used fibronectin-coated gels from 0.7 to 40 kPa [@dupont2011role, p. 179]. Segel and colleagues added 6-acrylamidohexanoic acid to control ECM tethering independently of stiffness [@segel2019niche, Methods, pp. 6–7].
+- **3D ECM gels.** *Xenopus* brain explants embedded in collagen hydrogels of 40 Pa or 450 Pa pulled harder on the stiffer gel: median maximum traction 3 nN versus 13 nN [@pillai2026long, Results; Fig. 5].
+- **Decellularised scaffolds.** Removing all cells from rat brain leaves its ECM. Aged oligodendrocyte progenitors reseeded on neonatal (P7) ECM proliferated about 10 times faster than on aged ECM [@segel2019niche, p. 3; Fig. 1c,d].
+- **Enzymatic digestion.** **Chondroitinase ABC (chABC)** degrades CSPGs [@long2019extracellular, sec. 2.1.1, p. 2]. In aged rat lesions, it gave about threefold more progenitor proliferation and differentiation [@segel2019niche, p. 3; Fig. 1f]. It digests both PNNs and the diffuse matrix, so it cannot show a PNN-specific role [@fawcett2019roles, p. 454].
+
+@sec-tissue-mechanics and @sec-piezo show what cells read from these substrates.
+
+## Check yourself {#sec-ecm-check}
+
+:::{.qmulti}
+Which of these is largely absent from the normal brain outside the meninges, vasculature and blood–brain barrier?
+
+- Fibrillar collagen and fibronectin fibrils.
+
+  > Correct [@franze2013mechanics, sec. 2.3, p. 235].
+
+- Hyaluronan.
+
+  > Hyaluronan is a major component of brain ECM and the backbone of perineuronal nets.
+
+- Proteoglycans.
+
+  > Brain ECM contains a large set of proteoglycans, including the lecticans.
+
+:::
+
+**Compute.** What percentage of CNS CSPGs is in the diffuse matrix rather than in perineuronal nets and perinodal ECM? {{< qinput 98 tol=0 hints="Only 2% are in the condensed compartment" >}} % [@fawcett2019roles, p. 453].
+
+:::{.qmulti}
+Which four components are needed in vitro to form a condensed pericellular matrix?
+
+- Hyaluronan, a lectican, a link protein and tenascin-R.
+
+  > Correct [@fawcett2019roles, p. 453].
+
+- Collagen I, fibronectin, laminin and an integrin.
+
+  > These are not the components of perineuronal nets; fibrillar collagen and fibronectin are largely absent from the brain.
+
+- Hyaluronan, laminin, reelin and chondroitinase ABC.
+
+  > Chondroitinase ABC is an enzyme that digests CSPGs, so it removes matrix instead of building it.
+
+:::
+
+:::{.qmulti}
+When do perineuronal nets form in mice?
+
+- Starting around P23, over about 10 days.
+
+  > Correct; the same holds for rats [@fawcett2019roles, p. 453].
+
+- At E10.5, with the neuroepithelium.
+
+  > PNNs are among the last structures of neural development, not among the first.
+
+- From 2 years of age.
+
+  > That is the human timing [@fawcett2019roles, p. 453].
+
+:::
+
+:::{.qmulti}
+Rat sympathetic neurons are moved from polylysine to laminin. What happens?
+
+- They form more axons, and the axons grow faster.
+
+  > Correct [@craig1994neuronal, p. 296].
+
+- They form dendrites.
+
+  > Dendrites were induced by Matrigel, a basement-membrane extract.
+
+- Nothing: any adhesive substrate gives the same result.
+
+  > Substrates differ; many adhesive substrates do not even support axon growth [@tessierlavigne1996molecular, p. 1124].
+
+:::
+
+::: {.callout-tip title="Answers" collapse="true"}
+1. Fibrillar collagen and fibronectin fibrils [@franze2013mechanics, sec. 2.3, p. 235].
+2. 98% [@fawcett2019roles, p. 453].
+3. Hyaluronan, a lectican, a link protein and tenascin-R [@fawcett2019roles, p. 453].
+4. From about P23, over about 10 days, in mice and rats [@fawcett2019roles, p. 453].
+5. More axons and faster axon growth [@craig1994neuronal, p. 296].
+:::
+
+## Summary {#sec-ecm-summary}
+
+- The ECM is the network of proteins around cells. Proteoglycans carry GAG chains, and lecticans are the main soluble CSPGs of the developing CNS [@long2019extracellular, pp. 1–5].
+- The adult brain lacks a fibrillar collagen and fibronectin scaffold. Its ECM is mostly hyaluronan, other GAGs, tenascin C and proteoglycans [@franze2013mechanics, sec. 2.3, p. 235].
+- In perineuronal nets, lecticans bind a hyaluronan backbone, link proteins stabilise the binding and tenascin-R cross-links the lecticans. In mice and rats, PNNs form from about P23 [@fawcett2019roles, Box 1; p. 453].
+- In vitro, ECM is used as a coating on gels of chosen stiffness, as 3D gels, as decellularised scaffolds, or removed with chABC [@engler2006matrix; @dupont2011role; @pillai2026long; @segel2019niche].
+
+:::{.qflashcards}
+
+- What is a proteoglycan?
+
+  > A core protein carrying one or more glycosaminoglycan chains, heparan sulfate or chondroitin sulfate [@long2019extracellular, sec. 2.1.1].
+
+- What does a link protein do in a perineuronal net?
+
+  > It stabilises the binding of lecticans to hyaluronan [@fawcett2019roles, Box 1].
+
+- Which CS sulfation is permissive to axon growth?
+
+  > 6-sulfation; 4-sulfation is inhibitory [@fawcett2019roles, Box 3].
+
+- What does chondroitinase ABC do?
+
+  > It digests the CS chains of CSPGs, in both perineuronal nets and the diffuse matrix.
+
+:::

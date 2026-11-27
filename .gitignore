@@ -1,0 +1,11 @@
+# Rendered site and Quarto cache
+course/_book/
+course/.quarto/
+**/*.quarto_ipynb
+
+# Private source material (copyright)
+/sources/
+/notes/
+
+# OS/editor
+.DS_Store

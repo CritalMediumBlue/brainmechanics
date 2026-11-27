@@ -1,0 +1,292 @@
+---
+filters:
+  - shortiquiz
+---
+
+# Tissue mechanics: how soft is the brain? {#sec-tissue-mechanics}
+
+```{ojs}
+//| echo: false
+import { predictGate as tmPredictGate, locked as tmLocked } from "./pedagogy/predict.js"
+```
+
+```{ojs}
+//| echo: false
+//| output: false
+// Hertz model for a spherical indenter, F = (4/3) K R^(1/2) δ^(3/2)
+// (@pillai2026long, Methods; @thompson2019rapid, p. 13).
+// Units: K in Pa, R and δ in µm, F in nN. Pa·µm^2 = pN, hence the factor 1e-3.
+tmHertzF = (K, R, d) => (4 / 3) * K * Math.sqrt(R) * Math.pow(d, 1.5) * 1e-3
+tmHertzDelta = (K, R, F) => Math.pow((3 * F * 1e3) / (4 * K * Math.sqrt(R)), 2 / 3)
+tmR0 = 18.64          // probe radius, µm (@thompson2019rapid, p. 2)
+tmF0 = 10             // force setpoint, nN (@pillai2026long, Methods)
+tmMean = a => a.reduce((s, x) => s + x, 0) / a.length
+// Published K values used as reference curves
+tmRefs = [
+  { name: "Xenopus brain, stage 40, control", K: 432, src: "pillai2026long, Results (Fig. 3d)" },
+  { name: "Xenopus brain, stage 40, Piezo1 knockdown", K: 231, src: "pillai2026long, Results (Fig. 3d)" },
+  { name: "rat prefrontal cortex, neonate (~P7)", K: tmMean([272.1, 229.3, 243.4]), src: "segel2019niche, Suppl. Table 5 (mean of 3 rats)" },
+  { name: "rat prefrontal cortex, aged (~455 d)", K: tmMean([443.4, 482.8, 488.7]), src: "segel2019niche, Suppl. Table 5 (mean of 3 rats)" }
+]
+tmSegelNeo = tmRefs[2].K.toFixed(0)
+tmSegelAged = tmRefs[3].K.toFixed(0)
+tmDeltaCtrl = tmHertzDelta(432, tmR0, tmF0).toFixed(2)
+tmDeltaKD = tmHertzDelta(231, tmR0, tmF0).toFixed(2)
+tmRatio4 = Math.pow(4, 2 / 3).toFixed(2)
+```
+
+Brain tissue is soft, and cells notice. In *Xenopus* embryos, retinal axons turn towards softer brain tissue [@koser2016mechanosensing, Fig. 3]. In rats, the niche of oligodendrocyte progenitor cells stiffens with age, and this stiffening is enough to make the cells lose function [@segel2019niche, Abstract]. Such papers report "K = 432 Pa", while others call brain "~10 kPa". This chapter explains what these numbers mean and why both can be right.
+
+::: {.callout-note title="After this chapter you will be able to"}
+- define stress, strain, Young's modulus $E$ and shear modulus $G$, and convert between them for an incompressible material;
+- use the Hertz model to relate force, indentation depth and the apparent modulus $K$ in an AFM measurement;
+- explain why AFM (~100 Pa) and magnetic resonance elastography (~10 kPa) give different stiffness values for brain;
+- place brain on a stiffness ladder of tissues and name the main pitfalls of sample preparation.
+:::
+
+## Stress, strain and moduli {#sec-tissue-mechanics-moduli}
+
+Definitions follow the glossary of @franze2013mechanics [p. 230]. **Stress** $\sigma$ is force per area, and **strain** is a unitless measure of deformation. For a material of resting length $l$ stretched by a distance $\delta$:
+
+$$
+\sigma = \frac{F}{A}, \qquad \varepsilon = \frac{\delta}{l}.
+$$ {#eq-stress-strain}
+
+A **modulus** is the ratio of stress to the strain it produces. Stretching gives the **Young's modulus** $E$; shearing, with shear strain $\gamma$ (lateral displacement over height), gives the **shear modulus** $G$ [@franze2013mechanics, p. 230]:
+
+$$
+E = \frac{\sigma}{\varepsilon}, \qquad G = \frac{\sigma}{\gamma}.
+$$ {#eq-moduli}
+
+The two moduli are linked by **Poisson's ratio** $\nu$, the ratio of transverse to axial strain [@tyler2012mechanobiology, p. 869]:
+
+$$
+E = 2G(1+\nu).
+$$ {#eq-E-G}
+
+Brain is usually assumed to conserve volume, $\nu = 0.5$ [@tyler2012mechanobiology, p. 867], so $G = E/3$ [@franze2013mechanics, p. 230]. Moduli are in pascals, and two identities help with cell-scale numbers: 1 Pa = 1 pN/µm² and 1 nN/µm² = 1 kPa [@tyler2012mechanobiology, pp. 867, 869].
+
+A material is **linearly elastic** if stress is proportional to strain, so the modulus stays constant; if the modulus changes with strain, it is **nonlinearly elastic** [@franze2013mechanics, p. 230]. Brain is also **viscoelastic**: it partly stores energy and springs back, and partly dissipates energy by viscous flow [@pillai2024mechanics, p. 5]. The elastic part is reported as a **storage modulus** (Pa) and the viscous part as a **loss modulus** (Pa) [@pillai2024mechanics, p. 5].
+
+## How soft is the brain? {#sec-tissue-mechanics-ladder}
+
+Brain is "among the softest tissues in the body" [@franze2013mechanics, p. 231]. @fig-tm-ladder places it among other tissues.
+
+```{ojs}
+//| echo: false
+//| output: false
+tmLadder = [
+  { row: "Brain · Engler 2006", lo: 100, hi: 1000, src: "Engler et al. 2006", loc: "engler2006matrix, Fig. 1B legend, p. 678" },
+  { row: "Brain · Tyler 2012", lo: 100, hi: 16000, src: "Tyler 2012", loc: "tyler2012mechanobiology, p. 867 (rodent and human)" },
+  { row: "Brain, all reports · Franze 2013", lo: 40, hi: 20000, src: "Franze et al. 2013", loc: "franze2013mechanics, p. 231" },
+  { row: "Brain, AFM ~1 Hz · Pillai 2024", lo: 100, hi: 100, src: "Pillai & Franze 2024", loc: "pillai2024mechanics, p. 5 (order of magnitude)" },
+  { row: "Brain, MRE · Pillai 2024", lo: 10000, hi: 10000, src: "Pillai & Franze 2024", loc: "pillai2024mechanics, p. 5 (order of magnitude)" },
+  { row: "Muscle · Engler 2006", lo: 8000, hi: 17000, src: "Engler et al. 2006", loc: "engler2006matrix, Fig. 1B legend, p. 678" },
+  { row: "Muscle · Tyler 2012", lo: 10000, hi: 100000, src: "Tyler 2012", loc: "tyler2012mechanobiology, p. 867" },
+  { row: "Osteoid (crosslinked collagen) · Engler 2006", lo: 25000, hi: 40000, src: "Engler et al. 2006", loc: "engler2006matrix, Fig. 1B legend, p. 678; measured osteoid 27 ± 10 kPa, p. 680" },
+  { row: "Connective tissue, arteries · Tyler 2012", lo: 1e5, hi: 1e6, src: "Tyler 2012", loc: "tyler2012mechanobiology, p. 867" },
+  { row: "Calcified bone · Engler 2006", lo: 1e9, hi: 1e9, src: "Engler et al. 2006", loc: "engler2006matrix, p. 680 (~10^6 kPa)" },
+  { row: "Bone · Tyler 2012", lo: 1.5e10, hi: 3e10, src: "Tyler 2012", loc: "tyler2012mechanobiology, p. 867" }
+].map(d => ({ ...d, tip: `${d.row}\n${d.lo === d.hi ? "~" + d3.format(".2~s")(d.lo) : d3.format(".2~s")(d.lo) + "–" + d3.format(".2~s")(d.hi)} Pa\n[@${d.loc}]` }))
+```
+
+```{ojs}
+//| echo: false
+//| label: fig-tm-ladder
+//| fig-cap: "Stiffness ladder of tissues (log axis, Young's modulus E in Pa). Bars are ranges and dots single values, as stated by Engler et al. 2006 (blue), Tyler 2012 (orange), Franze et al. 2013 (green; every reported brain modulus, mixed methods) and Pillai & Franze 2024 (purple; brain by AFM at ~1 Hz and by MRE). Hover over a mark for its source and locator. Values come from different methods, species and timescales, so the ladder shows orders of magnitude only."
+Plot.plot({
+  width: Math.min(width, 720), height: 380, marginLeft: 260,
+  x: { type: "log", domain: [10, 1e11], label: "Young's modulus E (Pa) →", grid: true },
+  y: { domain: tmLadder.map(d => d.row), label: null },
+  color: { domain: ["Engler et al. 2006", "Tyler 2012", "Franze et al. 2013", "Pillai & Franze 2024"], range: ["#2a78d6", "#eb6834", "#1baf7a", "#8e5ed6"], legend: true },
+  marks: [
+    Plot.ruleY(tmLadder.filter(d => d.lo < d.hi), { x1: "lo", x2: "hi", y: "row", stroke: "src", strokeWidth: 8, title: "tip" }),
+    Plot.dot(tmLadder.filter(d => d.lo === d.hi), { x: "lo", y: "row", fill: "src", r: 6, title: "tip" })
+  ]
+})
+```
+
+The sources agree on the order but not on the edges. Brain spans 0.1–1 kPa for @engler2006matrix [p. 678] but 0.1–16 kPa for @tyler2012mechanobiology [p. 867]. Bone is "~10⁶ kPa" for @engler2006matrix [p. 680] but 15–30 GPa for @tyler2012mechanobiology [p. 867]. Single cells are similarly soft: neurons ~1 kPa, glia ~400 Pa, growth cones ~100 Pa [@franze2013mechanics, pp. 233–234].
+
+## Measuring stiffness: AFM and the Hertz model {#sec-tissue-mechanics-hertz}
+
+In **atomic force microscopy (AFM) indentation**, a soft cantilever with a bead at its tip pushes into the tissue, and the force $F$ is recorded against the indentation depth $\delta$. For a sphere of radius $R$ the curve is fitted with the **Hertz model** [@pillai2026long, Methods; @thompson2019rapid, p. 13; @koser2016mechanosensing, Methods "AFM data"; @segel2019niche, Methods "Atomic force microscopy"]:
+
+$$
+F = \frac{4}{3}\,K\,R^{1/2}\,\delta^{3/2}, \qquad K = \frac{E}{1-\nu^{2}}.
+$$ {#eq-hertz}
+
+$K$ is the **reduced apparent elastic modulus**; "a larger $K$ value indicates stiffer tissue" [@pillai2026long, Results]. With $\nu = 0.5$, @eq-hertz and $G = E/3$ give $K = 4E/3 = 4G$ (our arithmetic): keep this in mind when gels described by $G$ are compared with tissue described by $K$. Solving @eq-hertz for $\delta$ gives the depth reached at a given force:
+
+$$
+\delta = \left(\frac{3F}{4\,K\,R^{1/2}}\right)^{2/3}.
+$$ {#eq-hertz-delta}
+
+**Typical setup.** @thompson2019rapid [p. 2] used a bead of radius $R$ = 18.64 µm and $F$ = 10 nN, "to measure the stiffness mainly of the top ~20–30 µm of the tissue"; so did @pillai2026long [Methods]. @koser2016mechanosensing [Methods] and @segel2019niche [Methods] used 7 nN.
+
+**Worked example.** The stage 40 *Xenopus* brain has a median $K$ of 432 Pa [@pillai2026long, Results]. With $R$ = 18.64 µm and $F$ = 10 nN, @eq-hertz-delta gives $\delta$ = ${tmDeltaCtrl} µm. Units work out because Pa·µm² = pN [@tyler2012mechanobiology, p. 869].
+
+Before you explore, make a prediction.
+
+```{ojs}
+//| echo: false
+viewof tmGuess = tmPredictGate({
+  prompt: "Tissue A has a K four times smaller than tissue B. Same probe, same force (10 nN). How much deeper does the probe go into tissue A?",
+  confidence: true,
+  spec: {
+    kind: "choice",
+    options: ["about 2.5 times deeper", "4 times deeper", "16 times deeper"],
+    answer: "about 2.5 times deeper",
+    feedback: {
+      "about 2.5 times deeper": "Right: δ scales as K^(−2/3), and 4^(2/3) ≈ 2.52.",
+      "4 times deeper": "That would hold for a linear spring. In the Hertz model the contact area grows with depth, so δ ∝ K^(−2/3), not K^(−1).",
+      "16 times deeper": "The exponent goes the other way: δ ∝ K^(−2/3), so δ grows less than K shrinks."
+    }
+  }
+})
+```
+
+```{ojs}
+//| echo: false
+viewof tmIn = Inputs.form({
+  logK: Inputs.range([Math.log10(50), Math.log10(20000)], { value: Math.log10(432), step: 0.01, label: "log₁₀ K (Pa)" }),
+  R: Inputs.range([2, 50], { value: 18.64, step: 0.01, label: "probe radius R (µm)" })
+})
+```
+
+```{ojs}
+//| echo: false
+//| label: fig-tm-hertz
+//| fig-cap: "Hertz indentation explorer (@eq-hertz). Black: force F against indentation δ for the K and probe radius R set by the sliders; the dot marks the depth reached at F = 10 nN (@eq-hertz-delta). Coloured: the same probe on published median K values, Xenopus brain at stage 40, control and Piezo1 knockdown (Pillai et al. 2026, Fig. 3d), and rat prefrontal cortex, neonate and aged (means of three rats each from Segel et al. 2019, Suppl. Table 5; measured with 7 nN, not 10 nN). Curves are computed, not measured. Real brain tissue is viscoelastic and nonlinearly elastic, and its stiffness depends on rate and strain (Franze et al. 2013, p. 231; Pillai & Franze 2024, p. 5), so a single K is a simplification."
+{
+  if (!tmGuess.committed) return tmLocked()
+  const K = Math.pow(10, tmIn.logK), R = tmIn.R
+  const d10 = tmHertzDelta(K, R, tmF0)
+  const xmax = Math.min(30, Math.max(8, 1.6 * d10))
+  const ds = d3.range(0, 201).map(i => i * xmax / 200)
+  const pal = ["#2a78d6", "#eb6834", "#1baf7a", "#8e5ed6"]
+  const rows = tmRefs.flatMap(r => ds.map(d => ({ d, F: tmHertzF(r.K, R, d), name: `${r.name}: K = ${r.K.toFixed(0)} Pa`, tip: `${r.name}\nK = ${r.K.toFixed(0)} Pa\n[@${r.src}]` })))
+  const mine = ds.map(d => ({ d, F: tmHertzF(K, R, d) }))
+  return Plot.plot({
+    width: Math.min(width, 680), height: 360,
+    x: { domain: [0, xmax], label: "indentation δ (µm) →" },
+    y: { domain: [0, 30], label: "↑ force F (nN)", grid: true },
+    color: { domain: tmRefs.map(r => `${r.name}: K = ${r.K.toFixed(0)} Pa`), range: pal, legend: true },
+    marks: [
+      Plot.ruleY([tmF0], { strokeDasharray: "4,3" }),
+      Plot.line(rows, { x: "d", y: "F", stroke: "name", z: "name", strokeWidth: 1.5, title: "tip", clip: true }),
+      Plot.line(mine, { x: "d", y: "F", stroke: "currentColor", strokeWidth: 2.5, clip: true }),
+      Plot.dot([{ d: d10, F: tmF0 }], { x: "d", y: "F", fill: "currentColor", r: 5 }),
+      Plot.text([{ d: d10, F: tmF0 }], { x: "d", y: "F", text: () => `δ = ${d10.toFixed(2)} µm at 10 nN`, dx: 8, dy: -10, textAnchor: "start" })
+    ]
+  })
+}
+```
+
+```{ojs}
+//| echo: false
+tmGuess.committed ? md`With K = ${Math.pow(10, tmIn.logK).toFixed(0)} Pa and R = ${tmIn.R.toFixed(2)} µm, a 10 nN force indents the tissue by **${tmHertzDelta(Math.pow(10, tmIn.logK), tmIn.R, tmF0).toFixed(2)} µm**.` : md``
+```
+
+Things to try:
+
+- Compare the two *Xenopus* curves. Piezo1 knockdown in brain tissue roughly halved $K$, from 432 to 231 Pa [@pillai2026long, Results]; the indentation at 10 nN grows only from ${tmDeltaCtrl} to ${tmDeltaKD} µm.
+- Rat cortex stiffens with age, from about ${tmSegelNeo} Pa (neonate, ~P7) to about ${tmSegelAged} Pa (~455 days) [@segel2019niche, Fig. 1g; Suppl. Table 5]. In the *Xenopus* diencephalon, local $K$ changes within tens of minutes during development [@thompson2019rapid, Fig. 2].
+
+## One number is not enough: rate and strain {#sec-tissue-mechanics-rate}
+
+Reported brain moduli run from 40 Pa to 20,000 Pa [@franze2013mechanics, p. 231], mostly because of rate and strain.
+
+**Rate.** Measured by AFM at ~1 Hz, brain has an elastic modulus on the order of 100 Pa. Measured at higher frequency by MRE or ultrasound shear-wave imaging, the same tissue appears to be ~10 kPa [@pillai2024mechanics, p. 5]. At slow rates "the material has time to relax, and water can flow away" from the probe; at fast rates it cannot [@pillai2024mechanics, p. 5]. Collected across studies, the shear modulus of brain falls from roughly 10 kPa to roughly 100 Pa as the time after deformation grows (approx., read from @franze2013mechanics [Fig. 2a]).
+
+**Strain.** In rat hippocampus and cortex, AFM gave 150–300 Pa at 5% strain, but hippocampal regions exceeded 2,000 Pa at 30% strain [@franze2013mechanics, p. 232; Fig. 2b]. *Xenopus* brain also stiffens under compression [@koser2016mechanosensing, Results]. In vivo, its stiffness $k$ rose from 3.0 nN/µm at 2–10 nN to 6.2 nN/µm at 22–30 nN, and to 16.9 nN/µm after 900 s at 30 nN [@pillai2026long, Extended Data Fig. 8e]. The change was transient: "tissue mechanics was only altered for as long as compression was applied" [@pillai2026long, Extended Data Fig. 8i].
+
+Brain stiffens through development, then softens again from ~40 years in humans and ~10 months in mice [@pillai2024mechanics, p. 4].
+
+::: {.callout-warning title="Common mistake"}
+"Brain is 10 kPa, so a 10 kPa gel is brain-like." Cells probe their surroundings over seconds to minutes [@pillai2024mechanics, p. 6], closer to the AFM timescale, where brain is hundreds of pascals. Also check whether a paper reports $E$, $G$ or $K$.
+:::
+
+## Methods and pitfalls {#sec-tissue-mechanics-methods}
+
+| Method | What it measures | Strength | Limitation |
+|---|---|---|---|
+| Shear rheometer | viscoelastic moduli of tissue slices | reliable, widely available | spatial resolution ~cm |
+| AFM indentation | force–indentation curves, $K$ | "gold standard"; cellular resolution, in vivo maps | surface only |
+| MRE | shear-wave speed, using MRI | probes deep tissue | indirect; no cellular resolution |
+| Brillouin microscopy | longitudinal modulus | non-contact | indirect |
+
+: Methods for measuring brain mechanics [@pillai2024mechanics, p. 7; @franze2013mechanics, p. 242]. {#tbl-tm-methods}
+
+Sample preparation matters too. Tissue must be measured within a few hours post mortem, in physiological buffer at the right temperature; freezing, drying or fixing "will massively alter" its mechanics [@pillai2024mechanics, p. 7]. Cutting tissue releases tension and may change what is measured [@franze2013mechanics, p. 242]. Gel recipes do not transfer between labs either: 5% acrylamide with 0.04% bis-acrylamide is "~0.1 kPa" for @koser2016mechanosensing [Methods] but $G$ ~200 Pa for @thompson2019rapid [p. 11]. Within one system and one method, though, results are "highly reproducible" [@pillai2024mechanics, p. 7].
+
+## Check yourself {#sec-tissue-mechanics-check}
+
+:::{.qmulti}
+AFM gives ~100 Pa for brain, MRE gives ~10 kPa. Why?
+
+- Brain is viscoelastic: probed slowly, it relaxes and water flows away, so it appears softer.
+
+  > Correct [@pillai2024mechanics, p. 5].
+
+- One of the methods is simply wrong.
+
+  > Both are reproducible; they probe different timescales.
+
+- MRE measures bone, not brain.
+
+  > MRE measures shear waves in the brain itself.
+
+:::
+
+**Compute.** Using @eq-hertz-delta with $K$ = 432 Pa, $R$ = 18.64 µm and $F$ = 10 nN: $\delta$ = {{< qinput 2.53 tol=0.05 hints="δ = (3F / (4 K √R))^(2/3); use F in pN and R in µm" >}} µm.
+
+**Compute.** A gel has shear modulus $G$ = 100 Pa. Assuming $\nu$ = 0.5, its Young's modulus is $E$ = {{< qinput 300 tol=1 hints="G = E/3" >}} Pa.
+
+:::{.qmulti}
+A lab measures frozen-then-thawed brain slices and finds them much stiffer than published AFM values. What is the most likely explanation?
+
+- Freezing massively alters tissue mechanics.
+
+  > Correct [@pillai2024mechanics, p. 7].
+
+- Their tissue came from an older animal.
+
+  > Age changes rat cortex stiffness less than twofold [@segel2019niche, Fig. 1g]; sample preparation is the first suspect.
+
+:::
+
+::: {.callout-tip title="Answers" collapse="true"}
+1. Viscoelasticity: slow probing lets the tissue relax and water flow [@pillai2024mechanics, p. 5].
+2. $\delta = (3 \times 10^4~\mathrm{pN} / (4 \times 432 \times \sqrt{18.64}))^{2/3}$ = 2.53 µm, from @eq-hertz [@pillai2026long, Methods].
+3. $E = 3G$ = 300 Pa [@franze2013mechanics, p. 230].
+4. Freezing alters mechanics [@pillai2024mechanics, p. 7].
+:::
+
+## Summary {#sec-tissue-mechanics-summary}
+
+- Stress is force per area, strain is relative deformation, and a modulus is their ratio; for $\nu$ = 0.5, $G = E/3$ [@franze2013mechanics, p. 230; @tyler2012mechanobiology, p. 867].
+- AFM indentation is analysed with the Hertz model, $F = \frac{4}{3} K R^{1/2} \delta^{3/2}$; developing *Xenopus* brain and rat cortex have $K$ of a few hundred pascals [@pillai2026long; @segel2019niche].
+- Brain looks softer when probed slowly (~100 Pa, AFM) than quickly (~10 kPa, MRE), and stiffer at large strain [@pillai2024mechanics, p. 5; @franze2013mechanics, p. 232].
+- Brain is among the softest tissues: 0.1–1 kPa versus 8–17 kPa for muscle [@engler2006matrix, p. 678].
+- Fresh, unfrozen, unfixed samples and like-for-like moduli are needed to compare studies [@pillai2024mechanics, p. 7].
+
+:::{.qflashcards}
+
+- What is $K$ in an AFM paper?
+
+  > The reduced apparent elastic modulus, $E/(1-\nu^2)$, fitted with the Hertz model (@eq-hertz).
+
+- Why does brain look stiffer in MRE than in AFM?
+
+  > MRE probes at higher frequency; at fast rates the viscoelastic tissue has no time to relax.
+
+- How do $E$ and $G$ relate for brain?
+
+  > $E = 2G(1+\nu)$; with $\nu$ = 0.5, $E = 3G$.
+
+- What is strain stiffening?
+
+  > The modulus rises with strain, as in brain under compression.
+
+:::

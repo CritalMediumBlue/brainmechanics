@@ -1,0 +1,214 @@
+---
+filters:
+  - shortiquiz
+---
+
+# Mechanosensing and Piezo1 {#sec-piezo}
+
+```{ojs}
+//| echo: false
+//| output: false
+// Published Piezo1 (and, for comparison, Piezo2) parameters. err = ± as reported.
+piezoData = [
+  { param: "P50", value: -28.0, err: 1.8, channel: "Piezo1", cond: "N2A, endogenous", cell: "Neuro2A (mouse neuroblastoma line)", mode: "cell-attached, suction", n: 21, key: "coste2010piezo", loc: "Fig. 1F" },
+  { param: "P50", value: -28.1, err: 2.8, channel: "Piezo1", cond: "N2A + mouse Piezo1", cell: "Neuro2A, overexpressing mPiezo1", mode: "cell-attached, suction", n: 12, key: "coste2010piezo", loc: "Fig. 4H" },
+  { param: "P50", value: -31.2, err: 3.5, channel: "Piezo1", cond: "HEK293T + mouse Piezo1", cell: "HEK293T (human cell line), overexpressing mPiezo1", mode: "cell-attached, suction", n: 11, key: "coste2010piezo", loc: "Fig. 4K" },
+  { param: "P50", value: -13.4, err: null, channel: "Piezo1", cond: "human fetal NSPCs, endogenous", cell: "neural stem/progenitor cells, human fetal cortex, 23 wk", mode: "cell-attached, pressure clamp; Boltzmann slope s = 4.75 mmHg", n: 8, key: "pathak2014stretch", loc: "Fig. 1D" },
+  { param: "conductance", value: 22.9, err: 1.4, channel: "Piezo1", cond: "N2A, endogenous", cell: "Neuro2A (mouse neuroblastoma line)", mode: "cell-attached, physiological salts", n: 4, key: "coste2010piezo", loc: "Fig. 1D" },
+  { param: "conductance", value: 98, err: 9, channel: "Piezo1", cond: "purified mouse Piezo1 in bilayer", cell: "no cell: DPhPC droplet bilayer, 1 µM Yoda1", mode: "0.5 M KCl, +100 mV", n: null, key: "syeda2015chemical", loc: "Fig. 3B" },
+  { param: "Erev", value: 6.6, err: null, channel: "Piezo1", cond: "N2A, endogenous (poke)", cell: "Neuro2A (mouse neuroblastoma line)", mode: "whole-cell, probe", n: null, key: "coste2010piezo", loc: "sec. \"Neuro2A cells express MA currents\"" },
+  { param: "Erev", value: 6.2, err: null, channel: "Piezo1", cond: "N2A, endogenous (single channel)", cell: "Neuro2A (mouse neuroblastoma line)", mode: "cell-attached, suction", n: 4, key: "coste2010piezo", loc: "Fig. 1D" },
+  { param: "Erev", value: -0.75, err: 0.67, channel: "Piezo1", cond: "human fetal NSPCs, endogenous", cell: "neural stem/progenitor cells, human fetal cortex, 23 wk", mode: "whole-cell I–V", n: 7, key: "pathak2014stretch", loc: "Fig. 1E" },
+  { param: "tau", value: 16.5, err: 1.5, channel: "Piezo1", cond: "HEK293T + mouse Piezo1", cell: "HEK293T (human cell line)", mode: "whole-cell, probe, before Yoda1", n: 5, key: "syeda2015chemical", loc: "Fig. 2G legend" },
+  { param: "tau", value: 6.8, err: 0.7, channel: "Piezo2", cond: "N2A + mouse Piezo2", cell: "Neuro2A, overexpressing mPiezo2", mode: "whole-cell, probe, −80 mV", n: 27, key: "coste2010piezo", loc: "sec. \"MA currents in cells overexpressing Piezo2\"" },
+  { param: "tau", value: 7.3, err: 0.7, channel: "Piezo2", cond: "HEK293T + mouse Piezo2", cell: "HEK293T (human cell line)", mode: "whole-cell, probe, −80 mV", n: 11, key: "coste2010piezo", loc: "sec. \"MA currents in cells overexpressing Piezo2\"" }
+].map(d => ({ ...d, tip: `${d.value}${d.err ? " ± " + d.err : ""} (${d.channel})\n${d.cell}\n${d.mode}${d.n ? "\nn = " + d.n : ""}\n[@${d.key}, ${d.loc}]` }))
+piezoLabels = ({
+  P50: "half-activation pressure P50 (mmHg)",
+  conductance: "single-channel conductance (pS)",
+  Erev: "reversal potential E_rev (mV)",
+  tau: "inactivation time constant τ (ms)"
+})
+```
+
+@sec-tissue-mechanics showed how soft brain tissue is. How does a cell read that? One route runs through ion channels opened by membrane stretch, above all Piezo1. In *Xenopus* embryos, blocking or knocking down Piezo1 disrupts optic tract growth [@koser2016mechanosensing, Fig. 5]; in rat oligodendrocyte progenitors, Piezo1 transmits the stiffening of the ageing niche [@segel2019niche, Fig. 3]. A second route, through adhesions and the cytoskeleton, needs no channel.
+
+::: {.callout-note title="After this chapter you will be able to"}
+- describe how Piezo1 was discovered and state its basic properties (non-selective cation channel, $E_\mathrm{rev}$ about +6 mV, ~23 pS);
+- distinguish "force-from-lipid" from tether gating, with a scale of membrane tensions;
+- explain why reported Piezo1 parameters differ between studies;
+- contrast the channel route with the adhesion–actomyosin–YAP/TAZ route, and name the tools used to probe each.
+:::
+
+## Mechanosensitive channels {#sec-piezo-channels}
+
+**Mechanotransduction** is "the conversion of mechanical force into biological signals" [@coste2010piezo, Introduction]. **Mechanosensitive ion channels** are pore-forming membrane proteins that respond to mechanical stimuli "by changing the opening probability of their pore" [@pillai2024mechanics, p. 9]. Many brain channels are mechanosensitive, from TRAAK and TREK1 to NMDA receptors [@tyler2012mechanobiology, Table 1], but most also respond to chemical signals, pH or temperature; Piezo channels "exclusively respond to mechanical signals" [@pillai2024mechanics, p. 10].
+
+## The discovery of Piezo1 {#sec-piezo-discovery}
+
+@coste2010piezo searched for the molecules behind **mechanically activated (MA) currents** in four steps:
+
+1. **Choose a cell.** Of seven mouse and rat cell lines, Neuro2A (N2A) mouse neuroblastoma cells had the most consistent MA currents [@coste2010piezo, sec. "Neuro2A cells express MA currents"].
+2. **List candidates.** Transcripts enriched in N2A cells, filtered for proteins predicted to cross the membrane at least twice [@coste2010piezo, sec. "Piezo1 (Fam38A) is required for MA currents of N2A cells"].
+3. **Knock down each one.** siRNA against *Fam38A* abolished the MA currents. The gene was renamed Piezo1, from the Greek for pressure (same section).
+4. **Overexpress.** Mouse Piezo1 or Piezo2 increased MA currents 17- to 300-fold in several cell types [@coste2010piezo, Discussion].
+
+In a **poke**, a glass probe indents the cell during whole-cell recording; in **stretch**, pipette suction pulls on a cell-attached patch [@coste2010piezo, sec. "Neuro2A cells express MA currents"]. Poking is "very qualitative": the force on the channel is unknown [@brohawn2014mechanosensitivity, Discussion].
+
+Piezo1 currents reverse near +6 mV and pass Na⁺, K⁺, Ca²⁺ and Mg²⁺, "with a slight preference for Ca²⁺"; Gd³⁺ and ruthenium red (30 µM) block them [@coste2010piezo, sec. "Piezo1 induces MA currents in various cell types"]. Piezo2, cloned from mouse dorsal root ganglion (DRG) neurons, inactivates faster (about 7 ms at −80 mV) and is required for their rapidly adapting MA currents [@coste2010piezo, Fig. 5–6].
+
+## Force from lipid, or from tethers? {#sec-piezo-gating}
+
+There are two gating models [@brohawn2014mechanosensitivity, Introduction]. In **force-from-lipid** gating, tension in the bilayer itself favours the open state. In **tether** gating, force reaches the channel through attached cytoskeletal or extracellular-matrix proteins. Brohawn and colleagues reconstituted the purified K⁺ channels TRAAK and TREK1 in pure lipid; stretch still opened them, so no tether was needed [@brohawn2014mechanosensitivity, sec. "Biophysical Origins of Mechanosensitivity in TRAAK and TREK1"].
+
+For scale: an unpressurised patch already carries ~0.5–4 mN/m of tension, and the bacterial channels MscS and MscL begin to open at ~5 and ~9 mN/m [@brohawn2014mechanosensitivity, Discussion]. Mechanical channels can oppose each other: in N2A cells, added TRAAK turned the Piezo1-driven depolarisation into a small biphasic response [@brohawn2014mechanosensitivity, Fig. 1].
+
+Piezo1 is "largely thought to be activated by an increase in membrane tension", consistent with force-from-lipid [@pillai2024mechanics, p. 10; @nourse2022piezo, Discussion]. Its sensitivity and inactivation are tuned by membrane cholesterol and fatty acids [@nourse2022piezo, Discussion]. Yet on stiffer substrates Piezo1 activity rises while axonal membrane tension does not, and how Piezo1 is activated in vivo is unknown [@pillai2024mechanics, pp. 10–11].
+
+## Reported Piezo1 parameters {#sec-piezo-parameters}
+
+```{ojs}
+//| echo: false
+viewof piezoParam = Inputs.radio(new Map([
+  ["P50", "P50"], ["Conductance", "conductance"], ["E_rev", "Erev"], ["Inactivation τ", "tau"]
+]), { value: "P50", label: "Parameter" })
+```
+
+```{ojs}
+//| echo: false
+//| label: fig-piezo-params
+//| fig-cap: "Published parameters of mechanically activated currents carried by Piezo1 (and Piezo2 for τ), one row per study and condition: Coste et al. 2010 (blue), Pathak et al. 2014 (orange), Syeda et al. 2015 (green). Bars show ± as reported; dots without bars had no spread reported. Hover over a dot for cell type, species, recording mode, n and source locator; the table lists all values. P50 is a fitted pipette pressure, not a membrane tension. Values come from different cells and solutions and should not be averaged."
+{
+  const rows = piezoData.filter(d => d.param === piezoParam)
+  return Plot.plot({
+    width: Math.min(width, 680), height: 70 + 40 * rows.length, marginLeft: 240,
+    x: { label: piezoLabels[piezoParam] + " →", grid: true, nice: true, zero: piezoParam !== "P50" && piezoParam !== "Erev" },
+    y: { domain: rows.map(d => d.cond), label: null },
+    color: { domain: ["coste2010piezo", "pathak2014stretch", "syeda2015chemical"], range: ["#2a78d6", "#eb6834", "#1baf7a"], legend: true },
+    symbol: { domain: ["Piezo1", "Piezo2"], range: ["circle", "triangle"] },
+    marks: [
+      piezoParam === "Erev" ? Plot.ruleX([0], { strokeDasharray: "3,3" }) : null,
+      Plot.ruleY(rows.filter(d => d.err), { y: "cond", x1: d => d.value - d.err, x2: d => d.value + d.err, stroke: "key", strokeWidth: 2 }),
+      Plot.dot(rows, { x: "value", y: "cond", fill: "key", symbol: "channel", r: 6, title: "tip" })
+    ]
+  })
+}
+```
+
+```{ojs}
+//| echo: false
+Inputs.table(piezoData.map(d => ({ parameter: piezoLabels[d.param], value: d.err ? `${d.value} ± ${d.err}` : `${d.value}`, channel: d.channel, cells: d.cell, recording: d.mode, n: d.n ?? "", source: `${d.key}, ${d.loc}` })), { rows: 8 })
+```
+
+Why do the values differ?
+
+- **Cell type.** The same suction protocol gave P50 of −28 to −31 mmHg in N2A and HEK293T cells [@coste2010piezo, Fig. 1F, 4H, 4K] but −13.4 mmHg in human fetal neural stem/progenitor cells (NSPCs) [@pathak2014stretch, Fig. 1D].
+- **Salt and preparation.** About 23 pS in a cell-attached N2A patch [@coste2010piezo, Fig. 1D]; 98 pS for purified Piezo1 in a bilayer in 0.5 M KCl at +100 mV, with Yoda1 [@syeda2015chemical, Fig. 3B].
+- **Stimulus.** P50 exists only for suction; poking is graded by probe displacement [@coste2010piezo, sec. "Neuro2A cells express MA currents"].
+- **Drugs.** Yoda1 lowered P50 by about 15 mmHg [@syeda2015chemical, p. 4].
+
+## Tools to activate and block Piezo1 {#sec-piezo-tools}
+
+**Yoda1** came from a screen of about 3.25 million compounds with a fluorescent Ca²⁺ readout on a FLIPR plate reader (@sec-indicators) [@syeda2015chemical, p. 8]. It activates mouse and human Piezo1 but not Piezo2, slows inactivation, and opens purified Piezo1 in lipid bilayers with no other proteins present [@syeda2015chemical, pp. 2–7]. Its apparent EC50 (17–27 µM) is unreliable because Yoda1 becomes insoluble above ~20 µM [@syeda2015chemical, pp. 3–4]. Jedi1 and Jedi2 are further Piezo1 agonists; none exists for Piezo2, and agonists should be applied only briefly [@pillai2024mechanics, p. 11]. Inhibitors (Gd³⁺, ruthenium red, the tarantula peptide GsMTx4) are non-specific and mostly act by altering membrane mechanics [@pillai2024mechanics, p. 11], so genetic knockdown is the usual specificity control.
+
+## Two routes from stiffness to the nucleus {#sec-piezo-routes}
+
+```{mermaid}
+%%| label: fig-piezo-routes
+%%| fig-cap: "Two routes of mechanotransduction. Top: a channel route (tens of ms; Pillai & Franze 2024, p. 10) from membrane tension through Piezo1 to Ca²⁺ influx. Bottom: an adhesion route (YAP/TAZ relocate within ~2 h; Dupont et al. 2011, p. 181) through focal adhesions and actomyosin tension to YAP/TAZ. Dashed links were shown in human fetal NSPCs (Pathak et al. 2014). Schematic, not exhaustive."
+flowchart LR
+  S["Matrix stiffness"]
+  T["Membrane tension"] --> P["Piezo1 opens"] --> C["Ca²⁺ and Na⁺ influx"]
+  A["Focal adhesions"] --> M["Actomyosin tension<br/>(Rho, myosin II)"] --> Y["YAP/TAZ in nucleus"]
+  S --> T
+  S --> A
+  M -. "traction" .-> P
+  P -. "knockdown: Yap leaves nucleus" .-> Y
+  C --> F["Gene expression, fate, growth"]
+  Y --> F
+```
+
+Matrix sensing requires a cell to "pull against the matrix" and a transducer that reports the force needed [@engler2006matrix, p. 677]. Human mesenchymal stem cells on brain-like gels (0.1–1 kPa) became branched and expressed neuronal markers, and blocking non-muscle myosin II with blebbistatin abolished this lineage choice [@engler2006matrix, Figs. 1, 3]. Downstream, the transcriptional coactivators **YAP and TAZ** were nuclear on stiff (15–40 kPa) and cytoplasmic on soft (0.7–1 kPa) gels in cultured human cells. This required Rho and actomyosin tension, but not the Hippo kinases LATS1/2 [@dupont2011role, pp. 179–181].
+
+The routes meet in human fetal NSPCs (23 weeks' gestation). There, myosin II traction opened Piezo1 without external force, giving local Ca²⁺ "hotspots" that were minimal on 0.4–0.7 kPa and larger on stiffer substrates [@pathak2014stretch, sec. "Piezo1 Is Activated by Traction Forces"]. Piezo1 knockdown pushed Yap out of the nucleus, and blocking Piezo1 shifted differentiation from neurons to astrocytes [@pathak2014stretch, Figs. 4–5].
+
+::: {.callout-warning title="Species matter"}
+Human fetal NSPCs made more neurons on stiff substrates, opposite to rodent NSCs [@pathak2014stretch, sec. "Effect of Substrate Stiffness on hNSPC Differentiation"]. In mouse NSCs from *Piezo1* knockout embryos at E10.5, astrocyte *and* neuron differentiation fell [@nourse2022piezo, Fig. 3B]; the authors attribute the conflict to species or knockdown versus knockout [@nourse2022piezo, Discussion]. @sec-frontier returns to these results.
+:::
+
+## Check yourself {#sec-piezo-check}
+
+:::{.qmulti}
+Why do Coste et al. and Syeda et al. report 23 and 98 pS for Piezo1?
+
+- Different preparations: a cell patch in physiological salts versus a bilayer in 0.5 M KCl.
+
+  > Correct [@coste2010piezo, Fig. 1D; @syeda2015chemical, Fig. 3B].
+
+- Yoda1 doubles the pore size.
+
+  > Yoda1 stabilises the open state; the salt and preparation differ.
+
+:::
+
+:::{.qmulti}
+Purified TRAAK in pure lipid still opens when stretched. What does this show?
+
+- Tension in the bilayer alone can gate the channel (force from lipid).
+
+  > Correct [@brohawn2014mechanosensitivity].
+
+- TRAAK needs the cytoskeleton.
+
+  > There was no cytoskeleton in the preparation.
+
+:::
+
+**Compute.** A patch at the upper estimate of resting tension (4 mN/m) needs at least {{< qinput 5 tol=0.5 hints="MscL begins to open at ~9 mN/m" >}} mN/m more tension to reach the threshold of MscL.
+
+:::{.qmulti}
+A paper blocks Piezo1 with GsMTx4. What control would you ask for?
+
+- Piezo1 knockdown or knockout, since GsMTx4 is non-specific.
+
+  > Correct [@pillai2024mechanics, p. 11].
+
+- A higher dose of GsMTx4.
+
+  > More drug does not make it more specific.
+
+:::
+
+::: {.callout-tip title="Answers" collapse="true"}
+1. Preparation and salt [@coste2010piezo, Fig. 1D; @syeda2015chemical, Fig. 3B].
+2. Force from lipid [@brohawn2014mechanosensitivity, sec. "Biophysical Origins of Mechanosensitivity in TRAAK and TREK1"].
+3. 9 − 4 = 5 mN/m; resting patches carry ~0.5–4 mN/m and MscL opens at ~9 mN/m [@brohawn2014mechanosensitivity, Discussion].
+4. Genetic knockdown or knockout [@pillai2024mechanics, p. 11; @pathak2014stretch].
+:::
+
+## Summary {#sec-piezo-summary}
+
+- Piezo1, found by an siRNA screen in N2A cells, is a non-selective cation channel reversing near +6 mV [@coste2010piezo].
+- Force-from-lipid gating was shown directly for TRAAK and TREK1; Piezo1 is thought to sense membrane tension, but in vivo activation is unclear [@brohawn2014mechanosensitivity; @pillai2024mechanics, pp. 10–11].
+- Piezo1 parameters depend on cell type, stimulus, salts and drugs: P50 −13 to −31 mmHg, conductance 23 to 98 pS [@coste2010piezo; @pathak2014stretch; @syeda2015chemical].
+- Stiffness is also read via adhesions, myosin II and YAP/TAZ; human NSPCs link both routes [@engler2006matrix; @dupont2011role; @pathak2014stretch].
+
+:::{.qflashcards}
+
+- What makes Piezo channels convenient for mechanobiology?
+
+  > They respond only to mechanical signals, unlike TRP or K2P channels.
+
+- What does Yoda1 do?
+
+  > It activates Piezo1 (not Piezo2), lowers P50 and slows inactivation.
+
+- Where are YAP/TAZ on soft substrates?
+
+  > In the cytoplasm (inactive); on stiff ones they are nuclear.
+
+- Name a Piezo1 inhibitor and its problem.
+
+  > GsMTx4; it is not specific.
+
+:::

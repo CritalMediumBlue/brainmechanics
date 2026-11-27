@@ -1,0 +1,229 @@
+# Condensed course {#sec-condensed}
+
+This is the 30-minute version of the course. It keeps only what you should remember from each chapter, with the same sources. Each section ends with a link to the full chapter, which has the explanations, figures and self-tests. Species and ages are given with every biological claim, because results from rat, frog (*Xenopus*) and human cells cannot be transferred to the mouse without new evidence.
+
+## Membrane potential and ion channels
+
+The **membrane potential** is the voltage of the cell's inside relative to the outside. It is set by ion concentration differences and by how permeable the membrane is to each ion. Resting values across cell types lie between about −10 and −90 mV [@sundelacruz2009role, sec. "Proliferation"]. A cell is **depolarised** when the potential becomes less negative and **hyperpolarised** when it becomes more negative.
+
+The **equilibrium potential** of one ion is the voltage at which its diffusion and electrical forces balance. It follows from the Boltzmann distribution of a charged species across the membrane [@fairless2013membrane, eq. 7, p. 8], which gives the Nernst equation
+
+$$
+E = \frac{RT}{zF}\ln\frac{c_e}{c_i},
+$$
+
+with $RT/F$ = 25.43 mV at 22 °C [@fairless2013membrane, p. 5]. Raising external K⁺ from 5.4 to 25 mM shifts the K⁺ equilibrium potential by 38.97 mV [@fairless2013membrane, eq. 1, p. 5]. A tenfold K⁺ gradient corresponds to about −59 mV [@brohawn2014mechanosensitivity, sec. "Mechanical Gating of K2P Channels"].
+
+When the membrane is permeable to several ions, the **Goldman–Hodgkin–Katz (GHK) equation** weights each ion by its permeability $P$ [@fairless2013membrane, eq. 2, p. 5]:
+
+$$
+\Delta E = \frac{RT}{F}\ln\frac{P_K K_x + P_{Na} Na_x + P_{Cl} Cl_i}{P_K K_r + P_{Na} Na_r + P_{Cl} Cl_i}.
+$$
+
+For the same 5.4 → 25 mM step, the GHK equation predicts only 10.36 to 15.06 mV, depending on the assumed Na⁺ permeability [@fairless2013membrane, p. 5]. Remember: the resting potential equals $E_K$ only if K⁺ is the only ion that can cross.
+
+Two more facts to keep:
+
+- **Gradients.** Channels let ions flow down gradients. Transporters build the gradients: for Cl⁻ in mature neurons this is the K⁺/Cl⁻ co-transporter KCC2 [@rivera1999kcc2, p. 254].
+- **Current density.** In voltage clamp, currents are divided by membrane capacitance, which is proportional to membrane area. The resulting **current density** (pA/pF) lets you compare growing cells [@kreysing2025environmental, Results].
+
+Full chapter: @sec-membrane.
+
+## Electrical activity in the developing brain and the GABA switch
+
+Immature neurons are electrically active before their synapses mature. Moody and Bosma describe this early activity with three principles: optimisation, coordination and self-limitation [@moody2005ion, p. 884].
+
+**GABA** is the main inhibitory transmitter of the mature brain. It opens channels that pass Cl⁻. Whether GABA depolarises or hyperpolarises depends on the **driving force** [@rivera1999kcc2, p. 253]:
+
+$$
+DF = E_\mathrm{GABA} - V_m.
+$$
+
+Young neurons keep internal Cl⁻ high: 20–25 mM in young hippocampal neurons versus 7 mM in mature ones [@benari2002excitatory, Box 2, p. 730]. With high internal Cl⁻, $E_\mathrm{GABA}$ lies above the resting potential and GABA depolarises.
+
+In rat hippocampus, the Cl⁻ extruder KCC2 is barely detectable at P0 and reaches adult-like levels by P9. Over the same period the GABA driving force changes from +7.0 mV (P0–P4) to −9.6 mV (P13–P30) [@rivera1999kcc2, pp. 251–253].
+
+The switch follows maturation, not birth: guinea pigs, which are born more mature, already have KCC2 and hyperpolarising GABA at P0–P4 [@rivera1999kcc2, pp. 252–253]. The sources disagree on when the switch happens in rodents. Rivera et al. place it at the end of the first postnatal week in rat, while Moody and Bosma say the first one to two weeks [@rivera1999kcc2; @moody2005ion, p. 917].
+
+Full chapter: @sec-activity.
+
+## Calcium signalling
+
+Ca²⁺ is a universal intracellular messenger:
+
+- **Resting level.** Resting cytosolic Ca²⁺ is about 100 nM [@berridge2003calcium, p. 523].
+- **On and off reactions.** "On" reactions raise it: channels in the plasma membrane and release from internal stores. "Off" reactions remove it: pumps, exchangers and buffers [@berridge2003calcium, pp. 518, 523].
+- **Entry channels.** They are classified by what opens them: voltage-operated, receptor-operated, store-operated and transient receptor potential (TRP) channels [@berridge2003calcium, Box 1, pp. 519–521].
+
+Developing *Xenopus* neurons produce two kinds of event. **Spikes** are fast, global rises to 10⁻⁷–10⁻⁶ M. **Waves** are slower and local [@rosenberg2011calcium]. Cells read Ca²⁺ signals by their amplitude, their frequency (often optimal near once per minute), their route of entry and their location [@moody2005ion, pp. 910–914; @berridge2003calcium, p. 524].
+
+In growth cones, Ca²⁺ and the cyclic nucleotides cAMP and cGMP decide whether a guidance cue attracts or repels (cultured *Xenopus* neurons) [@dickson2002molecular, p. 1962].
+
+For mechanics, the key link is that mechanosensitive channels produce Ca²⁺ transients. In human fetal neural stem and progenitor cells (NSPCs), Piezo1-dependent Ca²⁺ signals grow with substrate stiffness [@pathak2014stretch, Fig. 4]. In rat oligodendrocyte progenitor cells (OPCs), spontaneous Ca²⁺ transients appear on stiff substrates and depend on Piezo1 [@segel2019niche, Extended Data Fig. 6].
+
+Full chapter: @sec-calcium.
+
+## Voltage and calcium indicators, including FLIPR
+
+Fluorescent indicators turn voltage or Ca²⁺ into light. Their signal is reported as the relative change [@fairless2013membrane, eq. 3, p. 8; @chen2013ultrasensitive, Methods]
+
+$$
+\Delta F/F_0 = \frac{F_t - F_0}{F_0}.
+$$
+
+**FLIPR membrane potential (FMP) dye.** FMP was developed for the **fluorometric imaging plate reader (FLIPR)**, an instrument for high-throughput screening [@fairless2013membrane, p. 1]. It is a *redistribution* dye: it moves into the cell when the cell depolarises.
+
+- **Speed.** Its signal settles with time constants of 4–8 s [@fairless2013membrane, p. 11]. That is much faster than the older dye DiBAC₄(3). Whiteaker et al. saw maximal responses within 2–3 min versus 20–25 min [@whiteaker2001validation, p. 307]. Baxter et al. measured half-times of 17 s versus 240 s, although the two dyes were sampled at different rates in that comparison [@baxter2002novel, Fig. 5, p. 83].
+- **Calibration.** Because the dye distributes across the membrane by a Boltzmann law, a measured $\Delta F/F_0$ can be converted to millivolts [@fairless2013membrane, eq. 9, p. 8]:
+
+$$
+\Delta E = \frac{RT}{z'F}\ln\frac{1}{\Delta F/F_0 + 1},
+$$
+
+  with an apparent charge $z' = -0.71$ fitted from voltage clamp [@fairless2013membrane, Fig. 4A, p. 9].
+- **Sensitivity.** About 0.5 ΔF/F₀ per 10 mV in the physiological range [@fairless2013membrane, p. 9]. Plate-reader papers report about 10–12 % per 10 mV under their own conditions [@baxter2002novel]. Dyes in general report relative changes and are hard to calibrate to absolute millivolts [@sundelacruz2009role, sec. "Membrane Potential Measurements"].
+
+**Genetically encoded indicators.**
+
+- **GCaMP6.** GCaMP6 calcium indicators differ in Ca²⁺ affinity: the dissociation constant $K_d$ is 144 nM for GCaMP6s and 375 nM for GCaMP6f [@chen2013ultrasensitive, Supplementary Table]. In mouse visual cortex, GCaMP6s detected 99 % of single action potentials, with a decay time of about 550 ms [@chen2013ultrasensitive]. Ca²⁺ indicators are therefore sensitive, but slow compared with the millisecond voltage changes they report.
+- **Voltage indicators.** Voltage imaging reports the subthreshold and inhibitory signals that Ca²⁺ imaging misses [@knopfel2019optical, p. 719]. It is limited by photon shot noise, so the signal-to-noise ratio grows with $\Delta F/F$ and with the square root of the number of detected photons [@knopfel2019optical, Box 2, p. 723]. The chemigenetic indicator Voltron525 changes its fluorescence by −23 ± 1 % per 100 mV, with sub-millisecond kinetics. These numbers come from the bioRxiv preprint [@abdelfattah2019bright].
+
+**FLIPR Ca²⁺ assays** screen drugs at scale. The Piezo1 agonist Yoda1 was found in a screen of 3.25 million compounds [@syeda2015chemical, Methods].
+
+Full chapter: @sec-indicators.
+
+## Neuronal culture
+
+The standard model of how a neuron becomes polarised is dissociated hippocampal neurons from embryonic day 18 (E18) rats. They are grown on polylysine-coated glass facing a feeder layer of astroglia, in serum-free medium with N2 supplement after the first hours [@dotti1988establishment, p. 1455]. They pass through **five stages** [@dotti1988establishment, Fig. 9, p. 1466]:
+
+1. lamellipodia (about 0.25 d after plating);
+2. several minor processes (about 0.5 d);
+3. one process grows fast and becomes the axon (about 1.5 d);
+4. the remaining processes become dendrites (about 4 d);
+5. maturation (more than 7 d).
+
+Axons then grow at about 70 µm/d, dendrites at about 12 µm/d [@dotti1988establishment, p. 1457]. The neurons polarise without external signals [@dotti1988establishment, p. 1466]. The sources disagree on the length of stage-2 processes: 10–15 µm in the original paper versus 15–25 µm in a later review [@dotti1988establishment; @craig1994neuronal].
+
+Practical points for mechanics experiments:
+
+- **Coatings.** The substrate coating matters. Laminin speeds axon growth, and adhesion is necessary but not sufficient for growth [@craig1994neuronal, p. 297; @tessierlavigne1996molecular, p. 1124].
+- **Gel thickness.** On polyacrylamide gels, cells feel through very thin gels to the glass beneath. A soft gel only 0.5–1 µm thick behaves like a stiff one [@engler2006matrix, p. 685].
+- **Soft and stiff gels.** Kreysing et al. cultured rat E17–E18 hippocampal neurons on polyacrylamide gels of 0.1 and 10 kPa coated with poly-D-lysine and laminin [@kreysing2025environmental, Methods].
+- **Neural stem cells.** Mouse neural stem cells from E10.5 brain can be grown as neurospheres and differentiated by withdrawing growth factors [@nourse2022piezo, Methods].
+
+Full chapter: @sec-culture.
+
+## Mouse embryo brain anatomy
+
+- **Neural tube.** In the mouse, the neural tube forms around E9.5 and is closed by E10.5. Its wall is then a **pseudostratified neuroepithelium**: one layer of stem cells whose nuclei sit at different heights, plus nascent neurons [@long2019extracellular, p. 3; @nourse2022piezo, Results].
+- **Radial glia.** Between E10 and E12, neuroepithelial cells become **radial glia**. Most neurons derive from radial glia, either directly or via basal progenitors [@gotz2005cell, pp. 778–779].
+- **Cortical wall.** Going outwards from the ventricle, the developing cortex has a ventricular zone, a subventricular zone, the cortical plate (where neurons settle after migrating along radial glia), and the marginal zone with its Cajal–Retzius cells [@long2019extracellular, sec. 3.2, p. 6].
+- **Hindbrain.** The hindbrain is segmented from E8.5 to E11.5 [@moody2005ion, pp. 897–898].
+- **Atlas stages.** The Allen developing mouse brain atlas uses E11.5, E13.5, E15.5, E18.5, P4, P14, P28 and P56 as reference stages [@thompson2014high, Experimental Procedures].
+- **Perineuronal nets** (see the next section) form from about P23 in mice and rats [@fawcett2019roles, p. 453].
+
+Chapter 6 also has a 3D view of the embryonic mouse brain at E11.5–E18.5. Its geometry is from a reference atlas, not from the papers [@kronman2024developmental; @devccf2024dataset].
+
+Full chapter: @sec-anatomy.
+
+## The extracellular matrix
+
+The **extracellular matrix (ECM)** is the network of molecules around cells.
+
+- **No collagen scaffold.** The brain's ECM is unusual. The adult brain lacks a fibrillar collagen and fibronectin scaffold; its ECM is mostly hyaluronan, glycosaminoglycans, tenascin C and proteoglycans [@franze2013mechanics, p. 235].
+- **Development.** Lecticans are the main chondroitin sulfate proteoglycans of the developing central nervous system [@long2019extracellular, pp. 2–5].
+- **Perineuronal nets.** In **perineuronal nets**, lecticans bind a hyaluronan backbone, link proteins stabilise the binding, and tenascin-R cross-links the lecticans [@fawcett2019roles, Box 1].
+- **Effects on axons.** ECM molecules such as laminins can promote or inhibit axon growth, mostly through integrin receptors [@tessierlavigne1996molecular, p. 1126].
+- **ECM in the lab.** In vitro, the ECM becomes a tool in four ways: as a protein coating on gels of chosen stiffness, as soft or stiff 3D collagen gels, as decellularised scaffolds, or by digestion with chondroitinase ABC [@engler2006matrix; @dupont2011role; @pillai2026long; @segel2019niche].
+
+Full chapter: @sec-ecm.
+
+## Growth cones and the cytoskeleton
+
+A **growth cone** is the motile tip of a growing axon.
+
+- **Actin.** Its flat lamellipodium and finger-like filopodia are built from actin filaments. Actin is added at the leading edge and flows backwards, at about 3 µm/min in *Aplysia* growth cones [@mitchison1988cytoskeletal, pp. 761–763].
+- **Microtubules.** The axon behind it is built around microtubules, which switch between growth and shrinkage [@mitchison1988cytoskeletal, p. 766]. In axons they all point with their plus end away from the cell body; in dendrites they point both ways [@craig1994neuronal, p. 276].
+- **Molecular clutch.** Integrins and linker proteins such as talin anchor the flowing actin to the substrate. When the clutch engages, retrograde flow is converted into tension and forward protrusion [@mitchison1988cytoskeletal, pp. 764–765]. How the clutch behaves depends on substrate stiffness [@franze2013mechanics, p. 239].
+- **Forces.** Forces in this system range from about 1 pN per actin filament and about 5 pN per microtubule to traction forces of about 70 pN (hippocampal) and 540 pN (dorsal root ganglion) per growth cone [@tyler2012mechanobiology, pp. 869–873].
+- **Stress units.** Stress is force per area, and 1 Pa = 1 pN/µm² [@tyler2012mechanobiology, p. 869].
+- **Tension.** Neurites are under tension, and enough tension drives "towed growth" [@vanessen1997tension, p. 313].
+
+Full chapter: @sec-growth-cone.
+
+## Axon guidance
+
+Growth cones are steered by four kinds of force: contact attraction, chemoattraction, contact repulsion and chemorepulsion. They act together along short path segments between **choice points** [@tessierlavigne1996molecular, pp. 1123–1124].
+
+The four canonical cue families and their receptors are [@kolodkin2010mechanisms; @dickson2002molecular]:
+
+- **netrins**, acting through DCC (attraction) and UNC5 (repulsion);
+- **Slits**, acting through Robo receptors;
+- **semaphorins**, acting through plexins, with neuropilins for class 3;
+- **ephrins**, acting through Eph receptors.
+
+Commissural axons cross the midline only once. They switch from netrin attraction to Slit and semaphorin repulsion [@dickson2002molecular, p. 1963].
+
+The sources disagree on how far netrin acts: "up to a few millimeters" according to Dickson, "a few hundred micrometers" according to Kolodkin and Tessier-Lavigne [@dickson2002molecular; @kolodkin2010mechanisms].
+
+Mechanics is a guidance cue too. In the *Xenopus* optic tract, axons turn towards softer tissue [@koser2016mechanosensing].
+
+Full chapter: @sec-guidance.
+
+## Tissue mechanics: how soft is the brain?
+
+Four definitions are the language of the field [@franze2013mechanics, p. 230]:
+
+- **Stress** $\sigma = F/A$ is force per area.
+- **Strain** $\varepsilon$ is relative deformation.
+- **Young's modulus** $E = \sigma/\varepsilon$ is the ratio of stress to strain.
+- The **shear modulus** $G$ is the same ratio for shear.
+
+For an incompressible material, with Poisson's ratio $\nu = 0.5$, $G = E/3$ [@franze2013mechanics, p. 230; @tyler2012mechanobiology, p. 867].
+
+Atomic force microscopy (AFM) presses a bead of radius $R$ into tissue by a depth $\delta$, and the force $F$ is analysed with the **Hertz model** [@pillai2026long, Methods]:
+
+$$
+F = \frac{4}{3} K R^{1/2} \delta^{3/2}, \qquad K = \frac{E}{1-\nu^2}.
+$$
+
+Because $\delta \propto K^{-2/3}$, a tissue four times softer is indented about 2.5 times deeper by the same force.
+
+Numbers to remember:
+
+- **Stiffness ladder.** Brain is among the softest tissues: 0.1–1 kPa, against 8–17 kPa for muscle [@engler2006matrix, p. 678].
+- **Measured brains.** The developing *Xenopus* brain has $K \approx 432$ Pa [@pillai2026long, Fig. 4]. Rat cortex has about 248 Pa in neonates and about 472 Pa in aged animals [@segel2019niche, Fig. 1g; Supplementary Table 5].
+- **Rate dependence.** The answer depends on how you measure. Brain looks soft when probed slowly, about 100 Pa by AFM at about 1 Hz, and much stiffer when probed fast, about 10 kPa by magnetic resonance elastography [@pillai2024mechanics, p. 5].
+- **Strain stiffening.** Brain also stiffens at large strain: 150–300 Pa at 5 % strain versus more than 2 kPa at 30 % [@franze2013mechanics, p. 232].
+- **Comparing studies.** Compare only like-for-like moduli measured on fresh, unfixed, unfrozen tissue [@pillai2024mechanics, p. 7].
+
+Full chapter: @sec-tissue-mechanics.
+
+## Mechanosensing and Piezo1
+
+**Piezo1** was found in a siRNA screen in a mouse neuroblastoma cell line (N2A). It is a non-selective cation channel: its current reverses near +6 mV, and it passes Na⁺, K⁺, Ca²⁺ and Mg²⁺ [@coste2010piezo]. Piezo2 inactivates faster and underlies rapidly adapting mechanically activated currents in mouse sensory (dorsal root ganglion) neurons [@coste2010piezo].
+
+Its measured parameters depend strongly on the conditions:
+
+- **Pressure for half activation** ($P_{50}$): −28 to −31 mmHg in N2A cells [@coste2010piezo], and −13.4 mmHg in human fetal NSPCs [@pathak2014stretch].
+- **Single-channel conductance:** about 23 pS in N2A cells [@coste2010piezo], and 98 pS for purified channels in 0.5 M KCl [@syeda2015chemical].
+- **Drug effect.** The agonist Yoda1 activates Piezo1 but not Piezo2. It lowers $P_{50}$ by about 15 mmHg and slows inactivation [@syeda2015chemical].
+
+How might a channel feel force? In the **force-from-lipid** model, membrane tension itself opens the channel. This was shown directly for the K⁺ channels TRAAK and TREK1 in pure lipid bilayers [@brohawn2014mechanosensitivity]. Resting membrane tension is about 0.5–4 mN/m. Bacterial channels open at about 5 mN/m (MscS) and 9 mN/m (MscL) [@brohawn2014mechanosensitivity, Discussion].
+
+Channels are not the only route. Cells also read stiffness through focal adhesions and myosin II contractility, which act on the transcriptional regulators YAP and TAZ. On stiff matrix YAP/TAZ stay in the nucleus; on soft, brain-like matrix they leave it [@engler2006matrix; @dupont2011role, Fig. 1, p. 179]. In human fetal NSPCs the two routes meet: cells pull on their substrate, and the resulting Piezo1 activity biases them towards becoming neurons [@pathak2014stretch].
+
+Full chapter: @sec-piezo.
+
+## Frontier: stiffness as a developmental signal
+
+The newest papers in the reading list show that stiffness is an instructive developmental signal, not just a property of tissue.
+
+- **Axons follow softness.** In the *Xenopus* optic tract, axons turn towards softer tissue. Blocking mechanosensitive channels, or knocking down Piezo1, causes pathfinding errors [@koser2016mechanosensing].
+- **Stiffness is dynamic and self-made.** In living *Xenopus* brain, stiffness patterns change within tens of minutes and track cell-body density (ρ = 0.97). They precede axon turning by about 18 min, and axons turn once the gradient reaches about 0.9 Pa/µm [@thompson2019rapid].
+- **Stiffness sets the timing of maturation.** Rat hippocampal neurons on 0.1 kPa gels start firing about 4 days earlier than on 10 kPa gels. Knocking down Piezo1 removes the delay, and RNA sequencing points to the protein transthyretin as a downstream factor [@kreysing2025environmental].
+- **Piezo1 both senses and sets stiffness.** In *Xenopus* brain, Piezo1 knockdown roughly halves tissue stiffness (432 → 231 Pa) through the adhesion molecules NCAM1 and N-cadherin. Piezo1 is also needed for stiffening to induce the repulsive cue Sema3A [@pillai2026long].
+- **Mouse embryos need Piezo1.** In mouse embryos at E10.5, loss of Piezo1 thins the neuroepithelium. Neural stem cells lacking Piezo1 divide more slowly (doubling time 23 h 45 min versus 20 h 07 min) and make less cholesterol [@nourse2022piezo].
+- **Ageing.** Rat cortex stiffens with age. Softening the niche, or removing Piezo1, restores the function of aged oligodendrocyte progenitor cells [@segel2019niche].
+
+Full chapter, with an evidence table and the open questions the authors raise: @sec-frontier.
