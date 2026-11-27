@@ -41,11 +41,11 @@ The baseline is a convention you must state: the mean of the first ten images [@
 
 This is a ratio, not a voltage. Dye methods suffer from "the difficulty of dye calibration, and thus the difficulty of obtaining absolute values", so "most data are reported as percentage changes in fluorescence over a basal fluorescence value" [@sundelacruz2009role, sec. "Membrane Potential Measurements"].
 
-Voltage-sensitive dyes come in two families [@fairless2013membrane, p. 11]. In **redistribution dyes** the dye moves across the membrane with the electric field, so the intracellular concentration, and therefore the brightness, follows the voltage; the classic example, DiBAC₄(3), is slow because of "the relatively slow migration of the oxonol across the lipid bilayer" [@whiteaker2001validation, p. 305]. In **membrane-bound dyes** the voltage changes the electronic structure of the chromophore instead: much faster, much less sensitive.
+Voltage-sensitive dyes come in two families [@fairless2013membrane, p. 11]. In **redistribution dyes** the dye moves across the membrane with the electric field, so the intracellular concentration, and therefore the brightness, follows the voltage; the classic example, DiBAC₄(3), is slow because of "the relatively slow migration of the oxonol across the lipid bilayer" [@whiteaker2001validation, p. 305]. In **membrane-bound dyes** the voltage changes the electronic structure of the chromophore instead: much faster, much less sensitive [@fairless2013membrane, pp. 11–13].
 
 ## FMP and the plate reader {#sec-indicators-flipr}
 
-**FLIPR** is the fluorometric imaging plate reader: it images a whole 96-, 384- or 1536-well plate at once while compounds are added [@whiteaker2001validation, p. 306]. The **FMP (FLIPR membrane potential) dye** was made for it: a proprietary voltage-sensitive dye "containing additionally a membrane impermeant quencher" [@fairless2013membrane, Methods, p. 2], loaded in 15–30 min with no wash step [@baxter2002novel, p. 81].
+**FLIPR** is the fluorometric imaging plate reader: it records the fluorescence of cells in a multiwell plate before and after compounds are added [@whiteaker2001validation, p. 306]; the sources use 96-, 384- and 1536-well formats [@baxter2002novel, p. 84; @syeda2015chemical, Methods]. The **FMP (FLIPR membrane potential) dye** was made for it: a proprietary voltage-sensitive dye "containing additionally a membrane impermeant quencher" [@fairless2013membrane, Methods, p. 2], loaded in 15–30 min [@baxter2002novel, pp. 81, 84].
 
 Its selling point against DiBAC₄(3) is speed. In guinea-pig bladder smooth muscle, FMP reached maximal responses "within 2–3 min after addition compared to 20–25 min using DiBAC₄(3)", with roughly double the signal (9,000–11,000 versus 5,000–6,000 fluorescence units on the same instrument) [@whiteaker2001validation, p. 307]. In CHO-K1 cells expressing the human K⁺ channel hElk-1, a 60 mM KCl step gave a half-maximal response at $t_{1/2}$ = 17 s against 240 s for DiBAC₄(3), which also needs at least an hour of loading [@baxter2002novel, Fig. 5, p. 83].
 
@@ -54,7 +54,7 @@ Fast for a plate reader is still slow for a neuron: in single-cell imaging FMP e
 The same format is used with calcium dyes. Syeda and colleagues screened about 3.25 million compounds at 5 µM on HEK293T cells expressing mouse Piezo1 and Piezo2, in 1536-well plates with the Calcium5 dye, took about 9,000 hits, and followed them up in 384-well plates with Fluo3 plus EGTA and thapsigargin controls, which separate calcium entering from outside from calcium released from stores [@syeda2015chemical, Methods, pp. 7–8]. The winner, Yoda1, had an apparent EC₅₀ of 17.1 µM (mouse) and 26.6 µM (human Piezo1) — but above about 20 µM the solutions turned opaque, so "compound (in)solubility precludes meaningful conclusions with respect to EC₅₀" [@syeda2015chemical, p. 3; p. 4].
 
 ::: {.callout-warning title="The sources disagree about how sensitive FMP is"}
-- $\Delta F/F_0 \approx 0.5$ per 10 mV (about 50% per 10 mV): HEK cells and neurons imaged at 22 °C, over the range −10 to +50 mV where the relation is roughly linear; $\Delta F/F_0$ is of order 12 for 100 mV [@fairless2013membrane, pp. 9, 12–13].
+- $\Delta F/F_0 \approx 0.5$ per 10 mV (about 50% per 10 mV): K⁺ steps in HEK cells calibrated with eq. 9 (RT/F for 22 °C), over the range −10 to +50 mV where the relation is roughly linear; $\Delta F/F_0$ is of order 12 for 100 mV [@fairless2013membrane, pp. 9, 12–13].
 - 10–12% per 10 mV: CHO-K1 cells expressing hElk-1, against current clamp over 7.5–120 mM KCl, $r$ = 0.993 [@baxter2002novel, p. 82].
 - "10% per 100 mV" for voltage-sensitive dyes in general [@sundelacruz2009role, sec. "Membrane Potential Measurements"].
 
@@ -109,7 +109,7 @@ viewof indCal = Inputs.form({
       Plot.ruleX([here.x], { stroke: "#eb6834", strokeDasharray: "3,3" }),
       Plot.dot([here], { x: "x", y: "y", fill: "#eb6834", r: 5 }),
       Plot.text([here], {
-        x: "x", y: "y", dy: -14, fill: "#eb6834",
+        x: "x", frameAnchor: "top", dy: 6, dx: 6, textAnchor: "start", fill: "#eb6834",
         text: d => `ΔF/F₀ = ${d.x.toFixed(2)} → ΔE = ${d.y.toFixed(1)} mV`
       }),
       Plot.dot(pts, { x: "x", y: "y", fill: "#eda100", r: 4, title: "what" })
@@ -132,7 +132,7 @@ Fairless et al. estimate that "a *e*-fold (2.72-fold) increase of the FMP fluore
 
 A **genetically encoded calcium indicator (GECI)** is a protein the cell makes itself. GCaMP and its descendants "consist of circularly permuted green fluorescent protein (cpGFP), the calcium-binding protein calmodulin (CaM), and CaM-interacting M13 peptide"; calcium binding changes the CaM/M13 complex, which modulates solvent access and the pK$_a$ of the chromophore, so the protein brightens [@chen2013ultrasensitive, sec. "GCaMP protein engineering"].
 
-Chen and colleagues screened 447 variants in dissociated rat hippocampal cultures and kept GCaMP6s, 6m and 6f, for slow, medium and fast. Purified protein gives $K_d$ of 144 ± 4, 167 ± 3 and 375 ± 14 nM, with fitted Hill coefficients of 2.90 ± 0.17, 2.96 ± 0.04 and 2.27 ± 0.10 [@chen2013ultrasensitive, Supplementary Table 2]. In mouse V1 in vivo, one action potential gave 23 ± 3.2% $\Delta F/F_0$ with GCaMP6s and 19 ± 2.8% with GCaMP6f, detected with 99 ± 0.2% and 84 ± 6% efficiency at a 1% false-positive rate — but with decay half-times of 550 ± 52 and 142 ± 11 ms [@chen2013ultrasensitive, Supplementary Table 3]. That is the trade-off: "the more sensitive sensors having slower kinetics".
+Chen and colleagues screened 447 variants in dissociated rat hippocampal cultures and kept GCaMP6s, 6m and 6f, for slow, medium and fast. Purified protein gives $K_d$ of 144 ± 4, 167 ± 3 and 375 ± 14 nM, with fitted Hill coefficients of 2.90 ± 0.17, 2.96 ± 0.04 and 2.27 ± 0.10 [@chen2013ultrasensitive, Supplementary Table 2]. In mouse V1 in vivo (mice 1.5–2 months old at virus injection), one action potential gave 23 ± 3.2% $\Delta F/F_0$ with GCaMP6s and 19 ± 2.8% with GCaMP6f, detected with 99 ± 0.2% and 84 ± 6% efficiency at a 1% false-positive rate — but with decay half-times of 550 ± 52 and 142 ± 11 ms [@chen2013ultrasensitive, Supplementary Table 3]. That is the trade-off: "the more sensitive sensors having slower kinetics".
 
 Synthetic dyes remain the quick option: Kreysing and colleagues loaded 4 µM Rhod-4 for 30 min at 37 °C, imaged at about 12.5 Hz, and showed with 0.1 µM tetrodotoxin (TTX) that the transients vanish when action potentials are blocked — the control that makes a calcium signal a proxy for firing [@kreysing2025environmental, Methods].
 
@@ -144,7 +144,7 @@ Calcium is a consequence of voltage, not voltage: calcium imaging "provides litt
 
 Voltron is the hybrid worked example: a rhodopsin domain fused to a HaloTag that binds a synthetic dye, quenched by FRET on depolarisation. **All Voltron numbers here come from the bioRxiv preprint, not the published version** [@abdelfattah2019bright]. Voltron bound to JF525 changed fluorescence by −23 ± 1% for a step from −70 to +30 mV, with fast time constants of 0.64 ± 0.09 ms (activation) and 0.78 ± 0.12 ms (deactivation) in cultured rat neurons [@abdelfattah2019bright, Fig. 1E; Table S1]. Note the sign: it gets *dimmer* on depolarisation, so its baseline is an upper (80th) percentile [@abdelfattah2019bright, Methods].
 
-So a GEVI is about a hundred times faster than GCaMP6f and about a hundred times smaller in signal, which turns the experiment into a photon-counting problem. The number $n$ of photons per sampling interval is Poisson distributed, so the noise goes as $\sqrt{n}$ and the SNR as $\sqrt{n}$ [@knopfel2019optical, Box 2, p. 723]. The review's bound is
+So a GEVI such as Voltron has time constants about a hundred times shorter than GCaMP6f's 45 ms rise and 142 ms half-decay, and must be sampled at about a millisecond, which turns the experiment into a photon-counting problem. The number $n$ of photons per sampling interval is Poisson distributed, so the noise goes as $\sqrt{n}$ and the SNR as $\sqrt{n}$ [@knopfel2019optical, Box 2, p. 723]. The review's bound is
 
 $$
 \mathrm{SNR} \le \frac{\Delta F}{F}\sqrt{n_F(1-f_B)}\;\sqrt{f_C f_{em} q_D}\;\sqrt{\frac{q_{em}\,\Delta t}{q_b\,\tau_b}},

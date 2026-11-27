@@ -23,7 +23,7 @@ caData = [
   { panel: "Concentrations", label: "GCaMP6f K_d", kind: "indicator", lo: 3.75e-7, hi: 3.75e-7, value: "375 nM",
     src: "chen2013ultrasensitive, Supplementary Table 2", note: "purified protein in buffer" },
   { panel: "Concentrations", label: "Imaging buffer", kind: "recording solution", lo: 1e-3, hi: 1e-3, value: "1 mM",
-    src: "fairless2013membrane, p. 2", note: "CaCl2 in the bath solution for dye imaging; not a measured extracellular value" },
+    src: "fairless2013membrane, p. 2", note: "CaCl2 in the basic bath solution (BS) for dye imaging; not a measured extracellular value" },
   { panel: "Concentrations", label: "Slice solution (ACSF)", kind: "recording solution", lo: 2e-3, hi: 2e-3, value: "2 mM",
     src: "rivera1999kcc2, p. 255", note: "CaCl2 in artificial cerebrospinal fluid, rat slices; not a measured extracellular value" },
   // Times
@@ -127,7 +127,7 @@ viewof caPanel = Inputs.radio(["Concentrations", "Times"], { value: "Concentrati
 
 Things to try:
 
-- On the concentration ladder, note that both GCaMP6 affinities lie between rest and the peak of a Ca²⁺ spike. That is why these indicators report transients well (@sec-indicators).
+- On the concentration ladder, note that both GCaMP6 affinities (purified protein) lie between rest and the peak of a *Xenopus* Ca²⁺ spike. This comparison across preparations is ours, not the sources' (@sec-indicators).
 - On the time ladder, compare the intervals between spontaneous transients with the ~1 min interval to which responses are tuned [@moody2005ion, p. 912].
 
 ## How cells decode calcium {#sec-calcium-decoding}
@@ -135,13 +135,13 @@ Things to try:
 According to Moody and Bosma, nearly all effects of early activity act through Ca²⁺ influx, and the response depends on four features of the transient [@moody2005ion, pp. 910–914]:
 
 - **Amplitude.** CICR has a threshold: in dorsal root ganglion (DRG) neurons, going from seven to nine action potentials in a burst raised the Ca²⁺ transient fivefold [@moody2005ion, p. 911]. Translocation of calmodulin to the nucleus is graded over 0–600 nM [@moody2005ion, p. 912].
-- **Frequency.** Responses are tuned to transients near 1/min [@moody2005ion, p. 912]; CaMKII and PKC are frequency decoders [@berridge2003calcium, p. 524]. In *Xenopus* spinal neurons, imposed transients at 2 per hour rescued K⁺-current maturation, 3 per hour the GABA phenotype and 8–9 per hour neurite length [@moody2005ion, p. 905]. Spike frequency also sets transmitter identity: more spiking gives more GABA and glycine neurons, less spiking more glutamate and acetylcholine neurons [@rosenberg2011calcium, sec. "Calcium-mediated specification of neurotransmitter phenotype"].
+- **Frequency.** Responses are tuned to transients near 1/min [@moody2005ion, p. 912]; CaMKII and PKC are frequency decoders [@berridge2003calcium, p. 524]. In *Xenopus* spinal neurons, imposed transients at 2 per hour rescued K⁺-current maturation, 3 per hour the GABA phenotype and 8–9 per hour neurite length [@moody2005ion, p. 905]. Spike frequency also sets transmitter identity in *Xenopus* embryos: more spiking gives more GABA and glycine neurons, less spiking more glutamate and acetylcholine neurons [@rosenberg2011calcium, sec. "Calcium-mediated specification of neurotransmitter phenotype"].
 - **Route of entry.** Ca²⁺ entering through L-type channels or NMDA receptors can drive the transcription factor CREB [@moody2005ion, p. 913], through local complexes of channels and signalling proteins called **microdomains** [@moody2005ion, p. 914].
 - **Location.** Local transients, as in the growth cone of *Xenopus* spinal neurons, act on local processes such as motility [@moody2005ion, p. 914]. The **growth cone** is the "highly motile and exquisitely sensitive" tip of an axon or dendrite [@dickson2002molecular, p. 1959].
 
 ## Calcium in the growth cone {#sec-calcium-growth-cone}
 
-"Calcium spikes regulate neurotransmitter specification, whereas calcium waves regulate the rate of axon extension" [@rosenberg2011calcium, sec. "Spatiotemporal characteristics of calcium transients"]. In the developing *Xenopus* spinal cord, neurons with frequent growth-cone transients extend their axons slowly, and blocking or raising the frequency shows the transients are necessary and sufficient for this [@rosenberg2011calcium, sec. "Calcium-mediated regulation of axon outgrowth and pathfinding"]. Transients in filopodia regulate turning onto preferred substrates [@rosenberg2011calcium, sec. "Calcium-mediated regulation of axon outgrowth and pathfinding"].
+"Calcium spikes regulate neurotransmitter specification, whereas calcium waves regulate the rate of axon extension" [@rosenberg2011calcium, sec. "Spatiotemporal characteristics of calcium transients"]. In the developing *Xenopus* spinal cord, neurons with frequent growth-cone transients extend their axons slowly, and blocking or raising the frequency shows the transients are necessary and sufficient for this [@rosenberg2011calcium, sec. "Calcium-mediated regulation of axon outgrowth and pathfinding"]. Transients in growth-cone filopodia regulate turning onto preferred substrates (species not stated in the review) [@rosenberg2011calcium, sec. "Calcium-mediated regulation of axon outgrowth and pathfinding"].
 
 In cultured *Xenopus* spinal neurons, turning towards the guidance cue netrin-1 requires Ca²⁺ influx and release from stores, and a local Ca²⁺ gradient made by uncaging is enough to turn the growth cone without netrin-1 [@dickson2002molecular, p. 1962]. Dickson cautions that "compelling evidence of their involvement in growth cone turning in vivo is lacking" [@dickson2002molecular, p. 1962]. @sec-growth-cone and @sec-guidance continue the story.
 
@@ -150,9 +150,9 @@ In cultured *Xenopus* spinal neurons, turning towards the guidance cue netrin-1 
 Spitzer lists mechanoreceptors among the "novel" routes of ion influx in development [@spitzer2006electrical, p. 707]. Two examples show Ca²⁺ as the readout of stiffness:
 
 - In human fetal neural stem cells, Piezo1-dependent transients were minimal on 0.4–0.7 kPa substrates and increased on 3.7 and 750 kPa and on glass [@pathak2014stretch, sec. "Piezo1 Is Activated by Traction Forces"].
-- Rat oligodendrocyte progenitor cells showed Ca²⁺ transients on stiff but virtually none on soft hydrogels, and Piezo1 knockdown abolished them [@segel2019niche, Extended Data Fig. 6h–j].
+- Oligodendrocyte progenitor cells from aged rats showed Ca²⁺ transients on stiff but virtually none on soft hydrogels, and Piezo1 knockdown abolished them [@segel2019niche, Extended Data Fig. 6h–j].
 
-Genetically encoded indicators such as GCaMP6 make such transients visible: in cultured rat neurons with synaptic transmission blocked, Ca²⁺ rises after field stimulation come from voltage-gated Ca²⁺ channels [@chen2013ultrasensitive, Methods, "Neuronal culture screen"]. @sec-indicators, @sec-piezo and @sec-frontier build on these results.
+Genetically encoded indicators such as GCaMP6 make such transients visible: in cultured rat neurons with synaptic transmission blocked, Ca²⁺ rises after field stimulation are "presumably caused by the opening of voltage sensitive calcium channels" [@chen2013ultrasensitive, Methods, "Neuronal culture screen"]. @sec-indicators, @sec-piezo and @sec-frontier build on these results.
 
 ## Check yourself {#sec-calcium-check}
 

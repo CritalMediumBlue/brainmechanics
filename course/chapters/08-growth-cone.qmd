@@ -71,7 +71,7 @@ The axon shaft is dominated by stable microtubules and serves transport. The gro
 
 Axons and dendrites grow at different speeds. In cultured hippocampal neurons from embryonic day 18 (E18) rats, axons grew by about 70 µm per day for the first few days, and dendrites by about 12 µm per day between days 5 and 7 [@dotti1988establishment, p. 1457].
 
-Axons and dendrites also differ inside. In axons, all microtubules point their plus end away from the cell body; dendrites contain microtubules of both orientations [@craig1994neuronal, p. 276]. **Tau**, a protein that binds and stabilises microtubules, is needed for the axon: blocking its synthesis selectively inhibited axon outgrowth in cultured cerebellar neurons (species not stated in the review) [@craig1994neuronal, p. 294, Fig. 4].
+Axons and dendrites also differ inside. In axons, all microtubules point their plus end away from the cell body; dendrites contain microtubules of both orientations [@craig1994neuronal, p. 276]. **Tau**, a protein that binds and stabilises microtubules, is needed for the axon: blocking its synthesis selectively inhibited axon outgrowth in cultured cerebellar neurons (species not stated in the review) [@craig1994neuronal, p. 294; Fig. 4, p. 295].
 
 ## Actin: protrusion and retrograde flow {#sec-growth-cone-actin}
 
@@ -87,7 +87,7 @@ Microtubules in the growth cone are dynamic, whereas those in the axon are stabl
 
 ## The molecular clutch {#sec-growth-cone-clutch}
 
-If actin flows back as fast as it is added, the edge does not advance: a "futile cycle" [@mitchison1988cytoskeletal, Fig. 5, p. 764]. Advance needs a link to the outside. **Integrins** (receptors for the extracellular matrix) and **cadherins** (receptors for proteins on other cells) can grip actin through linker proteins such as **talin** [@mitchison1988cytoskeletal, p. 765]. When the link holds, the filament is anchored. Myosin's pull then becomes **tension** on the substrate, and subunits added at the barbed end push the membrane forward [@mitchison1988cytoskeletal, Fig. 5, pp. 764–765].
+If actin flows back as fast as it is added, the edge does not advance: a "futile cycle" [@mitchison1988cytoskeletal, Fig. 5, p. 764]. Advance needs a link to the outside. **Integrins** (receptors for the extracellular matrix) and **cadherins** (receptors for proteins on other cells) are thought to grip actin, probably through linker proteins such as **talin** [@mitchison1988cytoskeletal, p. 765]. When the link holds, the filament is anchored. Myosin's pull then becomes **tension** on the substrate, and subunits added at the barbed end push the membrane forward [@mitchison1988cytoskeletal, Fig. 5, pp. 764–765].
 
 Because retrograde flow is continuous but advance is variable, the coupling must slip; Mitchison and Kirschner named it a **molecular clutch** [@mitchison1988cytoskeletal, p. 765]. In a later formulation, "Substrate attachment secures the growth cone, allowing for tension to develop and subsequent growth-cone extension; detachment from the substrate has the opposite effect" [@kolodkin2010mechanisms, sec. "Guidance Cues and the Control of Cytoskeletal Dynamics"].
 
@@ -109,6 +109,8 @@ flowchart LR
     b2 --> b4["Polymerisation pushes<br/>the edge forward"]
   end
   OFF -->|"adhesion engages"| ON
+  style OFF fill:transparent,stroke:#9aa5b1
+  style ON fill:transparent,stroke:#9aa5b1
 ```
 
 The clutch also senses stiffness. On substrates softer than about 1 kPa, filopodia of embryonic chick forebrain neurons showed "load-and-fail" behaviour, with slow retrograde flow and high traction. On stiffer substrates they showed "frictional slippage", with fast flow and low traction [@franze2013mechanics, p. 239; @tyler2012mechanobiology, p. 869]. @sec-tissue-mechanics explains what a stiffness of 1 kPa means.
@@ -185,7 +187,7 @@ viewof gcScale = Inputs.radio(["Forces (pN)", "Stresses and stiffnesses (Pa)"], 
 
 Things to notice:
 
-- Single molecules sit at 1–40 pN; a growth cone pulls with tens to hundreds of times more, and a brain explant with nanonewtons.
+- Most single-molecule forces sit at 1–40 pN (a reinforced microtubule withstands more than 100 pN); a growth cone pulls with tens to hundreds of times the force of one actin filament, and a brain explant with nanonewtons.
 - *Xenopus* brain explants (stage 37/38) pulled about four times harder on the stiffer gel [@pillai2026long].
 - A growth cone (about 100 Pa) is softer than a whole neuron (about 1 kPa).
 

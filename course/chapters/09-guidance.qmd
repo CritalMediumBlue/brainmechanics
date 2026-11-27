@@ -68,7 +68,7 @@ Four families of cues are the best understood, each with its own receptors (@tbl
 
 **Slits** at the *Drosophila* midline stop axons from crossing, or from recrossing. Mice lacking Slit1 and Slit2 have no obvious spinal midline defects (Slit3 is still there) but striking defects at the optic chiasm, where retinal axons cross [@dickson2002molecular, p. 1960].
 
-**Semaphorins** usually repel. Sema3A surrounds many peripheral nerves and keeps axons on track by "surround repulsion" [@kolodkin2010mechanisms, sec. "Semaphorins"]. Yet Sema3A attracts the apical dendrites of pyramidal neurons but repels their axons [@dickson2002molecular, p. 1962].
+**Semaphorins** usually repel. Sema3A surrounds many peripheral nerves and keeps axons on track by "surround repulsion" [@kolodkin2010mechanisms, sec. "Semaphorins"]. Yet in the mammalian cortex Sema3A attracts the apical dendrites of pyramidal neurons but repels their axons [@dickson2002molecular, p. 1962].
 
 **Ephrins** must be clustered to activate their receptors, so they act only at short range [@kolodkin2010mechanisms, sec. "Ephrins"].
 
@@ -80,7 +80,7 @@ Four families of cues are the best understood, each with its own receptors (@tbl
 
 ## Topographic maps {#sec-guidance-maps}
 
-Ephrin-A ligands form a gradient across the tectum (the superior colliculus in mammals), and EphA receptors form a complementary gradient across the retina. Retinal axons with more EphA stop lower on the ephrin-A gradient, through repulsion [@dickson2002molecular, p. 1961]. When the ephrin-A gradient was removed in the mouse superior colliculus, retinal axons still filled the whole structure, but their order was disrupted. Mapping thus depends on an axon's EphA level relative to its neighbours, not on its absolute level [@dickson2002molecular, p. 1961].
+Ephrin-A ligands form a gradient across the tectum (the superior colliculus in mammals), and EphA receptors form a complementary gradient across the retina. Retinal axons with more EphA stop lower on the ephrin-A gradient, through repulsion [@dickson2002molecular, p. 1961]. When the ephrin-A gradient was removed in the mouse superior colliculus, retinal axons still filled the whole structure, but their order was disrupted. A second experiment, which raised EphA in half of the retinal axons, showed that mapping depends on an axon's EphA level relative to its neighbours, not on its absolute level [@dickson2002molecular, p. 1961].
 
 ## Switching at the midline {#sec-guidance-midline}
 
@@ -94,7 +94,7 @@ Cues act on the cytoskeleton of @sec-growth-cone, through Rho GTPases among othe
 
 **Calcium.** In cultured *Xenopus* spinal neurons, turning towards netrin-1 needs Ca²⁺ influx and Ca²⁺ release from internal stores. A local Ca²⁺ rise, made by releasing caged Ca²⁺ with light, causes turning without netrin [@dickson2002molecular, p. 1962]. In the *Xenopus* spinal cord in vivo, growth cones with frequent spontaneous Ca²⁺ transients (@sec-calcium) extended slowly; transients in filopodia regulate turning onto preferred substrates [@rosenberg2011calcium, sec. "Calcium-Mediated Regulation of Axon Outgrowth and Pathfinding"]. Dickson had judged evidence for a role in turning in vivo not yet "compelling" [@dickson2002molecular, p. 1962].
 
-**Cyclic nucleotides.** Lowering cAMP or cGMP turns attraction into repulsion, and raising them turns repulsion into attraction [@dickson2002molecular, p. 1962]. *Xenopus* retinal axons are attracted by netrin-1 at the exit of the eye and repelled by it at the tectum, following a decline in cAMP [@dickson2002molecular, p. 1962]. Timing matters too: cultured *Xenopus* neurons are repelled by netrin-1 early and attracted 8–10 h later, and blocking Ca²⁺ channels at late stages turns attraction back into repulsion [@moody2005ion, p. 906].
+**Cyclic nucleotides.** Lowering cAMP or cGMP turns attraction into repulsion, and raising them turns repulsion into attraction [@dickson2002molecular, p. 1962]. *Xenopus* retinal axons are attracted by netrin-1 at the exit of the eye and repelled by it at the tectum; these changes correlate with a gradual decline in cAMP and are reversed by raising cAMP [@dickson2002molecular, p. 1962]. Timing matters too: cultured *Xenopus* neurons are repelled by netrin-1 early and attracted 8–10 h later, and blocking Ca²⁺ channels at late stages turns attraction back into repulsion [@moody2005ion, p. 906].
 
 ## Mechanical guidance, in brief {#sec-guidance-mechanics}
 

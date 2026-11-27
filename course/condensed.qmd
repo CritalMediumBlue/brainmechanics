@@ -55,7 +55,7 @@ Ca²⁺ is a universal intracellular messenger:
 - **On and off reactions.** "On" reactions raise it: channels in the plasma membrane and release from internal stores. "Off" reactions remove it: pumps, exchangers and buffers [@berridge2003calcium, pp. 518, 523].
 - **Entry channels.** They are classified by what opens them: voltage-operated, receptor-operated, store-operated and transient receptor potential (TRP) channels [@berridge2003calcium, Box 1, pp. 519–521].
 
-Developing *Xenopus* neurons produce two kinds of event. **Spikes** are fast, global rises to 10⁻⁷–10⁻⁶ M. **Waves** are slower and local [@rosenberg2011calcium]. Cells read Ca²⁺ signals by their amplitude, their frequency (often optimal near once per minute), their route of entry and their location [@moody2005ion, pp. 910–914; @berridge2003calcium, p. 524].
+Developing *Xenopus* neurons produce two kinds of event. **Spikes** are fast, global rises from 10⁻⁷ to 10⁻⁶ M. **Waves** are slower and local [@rosenberg2011calcium]. Cells read Ca²⁺ signals by their amplitude, their frequency (often optimal near once per minute), their route of entry and their location [@moody2005ion, pp. 910–914; @berridge2003calcium, p. 524].
 
 In growth cones, Ca²⁺ and the cyclic nucleotides cAMP and cGMP decide whether a guidance cue attracts or repels (cultured *Xenopus* neurons) [@dickson2002molecular, p. 1962].
 
@@ -85,7 +85,7 @@ $$
 
 **Genetically encoded indicators.**
 
-- **GCaMP6.** GCaMP6 calcium indicators differ in Ca²⁺ affinity: the dissociation constant $K_d$ is 144 nM for GCaMP6s and 375 nM for GCaMP6f [@chen2013ultrasensitive, Supplementary Table]. In mouse visual cortex, GCaMP6s detected 99 % of single action potentials, with a decay time of about 550 ms [@chen2013ultrasensitive]. Ca²⁺ indicators are therefore sensitive, but slow compared with the millisecond voltage changes they report.
+- **GCaMP6.** GCaMP6 calcium indicators differ in Ca²⁺ affinity: the dissociation constant $K_d$ is 144 nM for GCaMP6s and 375 nM for GCaMP6f [@chen2013ultrasensitive, Supplementary Table]. In mouse visual cortex, GCaMP6s detected 99 % of single action potentials, with a half-decay time of about 550 ms [@chen2013ultrasensitive]. Ca²⁺ indicators are therefore sensitive, but slow compared with the millisecond voltage changes they report.
 - **Voltage indicators.** Voltage imaging reports the subthreshold and inhibitory signals that Ca²⁺ imaging misses [@knopfel2019optical, p. 719]. It is limited by photon shot noise, so the signal-to-noise ratio grows with $\Delta F/F$ and with the square root of the number of detected photons [@knopfel2019optical, Box 2, p. 723]. The chemigenetic indicator Voltron525 changes its fluorescence by −23 ± 1 % per 100 mV, with sub-millisecond kinetics. These numbers come from the bioRxiv preprint [@abdelfattah2019bright].
 
 **FLIPR Ca²⁺ assays** screen drugs at scale. The Piezo1 agonist Yoda1 was found in a screen of 3.25 million compounds [@syeda2015chemical, Methods].
@@ -192,7 +192,7 @@ Because $\delta \propto K^{-2/3}$, a tissue four times softer is indented about 
 Numbers to remember:
 
 - **Stiffness ladder.** Brain is among the softest tissues: 0.1–1 kPa, against 8–17 kPa for muscle [@engler2006matrix, p. 678].
-- **Measured brains.** The developing *Xenopus* brain has $K \approx 432$ Pa [@pillai2026long, Fig. 4]. Rat cortex has about 248 Pa in neonates and about 472 Pa in aged animals [@segel2019niche, Fig. 1g; Supplementary Table 5].
+- **Measured brains.** The developing *Xenopus* brain has $K \approx 432$ Pa at stage 40 [@pillai2026long, Fig. 3d]. Rat cortex has about 248 Pa in neonates and about 472 Pa in aged animals [@segel2019niche, Fig. 1g; Supplementary Table 5].
 - **Rate dependence.** The answer depends on how you measure. Brain looks soft when probed slowly, about 100 Pa by AFM at about 1 Hz, and much stiffer when probed fast, about 10 kPa by magnetic resonance elastography [@pillai2024mechanics, p. 5].
 - **Strain stiffening.** Brain also stiffens at large strain: 150–300 Pa at 5 % strain versus more than 2 kPa at 30 % [@franze2013mechanics, p. 232].
 - **Comparing studies.** Compare only like-for-like moduli measured on fresh, unfixed, unfrozen tissue [@pillai2024mechanics, p. 7].
@@ -211,7 +211,7 @@ Its measured parameters depend strongly on the conditions:
 
 How might a channel feel force? In the **force-from-lipid** model, membrane tension itself opens the channel. This was shown directly for the K⁺ channels TRAAK and TREK1 in pure lipid bilayers [@brohawn2014mechanosensitivity]. Resting membrane tension is about 0.5–4 mN/m. Bacterial channels open at about 5 mN/m (MscS) and 9 mN/m (MscL) [@brohawn2014mechanosensitivity, Discussion].
 
-Channels are not the only route. Cells also read stiffness through focal adhesions and myosin II contractility, which act on the transcriptional regulators YAP and TAZ. On stiff matrix YAP/TAZ stay in the nucleus; on soft, brain-like matrix they leave it [@engler2006matrix; @dupont2011role, Fig. 1, p. 179]. In human fetal NSPCs the two routes meet: cells pull on their substrate, and the resulting Piezo1 activity biases them towards becoming neurons [@pathak2014stretch].
+Channels are not the only route. Cells also read stiffness through focal adhesions and myosin II contractility, which act on the transcriptional regulators YAP and TAZ. In cultured human cells, YAP/TAZ stay in the nucleus on stiff matrix and leave it on soft, brain-like matrix [@engler2006matrix; @dupont2011role, Fig. 1, p. 179]. In human fetal NSPCs the two routes meet: cells pull on their substrate, and the resulting Piezo1 activity biases them towards becoming neurons [@pathak2014stretch].
 
 Full chapter: @sec-piezo.
 

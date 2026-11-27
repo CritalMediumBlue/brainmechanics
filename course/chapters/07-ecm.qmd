@@ -47,7 +47,7 @@ The brain is soft, and its extracellular matrix is part of the reason. In the ad
 
 The **extracellular matrix (ECM)** is "the complex network of proteins that surrounds cells within a tissue". It was once thought of "purely as a scaffold", but it does much more [@long2019extracellular, sec. 1, p. 1].
 
-**Proteoglycans** are core proteins carrying one or more **glycosaminoglycan (GAG)** chains, either heparan sulfate or chondroitin sulfate [@long2019extracellular, sec. 2.1.1, p. 2]. GAGs are chains of repeating disaccharides, and hyaluronan is a GAG too [@fawcett2019roles, p. 453, glossary]. Chondroitin sulfate proteoglycans (**CSPGs**) include the **lecticans** (brevican, neurocan, versican, aggrecan) [@long2019extracellular, sec. 2.1.1, p. 2]. These are "the major family of soluble CSPGs within the developing CNS" [@long2019extracellular, sec. 3.1, p. 5].
+**Proteoglycans** come in several types; the two that matter here, heparan sulfate and chondroitin sulfate proteoglycans, are core proteins carrying one or more **glycosaminoglycan (GAG)** chains, of heparan sulfate or chondroitin sulfate respectively [@long2019extracellular, sec. 2.1.1, p. 2]. GAGs are chains of repeating disaccharides, and hyaluronan is a GAG too [@fawcett2019roles, p. 453, glossary]. Chondroitin sulfate proteoglycans (**CSPGs**) include the **lecticans** (brevican, neurocan, versican, aggrecan) [@long2019extracellular, sec. 2.1.1, p. 2]. These are "the major family of soluble CSPGs within the developing CNS" [@long2019extracellular, sec. 3.1, p. 5].
 
 **Laminins** are built from α, β and γ subunits. @long2019extracellular [sec. 2.1.2, p. 3] count five α, four β and three γ subunits, forming 15 distinct laminins. The older review of @tessierlavigne1996molecular [Fig. 2 legend, p. 1125] lists "at least five α, three β, and two γ chains" in vertebrates. The main cell-surface receptors for ECM are **integrins** [@long2019extracellular, sec. 2.1.2, p. 3]. Ig-superfamily members and proteoglycans also act as receptors [@tessierlavigne1996molecular, p. 1126].
 
@@ -177,7 +177,7 @@ The coating changes the neuron. Rat sympathetic neurons grown on polylysine, wit
 Mechanics experiments separate the matrix's chemistry from its stiffness:
 
 - **Coated synthetic gels.** Polyacrylamide gels of chosen elasticity are coated with a thin layer of ECM protein. Engler and colleagues used collagen I and a brain-like range of 0.1–1 kPa for human mesenchymal stem cells [@engler2006matrix, pp. 678, 687]. Dupont and colleagues used fibronectin-coated gels from 0.7 to 40 kPa [@dupont2011role, p. 179]. Segel and colleagues added 6-acrylamidohexanoic acid to control ECM tethering independently of stiffness [@segel2019niche, Methods, pp. 6–7].
-- **3D ECM gels.** *Xenopus* brain explants embedded in collagen hydrogels of 40 Pa or 450 Pa pulled harder on the stiffer gel: median maximum traction 3 nN versus 13 nN [@pillai2026long, Results; Fig. 5].
+- **3D ECM gels.** *Xenopus* hypothalamic explants (stage 37/38) embedded in collagen hydrogels of 40 Pa or 450 Pa pulled harder on the stiffer gel: median maximum traction 3 nN versus 13 nN [@pillai2026long, Results; Fig. 5].
 - **Decellularised scaffolds.** Removing all cells from rat brain leaves its ECM. Aged oligodendrocyte progenitors reseeded on neonatal (P7) ECM proliferated about 10 times faster than on aged ECM [@segel2019niche, p. 3; Fig. 1c,d].
 - **Enzymatic digestion.** **Chondroitinase ABC (chABC)** degrades CSPGs [@long2019extracellular, sec. 2.1.1, p. 2]. In aged rat lesions, it gave about threefold more progenitor proliferation and differentiation [@segel2019niche, p. 3; Fig. 1f]. It digests both PNNs and the diffuse matrix, so it cannot show a PNN-specific role [@fawcett2019roles, p. 454].
 
@@ -274,7 +274,7 @@ Rat sympathetic neurons are moved from polylysine to laminin. What happens?
 
 - What is a proteoglycan?
 
-  > A core protein carrying one or more glycosaminoglycan chains, heparan sulfate or chondroitin sulfate [@long2019extracellular, sec. 2.1.1].
+  > A core protein carrying one or more glycosaminoglycan chains, for example heparan sulfate or chondroitin sulfate [@long2019extracellular, sec. 2.1.1].
 
 - What does a link protein do in a perineuronal net?
 
@@ -286,6 +286,6 @@ Rat sympathetic neurons are moved from polylysine to laminin. What happens?
 
 - What does chondroitinase ABC do?
 
-  > It digests the CS chains of CSPGs, in both perineuronal nets and the diffuse matrix.
+  > It digests the CS chains of CSPGs, in both perineuronal nets and the diffuse matrix [@fawcett2019roles, p. 454].
 
 :::

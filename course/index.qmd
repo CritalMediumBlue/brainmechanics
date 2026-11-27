@@ -40,4 +40,4 @@ The through-line: neurons are electrical *and* mechanical cells. Stiffness is me
 
 ## Sources
 
-Everything here comes from the 39 papers on the group's reading list, read in full. The references page lists all of them, including two entries whose text was not available to the author (Hodgkin & Huxley 1952; Hille 2001); they support no claim in this course.
+Everything here comes from the 39 papers on the group's reading list that were read in full. The one exception is the 3D brain geometry in @sec-anatomy, which comes from a reference atlas (DevCCF) and is labelled as such. The references page lists all of these, plus two entries whose text was not available to the author (Hodgkin & Huxley 1952; Hille 2001); they support no claim in this course.

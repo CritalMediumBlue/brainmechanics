@@ -50,7 +50,7 @@ culStages = [
   {
     n: 2, day: "≈ 0.5 d",
     title: "Minor processes",
-    text: "The lamellipodia condense into several short 'minor processes', on average 4.9 per cell at 24 h (n = 17), each about 10 µm long and reaching 10–15 µm within a few hours, after which they stop elongating (Dotti et al. 1988, pp. 1455, 1457, 1461). None of them looks like an axon yet.",
+    text: "The lamellipodia condense into several short 'minor processes', on average 4.9 per cell at 24 h (n = 17), each about 10 µm long and reaching 10–15 µm within a few hours, after which they show little net elongation (Dotti et al. 1988, pp. 1455, 1457, 1461). None of them looks like an axon yet.",
     processes: [1, 1, 1, 1, 1]
   },
   {
@@ -123,15 +123,15 @@ viewof culStep = stepper(culStages, { delay: 2200 })
 ```{ojs}
 //| echo: false
 //| label: fig-polarity-stages
-//| fig-cap: "Step through the five stages of polarisation of a dissociated rat E18 hippocampal neuron. Entry times are those given by Dotti et al. 1988 (Fig. 9, p. 1466): 0.25, 0.5, 1.5, 4 and more than 7 days in culture. Orange: the process that becomes the axon, with shaft collaterals from stage 4; blue: dendrites; grey: minor processes not yet specified; yellow dashed ring: lamellipodia. The drawings are schematic and not to scale — the axon and the minor processes differ by a factor of about 8 in length at 1–2 days (80–100 µm against 10–15 µm, p. 1455), far more than drawn."
+//| fig-cap: "Step through the five stages of polarisation of a dissociated rat E18 hippocampal neuron. Entry times are those given by Dotti et al. 1988 (Fig. 9, p. 1466): 0.25, 0.5, 1.5, 4 and more than 7 days in culture. Orange: the process that becomes the axon, with shaft collaterals from stage 4; blue: dendrites; grey: minor processes not yet specified; yellow dashed ring: lamellipodia. The drawings are schematic and not to scale — the axon and the minor processes differ by a factor of roughly 5–10 in length at 1–2 days (80–100 µm against 10–15 µm, p. 1455), far more than drawn."
 html`<figure>${culDraw(culStep)}
-<figcaption style="font-size:0.9em">${culStep.text}</figcaption></figure>`
+<figcaption style="font-size:0.9em; text-align:left">${culStep.text}</figcaption></figure>`
 ```
 
 The quantitative core of the sequence, shown stage by stage in @fig-polarity-stages, is the growth-rate difference. The axon of the cell in their Fig. 1 grew at about 60 µm/d, and averaged over 11 cells about ${culAxonRate} µm/d for the first few days, while dendrites elongated at about ${culDendRate} µm/d between days 5 and 7 — a factor of ${culRatio} here, quoted in the paper as 5–10 times [@dotti1988establishment, pp. 1455, 1457]. Per-cell time-lapse gives the same picture at finer grain: over the 18 h after the start of stage 3 the mean axonal rate was 6.3 µm/h, but the fastest 2 h interval of each cell averaged 20.3 µm/h [@dotti1988establishment, Table 1, p. 1459]. Growth is intermittent, not steady.
 
 ::: {.callout-warning title="Where the sources disagree"}
-- *When dendrites start.* Fig. 9 and the Discussion give about 4 days; the legend of Fig. 4 says "after day 3"; the Results say "between days 3 and 5" [@dotti1988establishment, pp. 1457, 1459, 1464]. Quote the figure you rely on.
+- *When dendrites start.* Fig. 9 and the Discussion give about 4 days; the legend of Fig. 4 says "after day 3"; the Results say "between days 3 and 5" [@dotti1988establishment, pp. 1457, 1459, 1464, Fig. 9, p. 1466]. Quote the figure you rely on.
 - *When the axon starts.* The text gives 8–27 h after plating, Table 1 on the same page lists 8–30 h [@dotti1988establishment, p. 1459].
 - *How long minor processes are.* The primary paper gives 10–15 µm [@dotti1988establishment, p. 1455]; the review that popularised the stages gives "four to five short neurites, typically 15–25 µm in length" [@craig1994neuronal, p. 290]. Cite the primary numbers.
 :::
@@ -156,7 +156,7 @@ Five things identify a culture: species, age, substrate, density and readout. Th
 | Rat, E17–E18 | Hippocampus | Polyacrylamide 0.1 or 10 kPa + PDL + laminin | 150,000 per dish | Patch clamp, Rhod-4 calcium, synapse staining | @kreysing2025environmental [Methods] |
 | Rat, age not stated | Hippocampus | Matrigel, 24-well glass bottom | 225,000 viable cells per well | GCaMP screen with field stimulation | @chen2013ultrasensitive [Methods] |
 | Rat, P0–P1 | Hippocampus | Poly-D-lysine on glass, NbActiv4, 8–10 DIV | not stated | Voltage imaging with Voltron (preprint) | @abdelfattah2019bright [Methods] |
-| Mouse, newborn (P0) | Hippocampus | Poly-D-lysine, serum then Neurobasal/B27, 7–12 DIV | not stated | FMP voltage dye imaging | @fairless2013membrane [p. 2] |
+| Mouse, newborn | Hippocampus | Poly-D-lysine, serum then Neurobasal/B27, 7–12 DIV | not stated | FMP voltage dye imaging | @fairless2013membrane [p. 2] |
 | Mouse, adult | Dorsal root ganglia | Poly-L-lysine on glass, 7–12 DIV | not stated | FMP imaging, menthol and capsaicin | @fairless2013membrane [p. 2] |
 | Mouse, E10.5 | Neural stem cells, neurospheres | Laminin-coated coverslips | 30,000 per cm² | Differentiation markers, proliferation | @nourse2022piezo [Methods] |
 
@@ -226,7 +226,7 @@ A paper reports "hippocampal neurons, E18, DIV 10". Which claim may you transfer
 - Polarisation runs through five stages entered at about 0.25, 0.5, 1.5, 4 and more than 7 days in culture [@dotti1988establishment, Fig. 9, p. 1466].
 - The axon is defined by its growth rate: about 70 µm/d against about 12 µm/d for dendrites, 5–10 times faster, and it grows in bursts [@dotti1988establishment, pp. 1455, 1457, Table 1].
 - The substrate changes the outcome: polylysine, laminin and Matrigel give different numbers of axons and dendrites, and adhesion alone is not sufficient for growth [@craig1994neuronal, p. 296; @tessierlavigne1996molecular, p. 1124].
-- Stiffness experiments need gels thick enough to hide the glass; cells feel through a gel of about 0.5–1 µm [@engler2006matrix, p. 685], and brain-like gels of 0.1 and 10 kPa with PDL and laminin are the current standard for rat hippocampal neurons [@kreysing2025environmental, Methods].
+- Stiffness experiments need gels thick enough to hide the glass; cells feel through a gel of about 0.5–1 µm [@engler2006matrix, p. 685], and brain-like gels of 0.1 and 10 kPa with PDL and laminin are what Kreysing and colleagues used for rat E17–E18 hippocampal neurons [@kreysing2025environmental, Methods].
 
 :::{.qflashcards}
 

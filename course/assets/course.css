@@ -3,3 +3,29 @@
 .not-lit { border-left: 3px solid #eda100; padding-left: 0.6rem; }
 .answers-box summary { font-weight: 600; }
 table.evidence td, table.evidence th { font-size: 0.9em; }
+
+/* Diagrams: the theme justifies and hyphenates body paragraphs, which also hits the
+   HTML labels inside mermaid nodes. Keep diagram labels centred and unhyphenated. */
+#quarto-document-content .mermaid p,
+#quarto-document-content svg foreignObject p,
+#quarto-document-content svg foreignObject div { text-align: center !important; hyphens: manual !important; }
+
+/* Observable Plot paints a white background by default (--plot-background). With the dark
+   theme, axis text turns light (currentColor) and disappears on that white. Let charts be
+   transparent so they sit on either theme. */
+svg[class^="plot-"], figure[class^="plot-"], div[class^="plot-"] {
+  --plot-background: transparent !important;
+  background: transparent !important;
+}
+
+/* Flashcards (shortiquiz): centred, not justified, text on the small cards. */
+#quarto-document-content .qflashcards__card p,
+#quarto-document-content .qflashcards__question p,
+#quarto-document-content .qflashcards__answer p { text-align: center; hyphens: manual; }
+
+/* Narrow screens: wide tables and displayed equations scroll inside their own box
+   instead of widening the whole page. */
+@media (max-width: 767.98px) {
+  #quarto-document-content table { display: block; max-width: 100%; overflow-x: auto; }
+}
+#quarto-document-content span.math.display { display: block; max-width: 100%; overflow-x: auto; overflow-y: hidden; }

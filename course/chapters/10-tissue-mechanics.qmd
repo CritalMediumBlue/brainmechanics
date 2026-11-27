@@ -58,7 +58,7 @@ $$
 E = \frac{\sigma}{\varepsilon}, \qquad G = \frac{\sigma}{\gamma}.
 $$ {#eq-moduli}
 
-The two moduli are linked by **Poisson's ratio** $\nu$, the ratio of transverse to axial strain [@tyler2012mechanobiology, p. 869]:
+The two moduli are linked by **Poisson's ratio** $\nu$, the ratio of transverse to axial strain [@tyler2012mechanobiology, pp. 867, 869]:
 
 $$
 E = 2G(1+\nu).
@@ -157,7 +157,7 @@ viewof tmIn = Inputs.form({
 ```{ojs}
 //| echo: false
 //| label: fig-tm-hertz
-//| fig-cap: "Hertz indentation explorer (@eq-hertz). Black: force F against indentation δ for the K and probe radius R set by the sliders; the dot marks the depth reached at F = 10 nN (@eq-hertz-delta). Coloured: the same probe on published median K values, Xenopus brain at stage 40, control and Piezo1 knockdown (Pillai et al. 2026, Fig. 3d), and rat prefrontal cortex, neonate and aged (means of three rats each from Segel et al. 2019, Suppl. Table 5; measured with 7 nN, not 10 nN). Curves are computed, not measured. Real brain tissue is viscoelastic and nonlinearly elastic, and its stiffness depends on rate and strain (Franze et al. 2013, p. 231; Pillai & Franze 2024, p. 5), so a single K is a simplification."
+//| fig-cap: "Hertz indentation explorer (@eq-hertz). Thick line (black; white in the dark theme): force F against indentation δ for the K and probe radius R set by the sliders; the dot marks the depth reached at F = 10 nN (@eq-hertz-delta). Coloured: the same probe on published median K values, Xenopus brain at stage 40, control and Piezo1 knockdown (Pillai et al. 2026, Fig. 3d), and rat prefrontal cortex, neonate and aged (means of three rats each from Segel et al. 2019, Suppl. Table 5; measured with 7 nN, not 10 nN). Curves are computed, not measured. Real brain tissue is viscoelastic and nonlinearly elastic, and its stiffness depends on rate and strain (Franze et al. 2013, p. 231; Pillai & Franze 2024, p. 5), so a single K is a simplification."
 {
   if (!tmGuess.committed) return tmLocked()
   const K = Math.pow(10, tmIn.logK), R = tmIn.R

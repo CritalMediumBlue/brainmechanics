@@ -34,7 +34,7 @@ anatEvents = [
     text: "After E12 a significant fraction of ventricular-zone cells has exited the cell cycle; at E12–E14 all ventricular-zone cells express delayed K⁺ currents, and from E14 a subset also expresses Na⁺ currents.",
     cite: "Moody & Bosma 2005, p. 895" },
   { age: "E13.5", species: "mouse", label: "plate and neuromere patterns coexist",
-    text: "The number of distinct transcription-factor expression patterns peaks; neurogenesis-related bHLH transcription factors peak in the ventricular and periventricular zones of the midbrain.",
+    text: "The number of distinct transcription-factor expression patterns rises from E11.5 to E13.5 and does not increase significantly afterwards; neurogenesis-related bHLH transcription factors peak in the ventricular and periventricular zones of the midbrain.",
     cite: "Thompson et al. 2014, Results, secs. \"Mapping gene expression\" and \"Molecular principles\"" },
   { age: "E14.5", species: "mouse", label: "laminins and integrins at the ventricular side",
     text: "In the neocortex, laminin α2 and α4 are high in the ventricular zone and integrin α6β1 is enriched along the ventricular surface.",
@@ -71,9 +71,9 @@ Mechanics papers in this field rarely say "the brain". They say "the E10.5 neuro
 
 ## Ages, stages and species {#sec-anatomy-ages}
 
-Mouse ages are written as embryonic days (E) and postnatal days (P). In the Allen Developing Mouse Brain Atlas, E11.5 means 11.5 days post conception, and P0 is the day of birth [@thompson2014high, Experimental Procedures, sec. "ISH"]. Nourse and colleagues count the morning of the vaginal plug as E0.5 [@nourse2022piezo, Methods].
+Mouse ages are written as embryonic days (E) and postnatal days (P). In the Allen Developing Mouse Brain Atlas, E11.5 means 11.5 days post conception, and P0 is the day of birth [@thompson2014high, Experimental Procedures, sec. "ISH"]. Nourse and colleagues count the day of vaginal plug observation as E0.5 [@nourse2022piezo, Methods].
 
-An E-day is a stage of one species only. Rat E12 is not mouse E12, and human fetal tissue is staged in gestation weeks (GW), not E-days [@long2019extracellular, sec. 4.2, pp. 7–8]. This chapter therefore uses mouse data for mouse ages, and keeps other species in clearly labelled places.
+An E-day is a stage of one species only: rat E12 is not mouse E12 (a course convention, not a claim from a source). Human fetal tissue is staged in gestation weeks (GW), not E-days [@long2019extracellular, sec. 4.2, pp. 7–8]. This chapter therefore uses mouse data for mouse ages, and keeps other species in clearly labelled places.
 
 ## From neural plate to neural tube {#sec-anatomy-tube}
 

@@ -14,7 +14,7 @@ piezoData = [
   { param: "P50", value: -28.1, err: 2.8, channel: "Piezo1", cond: "N2A + mouse Piezo1", cell: "Neuro2A, overexpressing mPiezo1", mode: "cell-attached, suction", n: 12, key: "coste2010piezo", loc: "Fig. 4H" },
   { param: "P50", value: -31.2, err: 3.5, channel: "Piezo1", cond: "HEK293T + mouse Piezo1", cell: "HEK293T (human cell line), overexpressing mPiezo1", mode: "cell-attached, suction", n: 11, key: "coste2010piezo", loc: "Fig. 4K" },
   { param: "P50", value: -13.4, err: null, channel: "Piezo1", cond: "human fetal NSPCs, endogenous", cell: "neural stem/progenitor cells, human fetal cortex, 23 wk", mode: "cell-attached, pressure clamp; Boltzmann slope s = 4.75 mmHg", n: 8, key: "pathak2014stretch", loc: "Fig. 1D" },
-  { param: "conductance", value: 22.9, err: 1.4, channel: "Piezo1", cond: "N2A, endogenous", cell: "Neuro2A (mouse neuroblastoma line)", mode: "cell-attached, physiological salts", n: 4, key: "coste2010piezo", loc: "Fig. 1D" },
+  { param: "conductance", value: 22.9, err: 1.4, channel: "Piezo1", cond: "N2A, endogenous", cell: "Neuro2A (mouse neuroblastoma line)", mode: "cell-attached", n: 4, key: "coste2010piezo", loc: "Fig. 1D" },
   { param: "conductance", value: 98, err: 9, channel: "Piezo1", cond: "purified mouse Piezo1 in bilayer", cell: "no cell: DPhPC droplet bilayer, 1 µM Yoda1", mode: "0.5 M KCl, +100 mV", n: null, key: "syeda2015chemical", loc: "Fig. 3B" },
   { param: "Erev", value: 6.6, err: null, channel: "Piezo1", cond: "N2A, endogenous (poke)", cell: "Neuro2A (mouse neuroblastoma line)", mode: "whole-cell, probe", n: null, key: "coste2010piezo", loc: "sec. \"Neuro2A cells express MA currents\"" },
   { param: "Erev", value: 6.2, err: null, channel: "Piezo1", cond: "N2A, endogenous (single channel)", cell: "Neuro2A (mouse neuroblastoma line)", mode: "cell-attached, suction", n: 4, key: "coste2010piezo", loc: "Fig. 1D" },
@@ -84,7 +84,8 @@ viewof piezoParam = Inputs.radio(new Map([
     width: Math.min(width, 680), height: 70 + 40 * rows.length, marginLeft: 240,
     x: { label: piezoLabels[piezoParam] + " →", grid: true, nice: true, zero: piezoParam !== "P50" && piezoParam !== "Erev" },
     y: { domain: rows.map(d => d.cond), label: null },
-    color: { domain: ["coste2010piezo", "pathak2014stretch", "syeda2015chemical"], range: ["#2a78d6", "#eb6834", "#1baf7a"], legend: true },
+    color: { domain: ["coste2010piezo", "pathak2014stretch", "syeda2015chemical"], range: ["#2a78d6", "#eb6834", "#1baf7a"], legend: true,
+             tickFormat: k => ({ coste2010piezo: "Coste et al. 2010", pathak2014stretch: "Pathak et al. 2014", syeda2015chemical: "Syeda et al. 2015" })[k] ?? k },
     symbol: { domain: ["Piezo1", "Piezo2"], range: ["circle", "triangle"] },
     marks: [
       piezoParam === "Erev" ? Plot.ruleX([0], { strokeDasharray: "3,3" }) : null,
@@ -102,7 +103,7 @@ Inputs.table(piezoData.map(d => ({ parameter: piezoLabels[d.param], value: d.err
 
 Why do the values differ?
 
-- **Cell type.** The same suction protocol gave P50 of −28 to −31 mmHg in N2A and HEK293T cells [@coste2010piezo, Fig. 1F, 4H, 4K] but −13.4 mmHg in human fetal neural stem/progenitor cells (NSPCs) [@pathak2014stretch, Fig. 1D].
+- **Cell type.** Suction on cell-attached patches gave P50 of −28 to −31 mmHg in N2A and HEK293T cells [@coste2010piezo, Fig. 1F, 4H, 4K] but −13.4 mmHg in human fetal neural stem/progenitor cells (NSPCs) [@pathak2014stretch, Fig. 1D].
 - **Salt and preparation.** About 23 pS in a cell-attached N2A patch [@coste2010piezo, Fig. 1D]; 98 pS for purified Piezo1 in a bilayer in 0.5 M KCl at +100 mV, with Yoda1 [@syeda2015chemical, Fig. 3B].
 - **Stimulus.** P50 exists only for suction; poking is graded by probe displacement [@coste2010piezo, sec. "Neuro2A cells express MA currents"].
 - **Drugs.** Yoda1 lowered P50 by about 15 mmHg [@syeda2015chemical, p. 4].
@@ -141,7 +142,7 @@ Human fetal NSPCs made more neurons on stiff substrates, opposite to rodent NSCs
 :::{.qmulti}
 Why do Coste et al. and Syeda et al. report 23 and 98 pS for Piezo1?
 
-- Different preparations: a cell patch in physiological salts versus a bilayer in 0.5 M KCl.
+- Different preparations: a patch on an intact N2A cell versus purified channel in a bilayer in 0.5 M KCl with Yoda1.
 
   > Correct [@coste2010piezo, Fig. 1D; @syeda2015chemical, Fig. 3B].
 
