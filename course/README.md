@@ -27,6 +27,13 @@ needs an internet connection.
 Quarto writes a `_book/search.json` even though search is disabled. Delete it before
 publishing an encrypted copy (same policy as `quarto-gallery`).
 
+## Publish
+
+The book is published to GitHub Pages at <https://critalmediumblue.github.io/brainmechanics/>.
+Every push to `main` runs `.github/workflows/publish.yml`, which renders the project and deploys
+`_book/` as a Pages artifact (Pages source: GitHub Actions). Rendered files are not committed.
+The private `sources/` and `notes/` directories are excluded from Git and are not published.
+
 ## Layout
 
 | Path | Contents |
