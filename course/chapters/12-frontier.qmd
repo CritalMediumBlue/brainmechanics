@@ -92,7 +92,7 @@ viewof frTurn = Inputs.form({
 //| label: fig-frontier-turning
 //| fig-cap: "**Illustrative model, not data; formula and directions from @koser2016mechanosensing.** Shading: apparent reduced elastic modulus K on the rostral (left) and caudal (right) side of an optic tract, on the 0–400 Pa colour range of Koser et al.'s in vivo stiffness maps of *Xenopus* brains [Fig. 2]. Dashed squares: the two 100 µm × 100 µm areas whose mean moduli K₁ and K₂ define the gradient M = (K₁ − K₂)/100 µm [Methods, author-manuscript p. 16]. Lines: an axon bundle, which turns toward the softer side for *Xenopus* retinal ganglion cell axons [Fig. 3c] and toward the stiffer side for durotaxis of non-neuronal cells [Discussion, p. 7]. Not from the literature: the size of the bend, which is fixed and does not scale with M, and the sharp boundary between the two sides. Koser et al. report in vivo gradients of about 0–7.5 Pa/µm (read off Fig. 3b, approximate) and gradient gels with M of up to about 2 Pa/µm [Fig. 3 legend]."
 {
-  const W = Math.min(width, 640), H = 300, mid = W / 2
+  const W = Math.max(320, Math.min(width, 640)), H = 300, mid = W / 2
   const M = gradientM(frTurn.K1, frTurn.K2)
   const dir = turnDirection(frTurn.K1, frTurn.K2, frTurn.rule)
   const pxPerUm = 0.9 // drawing scale: 100 µm = 90 px
@@ -210,7 +210,7 @@ Ageing of these cells is a property of the niche. Aged OPCs reseeded on decellul
 //| fig-cap: "**Data/values from** @pillai2026long, @thompson2019rapid and @kreysing2025environmental. Three published measurements, each plotted on its own axis. (a) Median apparent elastic modulus K of stage-40 Xenopus laevis brain for four Piezo1 morpholino conditions (Pillai et al. 2026, Fig. 3d). (b) Stiffness gradient across the Xenopus optic tract at three stages (Thompson et al. 2019, Fig. 3c; values read off the published plot, so approximate), with the turning threshold of 0.9 Pa/µm as a red dashed line and its stated SEM of ±0.4 Pa/µm as grey dashed lines. (c) Day in culture at which spontaneous action potentials were first detected in rat E17-E18 hippocampal neurons on soft and stiff gels (Kreysing et al. 2025, Fig. 2i); the same paper puts the delay at about 4 days by logistic regression. All values are as published (medians in panel a, means in panel b as read from the figure); hover a mark for its source. The three panels measure different quantities in different species and preparations, so bars and dots must not be compared across panels."
 {
   const box = document.createElement("div");
-  const wide = Math.min(width, 620);
+  const wide = Math.max(360, Math.min(width, 620));
   const label = text => {
     const h = document.createElement("div");
     h.textContent = text;

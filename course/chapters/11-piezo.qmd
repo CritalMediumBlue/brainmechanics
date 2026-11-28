@@ -153,7 +153,7 @@ viewof pzCond = Inputs.radio(new Map(PIEZO_CONDITIONS.map(c => [c.label, c])), {
 //| fig-cap: "**Schematic, not data; conditions and outcomes from @pathak2014stretch.** Human fetal neural stem/progenitor cells (23 weeks' gestation) imaged with the Ca²⁺ dye Fluo-4 by TIRF microscopy. Myosin II pulls on actin fibres (lines), and the pull reaches the substrate through focal adhesions (dots), as traction (arrows) [sec. \"Piezo1 Is Activated by Traction Forces\"]. Piezo1 channels (triangles) in the basal membrane let Ca²⁺ in, which gives local Ca²⁺ \"hotspots\" (glow). Outcomes: minimal or no transients on 0.4 and 0.7 kPa, increasing activity on 3.7 kPa, 750 kPa and glass [Fig. 4C–D]; abolished by 6 mM EGTA [Fig. 3C–D] and by 50 µM blebbistatin [Fig. 4A–B]; fewer and smaller after Piezo1 siRNA [Fig. 3E–F]. The perturbations were tested on glass and are shown only there. Not from the literature: the glow brightness is an ordinal rank built from the authors' words, not a measured amplitude, and the open or closed state of each drawn channel is our reading of the outcome; nothing is to scale."
 {
   const c = pzCond
-  const W = Math.min(width, 640), H = 300
+  const W = Math.max(320, Math.min(width, 640)), H = 300
   const svg = d3.create("svg").attr("viewBox", [0, 0, W, H]).attr("width", W).attr("height", H)
     .attr("role", "img").attr("aria-label", `Piezo1 schematic: ${c.label}`)
   const ySub = 230, x0 = W * 0.18, x1 = W * 0.82
