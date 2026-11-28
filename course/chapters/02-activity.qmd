@@ -73,12 +73,13 @@ viewof actGuess = predictGate({
   confidence: true,
   spec: {
     kind: "choice",
-    options: ["It depolarises the neuron", "It hyperpolarises the neuron", "Neither: GABA-A responses are absent at P0"],
+    options: ["It hyperpolarises the neuron", "It depolarises the neuron", "It has no effect: there are no GABA-A receptors yet", "It has no effect: E_GABA equals V_m"],
     answer: "It depolarises the neuron",
     feedback: {
-      "It depolarises the neuron": "Right. Rivera et al. measured a driving force of +7.0 mV at P0–P4: E_GABA lies above V_m, so Cl⁻ flows out.",
       "It hyperpolarises the neuron": "That is the adult behaviour. At P0–P4 Rivera et al. measured a positive driving force (+7.0 mV), because internal Cl⁻ is still high.",
-      "Neither: GABA-A responses are absent at P0": "Rivera et al. evoked clear responses with the GABA-A agonist muscimol at P0–P4, and they were depolarising."
+      "It depolarises the neuron": "Right. Rivera et al. measured a driving force of +7.0 mV at P0–P4: E_GABA lies above V_m, so Cl⁻ flows out.",
+      "It has no effect: there are no GABA-A receptors yet": "Rivera et al. evoked clear responses with the GABA-A agonist muscimol at P0–P4, and they were depolarising.",
+      "It has no effect: E_GABA equals V_m": "That would mean a driving force of zero. Rivera et al. (p. 253) measured +7.0 mV at P0–P4. A driving force near zero (−2.8 mV) appeared only when they knocked KCC2 down in slice cultures from P11–P13 rats (p. 254)."
     }
   }
 })
@@ -95,7 +96,7 @@ viewof actIn = Inputs.form({
 ```{ojs}
 //| echo: false
 //| label: fig-ecl
-//| fig-cap: "Equilibrium potential of Cl⁻ (E_Cl) against the internal Cl⁻ concentration [Cl⁻]ᵢ, computed with @eq-ecl: external Cl⁻ = 140 mM (Ben-Ari 2002, Box 2) and RT/F = 25.43 mV, the value for 22 °C used by Fairless et al. (2013). Filled dots: the schematic [Cl⁻]ᵢ of immature (25 mM) and mature (7 mM) neurons from Ben-Ari (2002, Fig. 1); yellow band: 20–25 mM, measured by perforated patch in young hippocampal neurons (Box 2). Their E_Cl values are computed here, not measured. Dashed line: V_m from the slider (default −75 mV, Ben-Ari's non-invasive estimate, p. 731). Red ring: [Cl⁻]ᵢ from the slider. Assumes E_GABA = E_Cl. Computed curve, not data; hover over the dots for sources. At the 34 °C of Rivera et al. (1999), RT/F, and with it every E_Cl, would be about 4% larger in magnitude."
+//| fig-cap: "**Illustrative model, not data.** Equation from @fairless2013membrane; concentrations and V_m from @benari2002excitatory. Equilibrium potential of Cl⁻ (E_Cl) against the internal Cl⁻ concentration [Cl⁻]ᵢ, computed with @eq-ecl: external Cl⁻ = 140 mM (Ben-Ari 2002, Box 2) and RT/F = 25.43 mV, the value for 22 °C used by Fairless et al. (2013). Filled dots: the schematic [Cl⁻]ᵢ of immature (25 mM) and mature (7 mM) neurons from Ben-Ari (2002, Fig. 1); yellow band: 20–25 mM, measured by perforated patch in young hippocampal neurons (Box 2). Their E_Cl values are computed here, not measured. Dashed line: V_m from the slider (default −75 mV, Ben-Ari's non-invasive estimate, p. 731). Red ring: [Cl⁻]ᵢ from the slider. Assumes E_GABA = E_Cl. Computed curve, not data; hover over the dots for sources. At the 34 °C of Rivera et al. (1999), RT/F, and with it every E_Cl, would be about 4% larger in magnitude."
 {
   if (!actGuess.committed) return locked()
   const curve = d3.range(2, 100.5, 0.5).map(ci => ({ ci, E: actECl(ci) }))
@@ -160,46 +161,54 @@ Guinea pigs are born more mature than rats. KCC2 mRNA is already abundant at E42
 
 ## Check yourself {#sec-activity-check}
 
-:::{.qmulti}
+:::{.qmulti correct="3"}
 Rivera et al. measured $DF_\mathrm{GABA\text{-}A}$ = +7.0 mV in P0–P4 rat pyramidal neurons. What does opening GABA_A channels do?
+
+- It hyperpolarises them, because GABA is an inhibitory transmitter.
+
+  > That is the adult case, with a negative driving force (−9.6 mV at P13–P30) [@rivera1999kcc2, p. 253].
+
+- It has no net effect, because Cl⁻ is at its equilibrium potential.
+
+  > At equilibrium the driving force would be zero, not +7 mV.
 
 - It depolarises them, because $E_\mathrm{GABA}$ lies above $V_m$.
 
   > Correct [@rivera1999kcc2, p. 253].
 
-- It hyperpolarises them, because GABA is an inhibitory transmitter.
+- It depolarises them, because Na⁺ enters through the GABA_A channels.
 
-  > That is the adult case, with a negative driving force (−9.6 mV at P13–P30).
-
-- Nothing, because Cl⁻ is at equilibrium.
-
-  > At equilibrium the driving force would be zero, not +7 mV.
+  > The effect is right, the ion is wrong. GABA_A receptors are "anion (predominantly Cl⁻)-permeant" [@rivera1999kcc2, p. 251]; the depolarisation comes from Cl⁻ flowing out [@benari2002excitatory, p. 729].
 
 :::
 
 **Compute.** With 140 mM Cl⁻ outside, 7 mM inside and $RT/F$ = 25.43 mV, @eq-ecl gives $E_\mathrm{Cl}$ = {{< qinput -76.2 tol=0.5 hints="−25.43 × ln(140/7)" >}} mV.
 
-:::{.qmulti}
-Why were GABA responses already hyperpolarising in P0–P4 guinea pigs?
+:::{.qmulti correct="1"}
+Why were GABA responses in hippocampal pyramidal neurons already hyperpolarising in P0–P4 guinea pigs?
 
 - Guinea pigs are born more mature, and their neurons already express KCC2.
 
-  > Correct [@rivera1999kcc2, pp. 252–253]: the switch follows maturation, not birth.
+  > Correct [@rivera1999kcc2, pp. 252–253]: KCC2 mRNA is abundant already at E42, and the switch follows maturation, not birth.
 
-- Guinea pig neurons lack GABA_A receptors.
+- Guinea pig slices were recorded at a lower temperature than the rat slices.
 
-  > Their muscimol responses were hyperpolarising, so the receptors are there.
+  > Rat and guinea pig slices were recorded under the same conditions, at 34 °C [@rivera1999kcc2, Methods, pp. 254–255].
 
-- The recordings were made at a different temperature.
+- Guinea pig neurons contain more internal Cl⁻, which makes $E_\mathrm{Cl}$ more negative.
 
-  > Rat and guinea pig were recorded under the same conditions (34 °C).
+  > The direction is reversed: more internal Cl⁻ makes $E_\mathrm{Cl}$ less negative (@eq-ecl), which would favour depolarisation.
+
+- Guinea pig neurons express KCC1 at birth, which rat hippocampus lacks until P5.
+
+  > In rat hippocampus, KCC1 mRNA is high already at P0 and does not change with age [@rivera1999kcc2, p. 252]. The transporter that rises steeply at P5 is KCC2 [@rivera1999kcc2, pp. 251–252].
 
 :::
 
 ::: {.callout-tip title="Answers" collapse="true"}
-1. Depolarises: $DF$ > 0 [@rivera1999kcc2, p. 253].
+1. It depolarises them: $E_\mathrm{GABA}$ lies above $V_m$, so $DF$ > 0 [@rivera1999kcc2, p. 253].
 2. $E_\mathrm{Cl} = -25.43 \ln(140/7) \approx -76.2$ mV (@eq-ecl), close to the −75 mV adult value of @benari2002excitatory [Box 2, p. 730].
-3. KCC2 is already expressed (E42) [@rivera1999kcc2, pp. 252–253].
+3. Guinea pigs are born more mature: KCC2 is already expressed at E42 [@rivera1999kcc2, pp. 252–253].
 :::
 
 ## Summary {#sec-activity-summary}

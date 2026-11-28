@@ -20,7 +20,15 @@ return {
       table.insert(options, match)
     end
 
-    local correctAnswer = options[1]
+    -- Local patch (see PATCHES.md): correct=N marks option N (1-based) as the
+    -- correct one and keeps the authored order of the drop-down.
+    local correctIdx = tonumber(pandoc.utils.stringify(kwargs["correct"]))
+    local fixedOrder = correctIdx ~= nil
+    if fixedOrder and (correctIdx < 1 or correctIdx > #options) then
+      quarto.log.error("qselect: correct=" .. correctIdx .. " is not an option number (1-" .. #options .. ")")
+      correctIdx = 1
+    end
+    local correctAnswer = options[correctIdx or 1]
     -- какой ответ показывать: из первого параметра или ключа show
     if showText == '' then
       showText = correctAnswer
@@ -34,7 +42,9 @@ return {
         <option disabled>???</option>]]
 
     -- перемешиваем ответы, чтобы правильный ответ не всегда был первым в списке
-    utils.ShuffleInPlace(options)
+    if not fixedOrder then
+      utils.ShuffleInPlace(options)
+    end
 
     for _, option in ipairs(options) do
       html = html .. '<option>' .. option .. '</option>'

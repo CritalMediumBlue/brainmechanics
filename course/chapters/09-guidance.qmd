@@ -34,7 +34,7 @@ The four forces act together. An axon may be "pushed" from behind by a chemorepe
 
 ```{mermaid}
 %%| label: fig-gd-forces
-%%| fig-cap: "The four guidance forces, with example cues for each as listed by @tessierlavigne1996molecular [Fig. 1, p. 1124; netrin repulsion and secreted semaphorins from p. 1126]. Green borders: attraction; red borders: repulsion. A chemoattractant pulls, a chemorepellent pushes, and contact cues hem the axon into a corridor. The match between molecules and forces is not one-to-one: some cues are bifunctional. Schematic."
+%%| fig-cap: "**Schematic, not data.** The four guidance forces, with example cues for each as listed by @tessierlavigne1996molecular [Fig. 1, p. 1124; netrin repulsion and secreted semaphorins from p. 1126]. Green borders: attraction; red borders: repulsion. A chemoattractant pulls, a chemorepellent pushes, and contact cues hem the axon into a corridor. The match between molecules and forces is not one-to-one: some cues are bifunctional. Schematic."
 flowchart TB
   CA["Chemoattraction<br/>long range, secreted<br/>e.g. netrins"]
   KA["Contact attraction<br/>short range, bound<br/>e.g. Ig CAMs, cadherins, laminins"]
@@ -110,68 +110,80 @@ Chemical and mechanical guidance are therefore linked. @sec-piezo introduces Pie
 
 **Match each cue with its receptor** [@kolodkin2010mechanisms; @dickson2002molecular]:
 
-- Netrin-1, when it attracts commissural axons: {{< qselect "DCC|Robo|EphA|Neuropilin" >}}
-- Netrin, when it repels: {{< qselect "UNC5|DCC|Robo|EphB" >}}
-- Slit: {{< qselect "Robo|DCC|Plexin|EphA" >}}
-- Secreted class 3 semaphorins such as Sema3A: {{< qselect "Neuropilin and plexin|Robo|DCC|EphB" >}}
-- Ephrin-A in the tectum: {{< qselect "EphA|EphB|Robo|UNC5" >}}
+- Netrin-1, when it attracts commissural axons: {{< qselect "Robo|DCC|EphA|Neuropilin" correct=2 >}}
+- Netrin, when it repels: {{< qselect "DCC|Robo|EphB|UNC5" correct=4 >}}
+- Slit: {{< qselect "Robo|DCC|Plexin|EphA" correct=1 >}}
+- Secreted class 3 semaphorins such as Sema3A: {{< qselect "Robo|DCC|Neuropilin and plexin|UNC5 with a DCC coreceptor" correct=3 >}}
+- Ephrin-A in the tectum: {{< qselect "EphB|Robo|UNC5|EphA" correct=4 >}}
 
-:::{.qmulti}
+:::{.qmulti correct="3"}
 A commissural axon has just crossed the floor plate. Why does it not turn back towards the netrin source?
 
-- It has lost its attraction to netrin and gained repulsion by Slit and semaphorins.
+- It no longer meets netrin, because the floor plate stops making it.
+
+  > Netrin is still at the midline. What changes is the axon: after crossing it is insensitive to netrin [@dickson2002molecular, p. 1963; Fig. 3].
+
+- It is now attracted by Slit, which pulls it away from the midline.
+
+  > Slit is a midline repellent. Commissural axons are repelled by Slit after crossing, not attracted [@dickson2002molecular, pp. 1960, 1963].
+
+- It loses netrin attraction and gains Slit and semaphorin repulsion.
 
   > Correct [@dickson2002molecular, p. 1963].
 
-- Netrin is no longer made at the midline.
+- It starts to destroy its Robo, so it ignores the midline Slit.
 
-  > Netrin is still there; the axon's response to it changes.
-
-- The axon now lacks a growth cone.
-
-  > The growth cone continues to the axon's target on the other side.
+  > That is the state before crossing in *Drosophila*: Comm sends new Robo to lysosomes. After crossing, Comm is inactivated and Robo reaches the growth cone [@dickson2002molecular, p. 1963].
 
 :::
 
-:::{.qmulti}
+:::{.qmulti correct="2"}
 A cultured *Xenopus* spinal neuron turns towards netrin-1. You lower cAMP inside the growth cone. What do you expect?
-
-- The growth cone now turns away from netrin-1.
-
-  > Correct: lowering cAMP or cGMP converts attraction to repulsion [@dickson2002molecular, p. 1962].
 
 - It turns towards netrin-1 more strongly.
 
-  > Raising cyclic nucleotides favours attraction; lowering them favours repulsion.
+  > Raising cAMP favours attraction; lowering it converts attraction to repulsion [@dickson2002molecular, p. 1962].
 
-- It stops responding to any cue.
+- It turns away from netrin-1 instead of towards it.
 
-  > The response switches sign; it does not disappear.
+  > Correct: lowering cAMP or cGMP converts attraction to repulsion [@dickson2002molecular, p. 1962].
+
+- It still turns towards netrin-1, as cAMP acts on Sema3A responses.
+
+  > Responses to netrin-1 depend on cAMP and PKA. It is the response to Sema3A that depends on cGMP and PKG [@dickson2002molecular, p. 1962].
+
+- Its growth cone collapses and the axon retracts.
+
+  > Collapse is a semaphorin effect: the first vertebrate semaphorin was purified as a potent inducer of sensory growth cone collapse [@dickson2002molecular, p. 1960]. Lowering cAMP changes the sign of the netrin-1 response: the growth cone turns away [@dickson2002molecular, p. 1962].
 
 :::
 
-:::{.qmulti}
+:::{.qmulti correct="3"}
 In the *Xenopus* optic tract, which way do retinal axons turn relative to a stiffness gradient?
 
-- Towards the softer tissue.
+- Towards the stiffer tissue, like most non-neuronal cells.
 
-  > Correct [@koser2016mechanosensing, sec. "Axons grow towards soft tissue"].
+  > Non-neuronal cells usually migrate towards the stiffer side (durotaxis). Retinal axon bundles did the opposite [@koser2016mechanosensing, PDF p. 7].
 
-- Towards the stiffer tissue, like fibroblasts in durotaxis.
+- Towards the softer side in vitro, but the stiffer side in vivo.
 
-  > That is what most non-neuronal cells do. Koser et al. found the opposite for these axons.
+  > The bundles turned towards the softer side both in vitro and in vivo [@koser2016mechanosensing, PDF p. 7].
 
-- Stiffness gradients do not affect them.
+- Towards the softer tissue, which lies caudal to the tract.
 
-  > Axons turned towards the soft side even on gels with a stiffness gradient and no chemical gradient.
+  > Correct. At stages 39–40, tissue rostral to the tract is stiffer than tissue caudal to it, and the axons turn towards the soft side [@koser2016mechanosensing, secs. "Stiffness gradients in developing brain tissue", "Axons grow towards soft tissue"].
+
+- Towards the stiffer tissue, where axons extend faster.
+
+  > Axons do extend faster on stiff gels (median 35.0 versus 22.6 µm/h), but the bundles turned towards the softer side [@koser2016mechanosensing, Fig. 1g; PDF p. 7].
 
 :::
 
 ::: {.callout-tip title="Answers" collapse="true"}
 1. Netrin attraction: DCC; netrin repulsion: UNC5; Slit: Robo; class 3 semaphorins: neuropilin with plexin; ephrin-A: EphA [@kolodkin2010mechanisms, secs. "Netrins", "Slits", "Semaphorins", "Ephrins"; @dickson2002molecular, pp. 1960–1961].
-2. It switches from netrin attraction to Slit and semaphorin repulsion [@dickson2002molecular, p. 1963].
+2. It loses netrin attraction and gains Slit and semaphorin repulsion [@dickson2002molecular, p. 1963].
 3. It turns away: lower cAMP converts attraction to repulsion [@dickson2002molecular, p. 1962].
-4. Towards softer tissue [@koser2016mechanosensing, sec. "Axons grow towards soft tissue"].
+4. Towards the softer tissue, caudal to the tract [@koser2016mechanosensing, secs. "Stiffness gradients in developing brain tissue", "Axons grow towards soft tissue"].
 :::
 
 ## Summary {#sec-guidance-summary}

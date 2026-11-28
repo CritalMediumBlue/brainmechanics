@@ -14,7 +14,14 @@ local loc_data = {
     nextStep = "Next Step",
     showFullSolution = "Show Full Solution",
     qSpotInstruction = "Drag the numbered markers onto the image",
-    next = "Next"
+    next = "Next",
+    showAnswer = "Show answer",
+    cardsLeft = "Cards left",
+    dontRemember = "Don't remember",
+    remember = "Remember",
+    startAgain = "Start again",
+    attemptsUsed = "Attempts used",
+    codeError = "The code contains an error."
   },
   ru = {
     inputPlaceholder = "Введите ответ",
@@ -29,7 +36,14 @@ local loc_data = {
     nextStep = "Следующий шаг",
     showFullSolution = "Показать всё решение",
     qSpotInstruction = "Перетащите на изображение пронумерованные маркеры",
-    next = "Далее"
+    next = "Далее",
+    showAnswer = "Показать ответ",
+    cardsLeft = "Осталось карточек",
+    dontRemember = "Не помню",
+    remember = "Помню",
+    startAgain = "Повторить ещё раз",
+    attemptsUsed = "Использовано попыток",
+    codeError = "В коде есть ошибка."
   }
 }
 -- // END OF LOCALIZATION STRINGS //

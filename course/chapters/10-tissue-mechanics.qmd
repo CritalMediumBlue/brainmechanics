@@ -93,7 +93,7 @@ tmLadder = [
 ```{ojs}
 //| echo: false
 //| label: fig-tm-ladder
-//| fig-cap: "Stiffness ladder of tissues (log axis, Young's modulus E in Pa). Bars are ranges and dots single values, as stated by Engler et al. 2006 (blue), Tyler 2012 (orange), Franze et al. 2013 (green; every reported brain modulus, mixed methods) and Pillai & Franze 2024 (purple; brain by AFM at ~1 Hz and by MRE). Hover over a mark for its source and locator. Values come from different methods, species and timescales, so the ladder shows orders of magnitude only."
+//| fig-cap: "**Data/values from** @engler2006matrix, @tyler2012mechanobiology, @franze2013mechanics and @pillai2024mechanics. Stiffness ladder of tissues (log axis, Young's modulus E in Pa). Bars are ranges and dots single values, as stated by Engler et al. 2006 (blue), Tyler 2012 (orange), Franze et al. 2013 (green; every reported brain modulus, mixed methods) and Pillai & Franze 2024 (purple; brain by AFM at ~1 Hz and by MRE). Hover over a mark for its source and locator. Values come from different methods, species and timescales, so the ladder shows orders of magnitude only."
 Plot.plot({
   width: Math.min(width, 720), height: 380, marginLeft: 260,
   x: { type: "log", domain: [10, 1e11], label: "Young's modulus E (Pa) →", grid: true },
@@ -135,12 +135,13 @@ viewof tmGuess = tmPredictGate({
   confidence: true,
   spec: {
     kind: "choice",
-    options: ["about 2.5 times deeper", "4 times deeper", "16 times deeper"],
-    answer: "about 2.5 times deeper",
+    options: ["2.5 times deeper", "4.0 times deeper", "8.0 times deeper", "16.0 times deeper"],
+    answer: "2.5 times deeper",
     feedback: {
-      "about 2.5 times deeper": "Right: δ scales as K^(−2/3), and 4^(2/3) ≈ 2.52.",
-      "4 times deeper": "That would hold for a linear spring. In the Hertz model the contact area grows with depth, so δ ∝ K^(−2/3), not K^(−1).",
-      "16 times deeper": "The exponent goes the other way: δ ∝ K^(−2/3), so δ grows less than K shrinks."
+      "2.5 times deeper": "Correct. δ scales as K^(−2/3), and 4^(2/3) ≈ 2.52.",
+      "4.0 times deeper": "That would hold for a linear spring. In the Hertz model the contact area grows with depth, so δ ∝ K^(−2/3), not K^(−1).",
+      "8.0 times deeper": "That turns the exponent upside down: 4^(3/2) = 8. From F ∝ K δ^(3/2), δ ∝ K^(−2/3), so the ratio is 4^(2/3) ≈ 2.52.",
+      "16.0 times deeper": "That squares the ratio (4² = 16). The exponent goes the other way: δ ∝ K^(−2/3), so δ grows less than K shrinks."
     }
   }
 })
@@ -157,7 +158,7 @@ viewof tmIn = Inputs.form({
 ```{ojs}
 //| echo: false
 //| label: fig-tm-hertz
-//| fig-cap: "Hertz indentation explorer (@eq-hertz). Thick line (black; white in the dark theme): force F against indentation δ for the K and probe radius R set by the sliders; the dot marks the depth reached at F = 10 nN (@eq-hertz-delta). Coloured: the same probe on published median K values, Xenopus brain at stage 40, control and Piezo1 knockdown (Pillai et al. 2026, Fig. 3d), and rat prefrontal cortex, neonate and aged (means of three rats each from Segel et al. 2019, Suppl. Table 5; measured with 7 nN, not 10 nN). Curves are computed, not measured. Real brain tissue is viscoelastic and nonlinearly elastic, and its stiffness depends on rate and strain (Franze et al. 2013, p. 231; Pillai & Franze 2024, p. 5), so a single K is a simplification."
+//| fig-cap: "**Illustrative model, not data.** Hertz model as fitted by @pillai2026long and @koser2016mechanosensing; K values from @pillai2026long and @segel2019niche. Hertz indentation explorer (@eq-hertz). Thick line (black; white in the dark theme): force F against indentation δ for the K and probe radius R set by the sliders; the dot marks the depth reached at F = 10 nN (@eq-hertz-delta). Coloured: the same probe on published median K values, Xenopus brain at stage 40, control and Piezo1 knockdown (Pillai et al. 2026, Fig. 3d), and rat prefrontal cortex, neonate and aged (means of three rats each from Segel et al. 2019, Suppl. Table 5; measured with 7 nN, not 10 nN). Curves are computed, not measured. Real brain tissue is viscoelastic and nonlinearly elastic, and its stiffness depends on rate and strain (Franze et al. 2013, p. 231; Pillai & Franze 2024, p. 5), so a single K is a simplification."
 {
   if (!tmGuess.committed) return tmLocked()
   const K = Math.pow(10, tmIn.logK), R = tmIn.R
@@ -222,20 +223,24 @@ Sample preparation matters too. Tissue must be measured within a few hours post 
 
 ## Check yourself {#sec-tissue-mechanics-check}
 
-:::{.qmulti}
+:::{.qmulti correct="4"}
 AFM gives ~100 Pa for brain, MRE gives ~10 kPa. Why?
 
-- Brain is viscoelastic: probed slowly, it relaxes and water flows away, so it appears softer.
+- MRE probes deeper tissue, and deep brain regions are stiffer than the surface.
 
-  > Correct [@pillai2024mechanics, p. 5].
+  > MRE does probe deep tissue and AFM only the surface [@pillai2024mechanics, p. 7], but the gap is explained by rate: the same tissue looks stiffer when it is probed at higher frequency [@pillai2024mechanics, p. 5].
 
-- One of the methods is simply wrong.
+- AFM indents with larger strains, and brain tissue softens at large strain.
 
-  > Both are reproducible; they probe different timescales.
+  > Brain does the opposite. AFM gave 150–300 Pa at 5% strain, but hippocampal regions exceeded 2,000 Pa at 30% strain [@franze2013mechanics, p. 232]. Larger strains would make AFM values higher, not lower.
 
-- MRE measures bone, not brain.
+- AFM reports a shear modulus and MRE a Young's modulus, three times larger.
 
-  > MRE measures shear waves in the brain itself.
+  > For brain, $E = 3G$ [@franze2013mechanics, p. 230], and a factor of 3 cannot explain a factor of about 100. The gap comes from the rate of deformation [@pillai2024mechanics, p. 5].
+
+- MRE deforms the tissue too fast for it to relax and let water flow away.
+
+  > Correct. At slow rates, as in AFM at ~1 Hz, "the material has time to relax, and water can flow away"; at the higher frequencies of MRE it does not, so brain appears ~10 kPa [@pillai2024mechanics, p. 5].
 
 :::
 
@@ -243,24 +248,32 @@ AFM gives ~100 Pa for brain, MRE gives ~10 kPa. Why?
 
 **Compute.** A gel has shear modulus $G$ = 100 Pa. Assuming $\nu$ = 0.5, its Young's modulus is $E$ = {{< qinput 300 tol=1 hints="G = E/3" >}} Pa.
 
-:::{.qmulti}
-A lab measures frozen-then-thawed brain slices and finds them much stiffer than published AFM values. What is the most likely explanation?
+:::{.qmulti correct="2"}
+A lab measures frozen-then-thawed brain slices by AFM and finds them much stiffer than published AFM values. What is the most likely explanation?
 
-- Freezing massively alters tissue mechanics.
+- The animals were older, and brain tissue stiffens with age.
 
-  > Correct [@pillai2024mechanics, p. 7].
+  > Rat prefrontal cortex does stiffen with age, but by less than twofold from ~P7 to ~455 days [@segel2019niche, Fig. 1g; Suppl. Table 5]. Freezing is a known, much larger effect.
 
-- Their tissue came from an older animal.
+- Freezing and thawing altered the mechanics of the tissue.
 
-  > Age changes rat cortex stiffness less than twofold [@segel2019niche, Fig. 1g]; sample preparation is the first suspect.
+  > Correct. Freezing, drying or fixing "will massively alter" tissue mechanics, so samples must be fresh [@pillai2024mechanics, p. 7].
+
+- The slices were indented more slowly than in published studies.
+
+  > Slower probing makes brain look softer, not stiffer, because the tissue has time to relax [@pillai2024mechanics, p. 5].
+
+- Cutting the slices released tension, which stiffens the tissue.
+
+  > Cutting releases tension and may change what is measured [@franze2013mechanics, p. 242], but published AFM values also come from cut slices [@segel2019niche, Methods "Atomic force microscopy"]. Freezing is the step that differs.
 
 :::
 
 ::: {.callout-tip title="Answers" collapse="true"}
-1. Viscoelasticity: slow probing lets the tissue relax and water flow [@pillai2024mechanics, p. 5].
+1. MRE deforms the tissue faster. Probed slowly, as in AFM, viscoelastic brain relaxes and water flows away, so it appears softer [@pillai2024mechanics, p. 5].
 2. $\delta = (3 \times 10^4~\mathrm{pN} / (4 \times 432 \times \sqrt{18.64}))^{2/3}$ = 2.53 µm, from @eq-hertz [@pillai2026long, Methods].
 3. $E = 3G$ = 300 Pa [@franze2013mechanics, p. 230].
-4. Freezing alters mechanics [@pillai2024mechanics, p. 7].
+4. Freezing and thawing altered the mechanics; freezing "will massively alter" them [@pillai2024mechanics, p. 7].
 :::
 
 ## Summary {#sec-tissue-mechanics-summary}

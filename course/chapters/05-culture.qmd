@@ -123,7 +123,7 @@ viewof culStep = stepper(culStages, { delay: 2200 })
 ```{ojs}
 //| echo: false
 //| label: fig-polarity-stages
-//| fig-cap: "Step through the five stages of polarisation of a dissociated rat E18 hippocampal neuron. Entry times are those given by Dotti et al. 1988 (Fig. 9, p. 1466): 0.25, 0.5, 1.5, 4 and more than 7 days in culture. Orange: the process that becomes the axon, with shaft collaterals from stage 4; blue: dendrites; grey: minor processes not yet specified; yellow dashed ring: lamellipodia. The drawings are schematic and not to scale — the axon and the minor processes differ by a factor of roughly 5–10 in length at 1–2 days (80–100 µm against 10–15 µm, p. 1455), far more than drawn."
+//| fig-cap: "**Data/values from @dotti1988establishment** (stage entry times); the drawings are schematic. Step through the five stages of polarisation of a dissociated rat E18 hippocampal neuron. Entry times are those given by Dotti et al. 1988 (Fig. 9, p. 1466): 0.25, 0.5, 1.5, 4 and more than 7 days in culture. Orange: the process that becomes the axon, with shaft collaterals from stage 4; blue: dendrites; grey: minor processes not yet specified; yellow dashed ring: lamellipodia. The drawings are schematic and not to scale — the axon and the minor processes differ by a factor of roughly 5–10 in length at 1–2 days (80–100 µm against 10–15 µm, p. 1455), far more than drawn."
 html`<figure>${culDraw(culStep)}
 <figcaption style="font-size:0.9em; text-align:left">${culStep.text}</figcaption></figure>`
 ```
@@ -168,18 +168,22 @@ The authors of the stage model were careful about this. Lamellipodia of the kind
 
 ## Check yourself {#sec-culture-check}
 
-:::{.qmulti}
-In the Dotti staging, what marks the transition from stage 2 to stage 3?
+:::{.qmulti correct="1"}
+In the Dotti staging of rat E18 hippocampal neurons, what marks the transition from stage 2 to stage 3?
 
-- One of the minor processes abruptly grows much faster and becomes the axon.
+- One minor process abruptly grows almost 10 times faster.
 
-  > Correct: an almost 10-fold rate increase, identifiable within 2 h [@dotti1988establishment, p. 1459].
+  > Correct: an almost 10-fold rate increase, identifiable as the axon within 2 h [@dotti1988establishment, p. 1459].
 
-- The cell attaches to the substrate and spreads lamellipodia.
+- The lamellipodia condense into several short minor processes.
 
-  > That is the entry into stage 1, during the first hour or two [@dotti1988establishment, p. 1457].
+  > That is the entry into stage 2, at about 0.5 days [@dotti1988establishment, p. 1461; Fig. 9, p. 1466].
 
-- MAP2 becomes restricted to the dendrites.
+- The remaining minor processes begin to grow slowly into dendrites.
+
+  > That is stage 4, entered at about 4 days, 2–3 days after axonal outgrowth [@dotti1988establishment, p. 1464; Fig. 9, p. 1466].
+
+- MAP2 becomes restricted to the dendrites and tau to the axon.
 
   > MAP2 and tau are not differentially distributed when cells first polarise [@dotti1988establishment, p. 1466].
 
@@ -187,37 +191,53 @@ In the Dotti staging, what marks the transition from stage 2 to stage 3?
 
 **Compute.** An axon growing at the mean rate of @dotti1988establishment [p. 1457] for the first few days, 70 µm/d, is how many times faster than a dendrite at 12 µm/d? {{< qinput 5.8 tol=0.2 hints="70 ÷ 12" >}} [@dotti1988establishment, pp. 1455, 1457].
 
-:::{.qmulti}
-You cast 1 µm polyacrylamide gels of 0.1 kPa on glass and see no difference from glass controls. The most likely reason is…
+:::{.qmulti correct="3"}
+You cast 1 µm polyacrylamide gels of 0.1 kPa on glass, coat them with poly-D-lysine and laminin, plate rat hippocampal neurons, and see no difference from glass controls. The most likely reason is…
 
-- the cells sense the rigid glass through the thin gel.
+- 0.1 kPa is too stiff to differ from the glass controls.
 
-  > Correct: a gel about 0.5–1 µm thick behaves like a stiff substrate [@engler2006matrix, p. 685].
+  > 0.1 kPa is at the soft end of the brain-like range, 0.1–1 kPa [@engler2006matrix, Fig. 1B legend, p. 678], and is the "soft" condition of Kreysing and colleagues [@kreysing2025environmental, Methods].
 
-- 0.1 kPa is too stiff to matter.
+- Rat hippocampal neurons do not sense substrate stiffness.
 
-  > 0.1 kPa is at the soft end of the brain-like range used in these experiments [@kreysing2025environmental; @engler2006matrix].
+  > They do: on about 10 kPa gels, synapse density was lower and spontaneous action potentials appeared about 4 days later than on about 0.1 kPa gels [@kreysing2025environmental, Results].
+
+- The cells sense the rigid glass through the thin gel.
+
+  > Correct: a gel about 0.5–1 µm thick on glass behaves like a stiff substrate [@engler2006matrix, p. 685].
+
+- The laminin coat hides the stiffness of the gel.
+
+  > Kreysing and colleagues coated both their soft and their stiff gels with poly-D-lysine and laminin and still found differences [@kreysing2025environmental, Methods; Results].
 
 :::
 
-:::{.qmulti}
-A paper reports "hippocampal neurons, E18, DIV 10". Which claim may you transfer to a mouse experiment at E18?
+:::{.qmulti correct="2"}
+A paper reports a result in "hippocampal neurons, E18, DIV 10" without naming the species. You plan a mouse E18 experiment. What should you do first?
 
-- None directly: E18 rat and E18 mouse are different developmental points, and the species must be stated with every claim.
+- Use it as it stands, since rat and mouse are both rodents.
+
+  > Developmental timing is stated per species; the course convention is to label every biological claim with species and age.
+
+- Find the species: E-days are not transferable between species.
 
   > Correct. Rat ages are not transferable to mouse; the sources of this course differ in both species and age [@dotti1988establishment; @fairless2013membrane].
 
-- All of them, since both are rodents.
+- Convert DIV 10 to the matching mouse days in vitro, then use it.
 
-  > Gestation and developmental timing differ; the course convention is to label every biological claim with species and age.
+  > Days in vitro are not the problem; the embryonic age is, and it can only be judged once the species is known.
+
+- Assume rat, since E18 rat is the standard hippocampal culture.
+
+  > Rat E18 is the classic preparation [@dotti1988establishment, p. 1455], but the course sources also culture mouse hippocampal neurons [@fairless2013membrane, p. 2]. A guess is not a species label.
 
 :::
 
 ::: {.callout-tip title="Answers" collapse="true"}
-1. One minor process starts growing much faster and becomes the axon [@dotti1988establishment, p. 1459].
+1. One minor process abruptly grows almost 10 times faster and becomes the axon [@dotti1988establishment, p. 1459].
 2. 70 / 12 ≈ 5.8, consistent with the paper's "5–10 times" [@dotti1988establishment, p. 1457].
 3. The cells feel the glass through the thin gel [@engler2006matrix, p. 685].
-4. None; species and age go with every claim.
+4. Find out the species first; species and age go with every claim.
 :::
 
 ## Summary {#sec-culture-summary}

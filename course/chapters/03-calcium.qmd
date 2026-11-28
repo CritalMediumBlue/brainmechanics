@@ -96,7 +96,7 @@ viewof caPanel = Inputs.radio(["Concentrations", "Times"], { value: "Concentrati
 ```{ojs}
 //| echo: false
 //| label: fig-ca-ladder
-//| fig-cap: "The calcium ladder: reported Ca²⁺ concentrations (\"Concentrations\") or durations, intervals between events and response times (\"Times\"), on log axes. Each bar or dot is a value reported in one source (Berridge et al. 2003; Rosenberg et al. 2011; Moody and Bosma 2005; Ben-Ari 2002; Chen et al. 2013; Rivera et al. 1999; Fairless et al. 2013); hover for the citation key, locator, species and notes. Bars are reported ranges or pairs of values; dots are single values. Values given only as a bound (\"< 1 s\", \"> 2 h\") are drawn at the bound. Species and preparations differ between rows, so rows are not directly comparable. Recording-solution values are what experimenters put in the bath, not measured extracellular concentrations."
+//| fig-cap: "**Data/values from** @berridge2003calcium, @rosenberg2011calcium, @moody2005ion, @benari2002excitatory, @chen2013ultrasensitive, @rivera1999kcc2 and @fairless2013membrane. The calcium ladder: reported Ca²⁺ concentrations (\"Concentrations\") or durations, intervals between events and response times (\"Times\"), on log axes. Each bar or dot is a value reported in one source (Berridge et al. 2003; Rosenberg et al. 2011; Moody and Bosma 2005; Ben-Ari 2002; Chen et al. 2013; Rivera et al. 1999; Fairless et al. 2013); hover for the citation key, locator, species and notes. Bars are reported ranges or pairs of values; dots are single values. Values given only as a bound (\"< 1 s\", \"> 2 h\") are drawn at the bound. Species and preparations differ between rows, so rows are not directly comparable. Recording-solution values are what experimenters put in the bath, not measured extracellular concentrations."
 {
   const rows = caData.filter(d => d.panel === caPanel).slice().sort((a, b) => a.lo - b.lo || a.hi - b.hi)
   const isConc = caPanel === "Concentrations"
@@ -156,60 +156,76 @@ Genetically encoded indicators such as GCaMP6 make such transients visible: in c
 
 ## Check yourself {#sec-calcium-check}
 
-:::{.qmulti}
+:::{.qmulti correct="2"}
 Purkinje neurons have a Ca²⁺-binding ratio $K_S$ of up to 2,000. What does this mean?
 
-- For each free Ca²⁺ ion in the cytosol, up to about 2,000 are bound to buffers.
+- The cytosolic Ca²⁺ concentration rises to 2,000 times the resting level.
+
+  > $K_S$ compares bound and free Ca²⁺ at the same moment, not two moments in time [@berridge2003calcium, p. 523].
+
+- For each free Ca²⁺ ion, up to about 2,000 are bound to buffers.
 
   > Correct [@berridge2003calcium, p. 523]. Most Ca²⁺ that enters never reaches an effector freely.
 
-- The cytosolic Ca²⁺ concentration is 2,000 times the resting level.
+- Each Purkinje neuron has up to about 2,000 Ca²⁺ channels in its membrane.
 
-  > $K_S$ compares bound and free Ca²⁺, not two moments in time.
+  > $K_S$ is a ratio of bound to free Ca²⁺, not a channel count [@berridge2003calcium, p. 523].
 
-- Purkinje neurons have 2,000 Ca²⁺ channels.
+- For each bound Ca²⁺ ion, up to about 2,000 are free in the cytosol.
 
-  > $K_S$ is a ratio of concentrations, not a channel count.
+  > The ratio is the other way round: $K_S$ is bound over free Ca²⁺, and most Ca²⁺ that enters is caught by buffers [@berridge2003calcium, p. 523].
 
 :::
 
 **Compute.** Slice solution contains 2 mM Ca²⁺, and resting cytosolic Ca²⁺ is about 100 nM. The outside is {{< qinput 20000 tol=1 hints="2 × 10⁻³ M / 1 × 10⁻⁷ M" >}} times more concentrated.
 
-:::{.qmulti}
+:::{.qmulti correct="4"}
 In embryonic *Xenopus* spinal neurons, which kind of Ca²⁺ transient regulates the rate of axon extension?
 
-- Waves, which are slower and often stay in the growth cone.
+- Spikes, which are fast and spread through the whole cell.
 
-  > Correct [@rosenberg2011calcium]. Spikes regulate transmitter specification.
+  > Spikes regulate transmitter specification; waves regulate the rate of axon extension [@rosenberg2011calcium, sec. "Spatiotemporal characteristics of calcium transients"].
 
-- Spikes, which spread through the whole cell.
+- Puffs, which arise from clusters of IP₃ receptors.
 
-  > Spikes set transmitter phenotype; waves regulate axon extension.
+  > Puffs are elementary events that last less than 1 s [@berridge2003calcium, p. 524]. In *Xenopus* spinal neurons, axon extension is tied to waves [@rosenberg2011calcium, sec. "Spatiotemporal characteristics of calcium transients"].
 
-- Neither: axon extension does not depend on Ca²⁺.
+- Sparks, which arise from ryanodine receptors.
 
-  > Blocking or raising growth-cone transient frequency changes outgrowth rate.
+  > Sparks are elementary events, like puffs, that last less than 1 s [@berridge2003calcium, p. 524]. In *Xenopus* spinal neurons, axon extension is tied to waves [@rosenberg2011calcium, sec. "Spatiotemporal characteristics of calcium transients"].
+
+- Waves, which are slower and stay close to where they start.
+
+  > Correct [@rosenberg2011calcium, sec. "Spatiotemporal characteristics of calcium transients"]. Spikes regulate transmitter specification.
 
 :::
 
-:::{.qmulti}
-A *Xenopus* neuron shows frequent growth-cone Ca²⁺ transients. What do you expect for its axon?
+:::{.qmulti correct="3"}
+A *Xenopus* spinal neuron shows frequent growth-cone Ca²⁺ transients. What do you expect for its axon?
 
-- Slow outgrowth.
+- Fast outgrowth, because Ca²⁺ influx drives growth-cone turning towards netrin-1.
 
-  > Correct: transient frequency is inversely related to outgrowth rate [@rosenberg2011calcium; @spitzer2006electrical, p. 709].
+  > Turning sets the direction of growth, not its rate. Ca²⁺ influx is needed for turning towards netrin-1 in cultured *Xenopus* spinal neurons [@dickson2002molecular, p. 1962], but frequent transients go with slow extension [@rosenberg2011calcium, sec. "Calcium-mediated regulation of axon outgrowth and pathfinding"].
 
-- Fast outgrowth.
+- Unchanged outgrowth, because the transients regulate turning, not extension rate.
 
-  > The relation is inverse: neurons with low-frequency activity extend fastest.
+  > Blocking or raising the frequency of growth-cone transients changes the rate of outgrowth [@rosenberg2011calcium, sec. "Calcium-mediated regulation of axon outgrowth and pathfinding"].
+
+- Slow outgrowth, because the transients slow the rate of axon extension.
+
+  > Correct: transient frequency is inversely related to outgrowth rate [@rosenberg2011calcium, sec. "Calcium-mediated regulation of axon outgrowth and pathfinding"; @spitzer2006electrical, p. 709].
+
+- Fast outgrowth, because each transient adds a short burst of extension.
+
+  > The relation is inverse: neurons with low-frequency Ca²⁺ activity extend fastest [@rosenberg2011calcium, sec. "Calcium-mediated regulation of axon outgrowth and pathfinding"].
 
 :::
 
 ::: {.callout-tip title="Answers" collapse="true"}
-1. Up to ~2,000 bound per free Ca²⁺ ion [@berridge2003calcium, p. 523].
+1. For each free Ca²⁺ ion, up to about 2,000 are bound to buffers [@berridge2003calcium, p. 523].
 2. $2\times10^{-3} / 10^{-7}$ = 20,000 [@rivera1999kcc2, p. 255; @berridge2003calcium, p. 523].
 3. Waves [@rosenberg2011calcium, sec. "Spatiotemporal characteristics of calcium transients"].
-4. Slow outgrowth [@rosenberg2011calcium, sec. "Calcium-mediated regulation of axon outgrowth and pathfinding"].
+4. Slow outgrowth: transient frequency is inversely related to outgrowth rate [@rosenberg2011calcium, sec. "Calcium-mediated regulation of axon outgrowth and pathfinding"].
 :::
 
 ## Summary {#sec-calcium-summary}

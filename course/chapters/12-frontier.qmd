@@ -68,6 +68,83 @@ In *Xenopus laevis* eye primordia on polyacrylamide gels (stages 33/34–35/36),
 
 In vivo, the same brains are mechanically heterogeneous. At stages 39–40 the tissue rostral of the optic tract is stiffer than the tissue caudal of it (*P* = 2.97 × 10⁻⁵), and the stiff side has more cell bodies [@koser2016mechanosensing, Fig. 2]. A **stiffness gradient** is the difference in apparent elastic modulus between two neighbouring regions divided by their separation, in Pa/µm [@thompson2019rapid, Methods, p. 14]. Optic-tract curvature follows that gradient: axons turn *away* from stiffer and toward softer tissue (*P* = 1.44 × 10⁻⁴, n = 51 points from 7 animals) [@koser2016mechanosensing, Fig. 3c]. This is the opposite of **durotaxis**, the usual behaviour of non-neuronal cells, which "migrate towards the stiffer side of their substrate" [@koser2016mechanosensing, p. 7].
 
+The explorer below makes the definition concrete. Set the stiffness on either side of a tract, read off the gradient $M$, and compare the direction in which *Xenopus* retinal axons turn with the direction that durotaxis would predict.
+
+```{ojs}
+//| echo: false
+import { gradientM, turnDirection } from "../js/stiffness-turn.js"
+```
+
+```{ojs}
+//| echo: false
+viewof frTurn = Inputs.form({
+  K1: Inputs.range([0, 400], { value: 250, step: 10, label: "K₁, rostral side (Pa)" }),
+  K2: Inputs.range([0, 400], { value: 150, step: 10, label: "K₂, caudal side (Pa)" }),
+  rule: Inputs.radio(new Map([
+    ["Xenopus RGC axons (Koser et al. 2016)", "neuron"],
+    ["Durotaxis of non-neuronal cells", "durotaxis"]
+  ]), { value: "neuron", label: "Who is moving?" })
+})
+```
+
+```{ojs}
+//| echo: false
+//| label: fig-frontier-turning
+//| fig-cap: "**Illustrative model, not data; formula and directions from @koser2016mechanosensing.** Shading: apparent reduced elastic modulus K on the rostral (left) and caudal (right) side of an optic tract, on the 0–400 Pa colour range of Koser et al.'s in vivo stiffness maps of *Xenopus* brains [Fig. 2]. Dashed squares: the two 100 µm × 100 µm areas whose mean moduli K₁ and K₂ define the gradient M = (K₁ − K₂)/100 µm [Methods, author-manuscript p. 16]. Lines: an axon bundle, which turns toward the softer side for *Xenopus* retinal ganglion cell axons [Fig. 3c] and toward the stiffer side for durotaxis of non-neuronal cells [Discussion, p. 7]. Not from the literature: the size of the bend, which is fixed and does not scale with M, and the sharp boundary between the two sides. Koser et al. report in vivo gradients of about 0–7.5 Pa/µm (read off Fig. 3b, approximate) and gradient gels with M of up to about 2 Pa/µm [Fig. 3 legend]."
+{
+  const W = Math.min(width, 640), H = 300, mid = W / 2
+  const M = gradientM(frTurn.K1, frTurn.K2)
+  const dir = turnDirection(frTurn.K1, frTurn.K2, frTurn.rule)
+  const pxPerUm = 0.9 // drawing scale: 100 µm = 90 px
+  const op = K => 0.08 + 0.8 * K / 400
+  const svg = d3.create("svg").attr("viewBox", [0, 0, W, H]).attr("width", W).attr("height", H)
+    .attr("role", "img").attr("aria-label", "Stiffness on two sides of an axon tract and the turning direction")
+  svg.append("rect").attr("x", 0).attr("y", 0).attr("width", mid).attr("height", H)
+    .attr("fill", "#8e5ed6").attr("fill-opacity", op(frTurn.K1))
+  svg.append("rect").attr("x", mid).attr("y", 0).attr("width", mid).attr("height", H)
+    .attr("fill", "#8e5ed6").attr("fill-opacity", op(frTurn.K2))
+  const box = 100 * pxPerUm, yBox = H * 0.62
+  for (const x of [mid - 8 - box, mid + 8]) {
+    svg.append("rect").attr("x", x).attr("y", yBox - box / 2).attr("width", box).attr("height", box)
+      .attr("fill", "none").attr("stroke", "currentColor").attr("stroke-dasharray", "4,3")
+  }
+  svg.append("text").attr("x", mid - 8 - box / 2).attr("y", yBox + box / 2 + 16).attr("text-anchor", "middle")
+    .attr("fill", "currentColor").attr("font-size", 12).text(`K₁ = ${frTurn.K1} Pa`)
+  svg.append("text").attr("x", mid + 8 + box / 2).attr("y", yBox + box / 2 + 16).attr("text-anchor", "middle")
+    .attr("fill", "currentColor").attr("font-size", 12).text(`K₂ = ${frTurn.K2} Pa`)
+  svg.append("text").attr("x", 10).attr("y", 20).attr("fill", "currentColor").attr("font-size", 13).text("rostral")
+  svg.append("text").attr("x", W - 10).attr("y", 20).attr("text-anchor", "end").attr("fill", "currentColor").attr("font-size", 13).text("caudal")
+  // Axon bundle: straight up the middle, then a fixed bend whose sign is dir.
+  const bend = 0.28 * W * dir
+  for (let k = -2; k <= 2; k++) {
+    const x0 = mid + 3 * k
+    svg.append("path")
+      .attr("d", `M${x0},${H} L${x0},${yBox} Q${x0},${H * 0.22} ${x0 + bend},${H * 0.12}`)
+      .attr("fill", "none").attr("stroke", "#1baf7a").attr("stroke-width", 2)
+  }
+  const tipX = mid + bend
+  svg.append("path").attr("d", dir === 0
+      ? `M${tipX - 7},${H * 0.12 + 10} L${tipX},${H * 0.12 - 4} L${tipX + 7},${H * 0.12 + 10}`
+      : `M${tipX - dir * 12},${H * 0.12 - 7} L${tipX + dir * 3},${H * 0.12} L${tipX - dir * 12},${H * 0.12 + 7}`)
+    .attr("fill", "none").attr("stroke", "#1baf7a").attr("stroke-width", 2.5)
+  // Scale bar
+  svg.append("line").attr("x1", 12).attr("x2", 12 + box).attr("y1", H - 12).attr("y2", H - 12)
+    .attr("stroke", "currentColor").attr("stroke-width", 2)
+  svg.append("text").attr("x", 12 + box / 2).attr("y", H - 18).attr("text-anchor", "middle")
+    .attr("fill", "currentColor").attr("font-size", 11).text("100 µm")
+  const toward = dir === 0 ? "goes straight: no gradient" :
+    `turns toward the ${dir < 0 ? "rostral" : "caudal"} side, the ${(dir < 0) === (frTurn.K1 < frTurn.K2) ? "softer" : "stiffer"} one`
+  const inRange = Math.abs(M) <= 7.5 ? "inside" : "outside"
+  return html`<div>${svg.node()}<p class="source-note">M = (${frTurn.K1} − ${frTurn.K2}) Pa / 100 µm = ${M.toFixed(1)} Pa/µm, ${inRange} the in vivo range of about 0–7.5 Pa/µm read off Koser et al., Fig. 3b. The bundle ${toward}.</p></div>`
+}
+```
+
+Things to try:
+
+- Make the rostral side stiffer, as Koser and colleagues measured at stages 39–40: the retinal axons turn caudally, toward the softer tissue. Switch to durotaxis and the same gradient sends cells the other way.
+- Set both sides equal: $M = 0$ and there is no mechanical cue to turn.
+- Set 400 Pa against 0 Pa: $M$ = 4 Pa/µm, still within the in vivo range. Brain gradients are steep relative to the tissue's own stiffness.
+
 Mechanics is necessary, not decorative: softening the brain with chondroitin sulphate, stiffening a spot with an AFM bead, blocking mechanosensitive channels with GsMTx4, or knocking Piezo1 down by ~42% with a morpholino all produced defasciculated tracts and pathfinding errors, with reduced optic-tract elongation after Piezo1 knockdown (*P* = 0.00476) [@koser2016mechanosensing, p. 6, Fig. 5i].
 
 ## Tissue stiffness is dynamic and self-made {#sec-frontier-dynamic}
@@ -130,7 +207,7 @@ Ageing of these cells is a property of the niche. Aged OPCs reseeded on decellul
 ```{ojs}
 //| echo: false
 //| label: fig-frontier-values
-//| fig-cap: "Three published measurements, each plotted on its own axis. (a) Median apparent elastic modulus K of stage-40 Xenopus laevis brain for four Piezo1 morpholino conditions (Pillai et al. 2026, Fig. 3d). (b) Stiffness gradient across the Xenopus optic tract at three stages (Thompson et al. 2019, Fig. 3c; values read off the published plot, so approximate), with the turning threshold of 0.9 Pa/µm as a red dashed line and its stated SEM of ±0.4 Pa/µm as grey dashed lines. (c) Day in culture at which spontaneous action potentials were first detected in rat E17-E18 hippocampal neurons on soft and stiff gels (Kreysing et al. 2025, Fig. 2i); the same paper puts the delay at about 4 days by logistic regression. All values are as published (medians in panel a, means in panel b as read from the figure); hover a mark for its source. The three panels measure different quantities in different species and preparations, so bars and dots must not be compared across panels."
+//| fig-cap: "**Data/values from** @pillai2026long, @thompson2019rapid and @kreysing2025environmental. Three published measurements, each plotted on its own axis. (a) Median apparent elastic modulus K of stage-40 Xenopus laevis brain for four Piezo1 morpholino conditions (Pillai et al. 2026, Fig. 3d). (b) Stiffness gradient across the Xenopus optic tract at three stages (Thompson et al. 2019, Fig. 3c; values read off the published plot, so approximate), with the turning threshold of 0.9 Pa/µm as a red dashed line and its stated SEM of ±0.4 Pa/µm as grey dashed lines. (c) Day in culture at which spontaneous action potentials were first detected in rat E17-E18 hippocampal neurons on soft and stiff gels (Kreysing et al. 2025, Fig. 2i); the same paper puts the delay at about 4 days by logistic regression. All values are as published (medians in panel a, means in panel b as read from the figure); hover a mark for its source. The three panels measure different quantities in different species and preparations, so bars and dots must not be compared across panels."
 {
   const box = document.createElement("div");
   const wide = Math.min(width, 620);
@@ -206,82 +283,98 @@ A single loop connects these papers, although its pieces come from different spe
 
 ## Check yourself {#sec-frontier-check}
 
-:::{.qmulti}
-In the developing *Xenopus* optic tract, which way do retinal ganglion cell axons turn relative to the stiffness gradient?
+:::{.qmulti correct="3"}
+In the developing *Xenopus* optic tract (stages 39–40), which way do retinal ganglion cell axons turn relative to the stiffness gradient?
 
-- Toward the softer tissue, the opposite of classical durotaxis.
+- Toward the stiffer tissue, as non-neuronal cells do in durotaxis.
 
-  > Correct [@koser2016mechanosensing, Fig. 3c and p. 7].
+  > That is durotaxis: non-neuronal cells "migrate towards the stiffer side of their substrate", but the axons do the opposite [@koser2016mechanosensing, p. 7].
 
-- Toward the stiffer tissue, like migrating fibroblasts.
+- Toward the denser tissue, where cell bodies are more tightly packed.
 
-  > That is durotaxis, which the paper explicitly contrasts with what the axons do.
+  > The side with more cell bodies is the rostral, stiffer side [@koser2016mechanosensing, Fig. 2], and the axons turn away from it [@koser2016mechanosensing, Fig. 3c].
 
-- They ignore the gradient; only Slit and Semaphorin matter.
+- Toward the softer tissue caudal to the tract, opposite to durotaxis.
 
-  > Chemical cues matter, but mechanical perturbation alone redirects the tract, and Piezo1 knockdown causes pathfinding errors.
+  > Correct. Tract curvature follows the gradient toward softer tissue (*P* = 1.44 × 10⁻⁴), the opposite of durotaxis [@koser2016mechanosensing, Fig. 3c and p. 7].
+
+- Along lines of equal stiffness, without bending toward either side.
+
+  > Curvature follows the stiffness gradient [@koser2016mechanosensing, Fig. 3c], and softening the brain or stiffening a spot of it disrupts the tract [@koser2016mechanosensing, p. 6].
 
 :::
 
 **Compute.** Knocking Piezo1 down in *Xenopus* brain tissue lowered the median apparent elastic modulus from 432 Pa to 231 Pa. By what factor did the tissue soften? {{< qinput 1.87 tol=0.05 hints="432 divided by 231" >}} [@pillai2026long, Fig. 3d].
 
-:::{.qmulti}
+:::{.qmulti correct="1"}
 Thompson and colleagues report that the stiffness gradient precedes axon turning by 18 min. What does that timing by itself establish?
 
-- An order of events consistent with the gradient instructing turning, but not causation on its own.
+- An order of events that fits guidance, but is not proof of it.
 
-  > Correct. The causal argument rests on the mitotic block [@thompson2019rapid, Fig. 4e] and on the mechanical manipulations of @koser2016mechanosensing.
+  > Correct. The gradient leads turning by 18 min on average [@thompson2019rapid, p. 3], which fits guidance by stiffness, but timing alone does not show cause. The causal tests are the mitotic block [@thompson2019rapid, Fig. 4e] and the mechanical manipulations of @koser2016mechanosensing [p. 6].
 
-- That the gradient causes the turn.
+- Proof that the stiffness gradient makes the axons turn.
 
-  > Timing is necessary for causation, not sufficient; the 18 min is itself a projected onset extrapolated from linear fits [@thompson2019rapid, Fig. 2d-e].
+  > Timing is necessary for causation, not sufficient. The 18 min is also a projected onset extrapolated from linear fits [@thompson2019rapid, Fig. 2c-e].
 
-- That turning causes the gradient.
+- Proof that turning axons create the stiffness gradient.
 
-  > The order is the wrong way round, and eye ablation shows the axons do not create the gradient [@koser2016mechanosensing].
+  > The order runs the other way: the gradient comes first [@thompson2019rapid, p. 3]. Eye-primordium ablation also showed that the retinal axons do not cause the gradient [@koser2016mechanosensing, Supplementary Fig. 3c].
+
+- Proof that growth cones take 18 min to read the gradient.
+
+  > The 18 min is the average lead of the gradient over the projected onset of turning [@thompson2019rapid, p. 3]. It does not measure how fast a growth cone senses stiffness.
 
 :::
 
-:::{.qmulti}
+:::{.qmulti correct="4"}
 Why can the 432 Pa of @pillai2026long not be compared directly with the 10 kPa stiff gels of @kreysing2025environmental?
 
-- They are different quantities (apparent elastic modulus *K* of tissue versus shear modulus *G* of a gel), on different materials by different methods.
+- Because *Xenopus* and rat brain tissue differ in stiffness.
 
-  > Correct: *K* = *E*/(1 − ν²) is not *G*.
+  > The 10 kPa is not rat tissue: it is the shear modulus of a polyacrylamide gel [@kreysing2025environmental, Results].
 
-- Because one is *Xenopus* and the other is rat, which is the only problem.
+- Because 10 kPa came from MRE and 432 Pa from AFM.
 
-  > Species matters, but the deeper problem is that these are different mechanical quantities.
+  > 432 Pa is an AFM value [@pillai2026long, Fig. 3d], but 10 kPa is the shear modulus of the gel substrate, not an MRE value [@kreysing2025environmental, Results].
 
-- They can be compared; pascals are pascals.
+- Because 432 Pa is a median of many points, not a single value.
 
-  > Shared units do not make shared meaning.
+  > A median over 1,297 points [@pillai2026long, Fig. 3d] is a fair summary. The problem is that it summarises a different quantity, *K*, from the shear modulus *G* of the gel.
+
+- Because *K* of the tissue and *G* of a gel are different quantities.
+
+  > Correct. *K* = *E*/(1 − ν²) is the apparent elastic modulus of tissue [@pillai2026long, Methods], while the gels are described by their shear modulus *G* [@kreysing2025environmental, Results]. Same unit, different quantity.
 
 :::
 
-:::{.qmulti}
-In the ageing rat brain, what is the evidence that OPC decline is caused by the niche rather than the cells?
+:::{.qmulti correct="4"}
+In the ageing rat brain, which result shows that the decline of OPCs comes from their niche rather than from the cells themselves?
 
-- Aged OPCs proliferate and differentiate again on neonatal ECM, on soft gels, or after Piezo1 knockdown.
+- Aged rat cortex softens, which frees OPCs from mechanical constraint.
 
-  > Correct [@segel2019niche, pp. 3–4].
+  > It *stiffens*: rat prefrontal cortex rose from about ${frSegelNeonate} Pa (~P7) to about ${frSegelAged} Pa (~455 days) [@segel2019niche, Supplementary Table 5; Fig. 1g].
 
-- Aged OPCs carry irreversible DNA damage.
+- Aged OPCs on aged ECM proliferate as fast as on neonatal ECM.
 
-  > Not measured there; the transplantation and substrate experiments argue against irreversibility.
+  > On neonatal ECM, aged OPCs showed "a 10-fold increase in proliferation rate" over aged ECM [@segel2019niche, p. 3].
 
-- The aged brain softens, releasing the cells from mechanical constraint.
+- Piezo1 knockdown slows aged OPCs further on stiff gels.
 
-  > It *stiffens*, from about ${frSegelNeonate} Pa to about ${frSegelAged} Pa in rat prefrontal cortex.
+  > On stiff gels, Piezo1 siRNA made aged OPCs "proliferate and differentiate ~4-5-fold more than the control" [@segel2019niche, p. 3].
+
+- Aged OPCs proliferate again on neonatal ECM and on soft hydrogels.
+
+  > Correct. Aged OPCs proliferated 10-fold faster on neonatal than on aged ECM, and on soft hydrogels their proliferation and differentiation "increased more than ten-fold" [@segel2019niche, p. 3].
 
 :::
 
 ::: {.callout-tip title="Answers" collapse="true"}
 1. Toward the softer tissue, the opposite of durotaxis [@koser2016mechanosensing, Fig. 3c, p. 7].
 2. 432/231 = ${frFold}, a close-to-twofold softening [@pillai2026long, Fig. 3d].
-3. It establishes order, not causation; the causal evidence is the mitotic block [@thompson2019rapid, Fig. 4e] and the mechanical manipulations of @koser2016mechanosensing.
+3. An order of events that fits guidance, not proof of cause; the causal evidence is the mitotic block [@thompson2019rapid, Fig. 4e] and the mechanical manipulations of @koser2016mechanosensing [p. 6].
 4. Different quantities: shear modulus *G* for gels [@kreysing2025environmental, Results] versus apparent elastic modulus *K* for tissue [@pillai2026long, Methods].
-5. Restoring the young mechanical environment, or removing Piezo1, restores function in aged cells [@segel2019niche, pp. 3–4].
+5. Aged OPCs recover on neonatal ECM or on soft gels, and Piezo1 knockdown restores them on stiff gels [@segel2019niche, pp. 3–4].
 :::
 
 ## Summary {#sec-frontier-summary}

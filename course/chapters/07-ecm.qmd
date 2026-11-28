@@ -68,7 +68,7 @@ Their build follows one plan, which @fawcett2019roles [Box 1, p. 452] call "a te
 ```{ojs}
 //| echo: false
 //| label: fig-ecm-pnn
-//| fig-cap: "Schematic, not to scale, of the molecular assembly of a perineuronal net, drawn from the description in Fawcett et al. 2019 (Box 1, p. 452; p. 453). Grey band: neuronal membrane with hyaluronan synthase (red). Blue: hyaluronan backbone. Orange: lectican core proteins with chondroitin sulfate chains (yellow). Green: link proteins at the lectican–hyaluronan junction. Purple: tenascin-R linking lecticans. Hover over, or tab to, a component for its role and source. Shapes, sizes, numbers and spacing are illustrative; no stiffness or mechanical property is implied, because the source gives none."
+//| fig-cap: "**Schematic, not data.** Schematic, not to scale, of the molecular assembly of a perineuronal net, drawn from the description in Fawcett et al. 2019 (Box 1, p. 452; p. 453). Grey band: neuronal membrane with hyaluronan synthase (red). Blue: hyaluronan backbone. Orange: lectican core proteins with chondroitin sulfate chains (yellow). Green: link proteins at the lectican–hyaluronan junction. Purple: tenascin-R linking lecticans. Hover over, or tab to, a component for its role and source. Shapes, sizes, numbers and spacing are illustrative; no stiffness or mechanical property is implied, because the source gives none."
 {
   const W = 660, H = 300;
   const root = d3.create("div");
@@ -185,78 +185,94 @@ Mechanics experiments separate the matrix's chemistry from its stiffness:
 
 ## Check yourself {#sec-ecm-check}
 
-:::{.qmulti}
+:::{.qmulti correct="1"}
 Which of these is largely absent from the normal brain outside the meninges, vasculature and blood–brain barrier?
 
-- Fibrillar collagen and fibronectin fibrils.
+- Fibrillar collagen and fibronectin.
 
-  > Correct [@franze2013mechanics, sec. 2.3, p. 235].
+  > Correct. Normal brain is "conspicuously devoid of fibrillar collagens or fibronectin fibrils" outside these sites [@franze2013mechanics, sec. 2.3, p. 235].
 
-- Hyaluronan.
+- Tenascin C and tenascin-R.
 
-  > Hyaluronan is a major component of brain ECM and the backbone of perineuronal nets.
+  > Both are present. Tenascin C is a main component of adult brain ECM [@franze2013mechanics, sec. 2.3, p. 235], and tenascin-R cross-links the lecticans in perineuronal nets [@fawcett2019roles, Box 1, p. 452].
 
-- Proteoglycans.
+- Hyaluronan and other glycosaminoglycans.
 
-  > Brain ECM contains a large set of proteoglycans, including the lecticans.
+  > These soft carbohydrate polymers make up much of adult brain ECM [@franze2013mechanics, sec. 2.3, p. 235].
+
+- Lecticans and other chondroitin sulfate proteoglycans.
+
+  > Brain ECM contains a large set of proteoglycans [@franze2013mechanics, sec. 2.3, p. 235], and lecticans are the key CSPGs of perineuronal nets [@fawcett2019roles, Box 1, p. 452].
 
 :::
 
 **Compute.** What percentage of CNS CSPGs is in the diffuse matrix rather than in perineuronal nets and perinodal ECM? {{< qinput 98 tol=0 hints="Only 2% are in the condensed compartment" >}} % [@fawcett2019roles, p. 453].
 
-:::{.qmulti}
+:::{.qmulti correct="3"}
 Which four components are needed in vitro to form a condensed pericellular matrix?
+
+- Collagen IV, laminin, perlecan and an integrin.
+
+  > These are basement-membrane molecules and an integrin, a receptor for ECM [@long2019extracellular, secs. 2.1.1–2.1.2, pp. 2–3; sec. 4.1, p. 7]. The condensed matrix needs hyaluronan, a lectican, a link protein and tenascin-R [@fawcett2019roles, p. 453].
+
+- Hyaluronan, CD44, a link protein and reelin.
+
+  > CD44 binds hyaluronan on astrocyte foot processes at nodes [@fawcett2019roles, Fig. 2, p. 455], and reelin is a secreted glycoprotein that controls neuronal migration [@long2019extracellular, sec. 3.2, p. 6]. Neither is one of the four essential components [@fawcett2019roles, p. 453].
 
 - Hyaluronan, a lectican, a link protein and tenascin-R.
 
   > Correct [@fawcett2019roles, p. 453].
 
-- Collagen I, fibronectin, laminin and an integrin.
+- Hyaluronan, a lectican, a link protein and chondroitinase ABC.
 
-  > These are not the components of perineuronal nets; fibrillar collagen and fibronectin are largely absent from the brain.
-
-- Hyaluronan, laminin, reelin and chondroitinase ABC.
-
-  > Chondroitinase ABC is an enzyme that digests CSPGs, so it removes matrix instead of building it.
+  > Chondroitinase ABC is an enzyme that digests the CS chains of CSPGs, so it removes matrix instead of building it [@fawcett2019roles, p. 454].
 
 :::
 
-:::{.qmulti}
+:::{.qmulti correct="1"}
 When do perineuronal nets form in mice?
 
-- Starting around P23, over about 10 days.
+- From about P23, maturing over about 10 days.
 
   > Correct; the same holds for rats [@fawcett2019roles, p. 453].
 
-- At E10.5, with the neuroepithelium.
+- From about E9.5, as the neural tube forms.
 
-  > PNNs are among the last structures of neural development, not among the first.
+  > E9.5 is when the neural tube forms in mice [@long2019extracellular, sec. 2.1.2, p. 3]. PNNs form much later, as one of the last acts of neural development [@fawcett2019roles, p. 453].
 
-- From 2 years of age.
+- Before birth, when hyaluronan is first made.
+
+  > Hyaluronan and some CSPGs are first made at embryonic stages, but the nets form later, when link proteins, aggrecan and brevican are upregulated [@fawcett2019roles, p. 453].
+
+- From about 2 years, maturing by about 8 years.
 
   > That is the human timing [@fawcett2019roles, p. 453].
 
 :::
 
-:::{.qmulti}
+:::{.qmulti correct="2"}
 Rat sympathetic neurons are moved from polylysine to laminin. What happens?
+
+- They form dendrites in addition to one axon.
+
+  > Dendrites were induced by Matrigel, a basement-membrane extract, not by laminin [@craig1994neuronal, p. 296].
 
 - They form more axons, and the axons grow faster.
 
   > Correct [@craig1994neuronal, p. 296].
 
-- They form dendrites.
+- Their axons grow faster, but each cell keeps one axon.
 
-  > Dendrites were induced by Matrigel, a basement-membrane extract.
+  > That is the effect of thrombospondin and collagen IV on these neurons. Laminin also raises the number of axons per cell [@craig1994neuronal, p. 296].
 
-- Nothing: any adhesive substrate gives the same result.
+- They form more axons, but the axons grow more slowly.
 
-  > Substrates differ; many adhesive substrates do not even support axon growth [@tessierlavigne1996molecular, p. 1124].
+  > Laminin raises both the number of axons and their rate of growth [@craig1994neuronal, p. 296].
 
 :::
 
 ::: {.callout-tip title="Answers" collapse="true"}
-1. Fibrillar collagen and fibronectin fibrils [@franze2013mechanics, sec. 2.3, p. 235].
+1. Fibrillar collagen and fibronectin [@franze2013mechanics, sec. 2.3, p. 235].
 2. 98% [@fawcett2019roles, p. 453].
 3. Hyaluronan, a lectican, a link protein and tenascin-R [@fawcett2019roles, p. 453].
 4. From about P23, over about 10 days, in mice and rats [@fawcett2019roles, p. 453].

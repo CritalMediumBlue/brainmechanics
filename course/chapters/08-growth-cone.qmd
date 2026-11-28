@@ -93,7 +93,7 @@ Because retrograde flow is continuous but advance is variable, the coupling must
 
 ```{mermaid}
 %%| label: fig-gc-clutch
-%%| fig-cap: "Schematic of the molecular clutch, drawn from the descriptions in @mitchison1988cytoskeletal [Fig. 5, pp. 764–765] and @kolodkin2010mechanisms. Left: no link to the substrate; actin cycles without net advance. Right: integrin and talin link actin to the substrate; flow slows, tension is passed to the substrate and polymerisation pushes the edge forward. Schematic, not to scale."
+%%| fig-cap: "**Schematic, not data.** Schematic of the molecular clutch, drawn from the descriptions in @mitchison1988cytoskeletal [Fig. 5, pp. 764–765] and @kolodkin2010mechanisms. Left: no link to the substrate; actin cycles without net advance. Right: integrin and talin link actin to the substrate; flow slows, tension is passed to the substrate and polymerisation pushes the edge forward. Schematic, not to scale."
 flowchart LR
   subgraph OFF["Clutch disengaged"]
     direction TB
@@ -136,12 +136,13 @@ viewof gcGuess = gcPredictGate({
   confidence: true,
   spec: {
     kind: "choice",
-    options: ["tens to hundreds of times larger", "about the same", "smaller"],
+    options: ["smaller", "about the same", "thousands to millions of times larger", "tens to hundreds of times larger"],
     answer: "tens to hundreds of times larger",
     feedback: {
-      "tens to hundreds of times larger": "Right: about 1 pN per filament against 71–537 pN per growth cone. A growth cone's force adds up from many filaments, motors and bonds.",
-      "about the same": "A single filament stalls at about 1 pN, so a growth cone's traction is that of many filaments, motors and bonds acting together.",
-      "smaller": "The single-molecule forces are the smallest on the scale: about 1 pN for actin and 5 pN for a microtubule."
+      "smaller": "The single-molecule forces are the smallest on the scale: about 1 pN for actin and 5 pN for a microtubule (Tyler 2012).",
+      "about the same": "A single filament stalls at about 1 pN (Tyler 2012), so a growth cone's traction is that of many filaments, motors and bonds acting together.",
+      "thousands to millions of times larger": "That would be nanonewtons or more, the scale of the tension in a whole neurite (about 1.5 nN; Van Essen 1997). A hippocampal growth cone pulls with about 71 pN, about 70 times the 1 pN of one filament (Tyler 2012).",
+      "tens to hundreds of times larger": "Right: about 1 pN per filament against 71–537 pN per growth cone (Tyler 2012). A growth cone's force adds up from many filaments, motors and bonds."
     }
   }
 })
@@ -155,7 +156,7 @@ viewof gcScale = Inputs.radio(["Forces (pN)", "Stresses and stiffnesses (Pa)"], 
 ```{ojs}
 //| echo: false
 //| label: fig-gc-ladder
-//| fig-cap: "Forces (top option, pN) and stresses or stiffnesses (bottom option, Pa) reported in the sources, on log axes. Each dot is one published value; bars join the ends of a published range. Hover over a dot to see the system, species and source (citekey and page). Values from Tyler 2012, Franze et al. 2013, Van Essen 1997 (150 µdyn converted to 1.5 nN), Koser et al. 2016 and Pillai et al. 2026. The values were measured with different methods, in different species and at different timescales, so the scale shows orders of magnitude, not a comparison under equal conditions. Stresses and moduli share the unit Pa but are different quantities: a stress is a force per area, a modulus is a stress per strain (@sec-tissue-mechanics)."
+//| fig-cap: "**Data/values from** @tyler2012mechanobiology, @franze2013mechanics, @vanessen1997tension, @koser2016mechanosensing and @pillai2026long. Forces (top option, pN) and stresses or stiffnesses (bottom option, Pa) reported in the sources, on log axes. Each dot is one published value; bars join the ends of a published range. Hover over a dot to see the system, species and source (citekey and page). Values from Tyler 2012, Franze et al. 2013, Van Essen 1997 (150 µdyn converted to 1.5 nN), Koser et al. 2016 and Pillai et al. 2026. The values were measured with different methods, in different species and at different timescales, so the scale shows orders of magnitude, not a comparison under equal conditions. Stresses and moduli share the unit Pa but are different quantities: a stress is a force per area, a modulus is a stress per strain (@sec-tissue-mechanics)."
 {
   if (!gcGuess.committed) return gcLocked()
   const isForce = gcScale === "Forces (pN)"
@@ -201,43 +202,51 @@ Once connected, axons can "grow passively by being stretched" [@franze2013mechan
 
 ## Check yourself {#sec-growth-cone-check}
 
-:::{.qmulti}
+:::{.qmulti correct="2"}
 A growth cone has fast retrograde actin flow, but its integrins suddenly link actin to a laminin-coated substrate. What happens at the leading edge?
 
-- Retrograde flow slows, tension is passed to the substrate, and polymerisation pushes the edge forward.
+- Retrograde flow speeds up, and the leading edge retracts.
 
-  > Correct. This is the molecular clutch [@mitchison1988cytoskeletal, Fig. 5, pp. 764–765; @kolodkin2010mechanisms].
+  > Anchoring the filaments to the substrate slows their backward flow. Myosin's pull is then passed to the substrate as tension, and the edge moves forward [@mitchison1988cytoskeletal, Fig. 5, pp. 764–765].
 
-- Retrograde flow speeds up, because myosin now has something to pull against.
+- Retrograde flow slows, and the leading edge advances.
 
-  > Anchoring the filaments slows their backward flow; myosin's pull is transmitted to the substrate as tension instead.
+  > Correct. This is the molecular clutch: the anchored filaments stop flowing backwards, tension develops, and polymerisation now pushes the edge forward [@mitchison1988cytoskeletal, Fig. 5, pp. 764–765; @kolodkin2010mechanisms, sec. "Guidance Cues and the Control of Cytoskeletal Dynamics"].
 
-- Nothing changes, because protrusion depends only on the rate of actin polymerisation.
+- Retrograde flow is unchanged, and the edge stays where it is.
 
-  > Without a link, polymerisation is cancelled by retrograde flow (the "futile cycle"). Advance needs both.
+  > That is the "futile cycle" of an unlinked growth cone, where polymerisation is cancelled by retrograde flow. A link to the substrate converts the flow into tension and protrusion [@mitchison1988cytoskeletal, Fig. 5, pp. 764–765].
+
+- Retrograde flow reverses, and actin flows towards the leading edge.
+
+  > Actin is still added at the leading edge and removed further back. The clutch slows the backward flux; it does not reverse it [@mitchison1988cytoskeletal, pp. 763–765].
 
 :::
 
 **Compute.** Traction force microscopy gave about 537 pN for DRG growth cones and 71 pN for hippocampal ones [@tyler2012mechanobiology, p. 873]. The DRG value is {{< qinput 7.6 tol=0.2 hints="537 / 71" >}} times larger.
 
-:::{.qmulti}
+:::{.qmulti correct="4"}
 You stain microtubules in a cultured rat hippocampal neuron and find a process whose microtubules point in both directions. What is it most likely to be?
+
+- The axon.
+
+  > Microtubules in the axon all point plus end distal [@craig1994neuronal, p. 276].
+
+- A filopodium.
+
+  > Filopodia are built around a dense core of actin, not a bundle of microtubules [@mitchison1988cytoskeletal, p. 762].
+
+- An axon branch.
+
+  > A branch is part of the axon, and axonal microtubules are uniformly oriented with plus ends distal [@craig1994neuronal, pp. 276, 288].
 
 - A dendrite.
 
   > Correct: dendrites contain microtubules of both orientations, while all axonal microtubules point their plus end away from the cell body [@craig1994neuronal, p. 276].
 
-- The axon.
-
-  > Axonal microtubules all point plus end distal.
-
-- A filopodium.
-
-  > Filopodia are built around a dense core of actin, not microtubules [@mitchison1988cytoskeletal, p. 762].
-
 :::
 
-:::{.qmulti}
+:::{.qmulti correct="1"}
 A growth cone's internal stress is about 30 Pa. How much force acts on each square micrometre?
 
 - About 30 pN.
@@ -246,33 +255,41 @@ A growth cone's internal stress is about 30 Pa. How much force acts on each squa
 
 - About 30 nN.
 
-  > That would be 30 kPa. Check the conversion 1 Pa = 1 pN/µm².
+  > 1 nN/µm² is 1,000 Pa [@tyler2012mechanobiology, p. 867], so 30 nN/µm² would be 30 kPa.
 
 - About 0.03 pN.
 
-  > The conversion is one-to-one: 1 Pa = 1 pN/µm².
+  > The conversion is one-to-one, 1 Pa = 1 pN/µm² [@tyler2012mechanobiology, p. 869], so no factor of 1,000 is needed.
+
+- About 300 pN.
+
+  > That would be a stress of 300 Pa. With 1 Pa = 1 pN/µm² [@tyler2012mechanobiology, p. 869], 30 Pa gives 30 pN/µm².
 
 :::
 
-:::{.qmulti}
+:::{.qmulti correct="2"}
 In Van Essen's summary, what happens to a chick sensory neurite when its tension is completely released?
 
-- It actively retracts.
+- It actively elongates, as in towed growth.
 
-  > Correct. Above a threshold tension neurites elongate; with no tension they retract [@vanessen1997tension, p. 313].
+  > Towed growth needs tension held above a threshold level [@vanessen1997tension, p. 313].
+
+- It actively retracts, like a fishing line being reeled in.
+
+  > Correct. Above a threshold tension neurites elongate; when the tension is fully released they retract [@vanessen1997tension, p. 313].
 
 - It keeps growing at the same rate.
 
-  > Growth depends on tension, which acts as a negative-feedback signal on length.
+  > Growth depends on tension: neurites adjust their length by negative feedback that tends to keep the tension steady [@vanessen1997tension, p. 313].
 
 - It stiffens until the tension returns.
 
-  > The review describes shortening, waviness and active retraction, not stiffening.
+  > The review describes slight shortening, waviness and active retraction, not stiffening [@vanessen1997tension, p. 313].
 
 :::
 
 ::: {.callout-tip title="Answers" collapse="true"}
-1. Flow slows, tension develops, the edge advances: the molecular clutch [@mitchison1988cytoskeletal, Fig. 5, pp. 764–765; @kolodkin2010mechanisms, sec. "Guidance Cues and the Control of Cytoskeletal Dynamics"].
+1. Retrograde flow slows and the leading edge advances: the molecular clutch [@mitchison1988cytoskeletal, Fig. 5, pp. 764–765; @kolodkin2010mechanisms, sec. "Guidance Cues and the Control of Cytoskeletal Dynamics"].
 2. $537/71 \approx 7.6$ [@tyler2012mechanobiology, p. 873].
 3. A dendrite [@craig1994neuronal, p. 276].
 4. About 30 pN, because 1 Pa = 1 pN/µm² [@tyler2012mechanobiology, p. 869; @franze2013mechanics, p. 239].

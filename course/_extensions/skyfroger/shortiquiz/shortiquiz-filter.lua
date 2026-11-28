@@ -206,6 +206,20 @@ function createQmutli(div)
     -- skip rendering if question format is incorrect
     if #questionContent == 0 or stems == nil or #stems.content < 2 then return pandoc.Div('') end
 
+    -- Local patch (see PATCHES.md): correct="N" marks option N (1-based) as the
+    -- correct one and keeps the authored order. Without it, upstream behaviour:
+    -- the first option is correct and the options are shuffled at render time.
+    local correctIdx = 1
+    local fixedOrder = false
+    if div.attributes["correct"] ~= nil then
+        correctIdx = tonumber(div.attributes["correct"])
+        fixedOrder = true
+        if correctIdx == nil or correctIdx < 1 or correctIdx > #stems.content then
+            quarto.log.error("qmulti: correct=\"" .. div.attributes["correct"] .. "\" is not an option number (1-" .. #stems.content .. ")")
+            correctIdx = 1
+        end
+    end
+
     local stemHints = {}
     local questionOptions = {}
     for i, item in ipairs(stems.content) do
@@ -226,7 +240,7 @@ function createQmutli(div)
         local classRule = [[answer === ']] .. (i - 1) .. [[' && isAnswered && 'qmulti__wrong']]
         local correctAnswerAction = ""
         local hintStyle = "qmulti__wrong_result"
-        if i == 1 then
+        if i == correctIdx then
             classRule = "isAnswerCorrect && 'qmulti__correct'"
             correctAnswerAction = "isAnswerCorrect=true"
             hintStyle = "qmulti__correct_result"
@@ -245,7 +259,7 @@ function createQmutli(div)
             x-model="answer"
             :disabled="isAnswerCorrect"
             name="]] .. qName .. [["
-            x-on:click="attempt++; isAnswered = true; isAnswerCorrect = answer === '0';]] ..
+            x-on:click="attempt++; isAnswered = true; isAnswerCorrect = answer === ']] .. (correctIdx - 1) .. [[';]] ..
             correctAnswerAction .. [["
         />
     </div>]]))
@@ -261,7 +275,9 @@ function createQmutli(div)
         table.insert(questionOptions, pandoc.Div(fullStem))
     end
 
-    utils.ShuffleInPlace(questionOptions)
+    if not fixedOrder then
+        utils.ShuffleInPlace(questionOptions)
+    end
 
     -- opening div
     table.insert(question,
@@ -493,7 +509,10 @@ function createQcheck(div)
     end
 
     -- TODO вставить вопросы с отзывами
-    utils.ShuffleInPlace(questionOptions)
+    -- Local patch (see PATCHES.md): shuffle="false" keeps the authored order.
+    if div.attributes["shuffle"] ~= "false" then
+        utils.ShuffleInPlace(questionOptions)
+    end
     table.insert(question, pandoc.Div(questionOptions))
 
     -- TODO число 3 заменить на сумму значений правильных ответов (арифметическая прогрессия)
@@ -827,7 +846,7 @@ function createQflashcards(div)
             <button
                 x-show="!isAnswerd"
                 x-on:click="showAnswer">
-                Show answer
+                ]]..l10n("showAnswer")..[[
             </button>
         </div>
         <div x-show="isAnswerd" x-transition x-cloak class="qflashcards__answer">
@@ -838,10 +857,10 @@ function createQflashcards(div)
             <div class="qflashcards__card__buttons">
               <button :disabled="!isAnswerd" class="button__recall"
                 x-on:click.stop="recall">
-                Не помню</button>
+                ]]..l10n("dontRemember")..[[</button>
               <button :disabled="!isAnswerd" class="button_remember"
               x-on:click.stop="remembered">
-                Помню</button>
+                ]]..l10n("remember")..[[</button>
             </div>
           </div>
         </div>
@@ -919,7 +938,7 @@ function createQflashcards(div)
     }"
     >
     <div x-show="!isFinished" x-transition.duration.500ms>
-      <p class="qflashcars__header" x-text="`Cards left: ${cardsRemaining}`"></p>
+      <p class="qflashcars__header" x-text="`]]..l10n("cardsLeft")..[[: ${cardsRemaining}`"></p>
     ]]))
 
     -- добавить разметку карточек
@@ -932,7 +951,7 @@ function createQflashcards(div)
         x-transition.duration.500ms
         x-cloak
         class="qflashcards__results">
-        <button x-on:click="reset">Повторить ещё раз</button>
+        <button x-on:click="reset">]]..l10n("startAgain")..[[</button>
       </div>
     </div>
     ]]))
@@ -1151,8 +1170,8 @@ function createQParson(div)
             📋
           </button> 
           -->
-          <span x-text="`Использовано попыток: ${attempt}`"
-            >Использовано попыток: 0</span
+          <span x-text="`]]..l10n("attemptsUsed")..[[: ${attempt}`"
+            >]]..l10n("attemptsUsed")..[[: 0</span
           >
         </div>
 
@@ -1168,7 +1187,7 @@ function createQParson(div)
             x-show="!isAnswered"
             class="qmulti__wrong_result"
           >
-            <span x-text="errorMessage">В коде есть ошибка.</span>
+            <span x-text="errorMessage">]]..l10n("codeError")..[[</span>
           </div>
         </div>
       </div>

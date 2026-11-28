@@ -77,7 +77,7 @@ viewof piezoParam = Inputs.radio(new Map([
 ```{ojs}
 //| echo: false
 //| label: fig-piezo-params
-//| fig-cap: "Published parameters of mechanically activated currents carried by Piezo1 (and Piezo2 for τ), one row per study and condition: Coste et al. 2010 (blue), Pathak et al. 2014 (orange), Syeda et al. 2015 (green). Bars show ± as reported; dots without bars had no spread reported. Hover over a dot for cell type, species, recording mode, n and source locator; the table lists all values. P50 is a fitted pipette pressure, not a membrane tension. Values come from different cells and solutions and should not be averaged."
+//| fig-cap: "**Data/values from** @coste2010piezo, @pathak2014stretch and @syeda2015chemical. Published parameters of mechanically activated currents carried by Piezo1 (and Piezo2 for τ), one row per study and condition: Coste et al. 2010 (blue), Pathak et al. 2014 (orange), Syeda et al. 2015 (green). Bars show ± as reported; dots without bars had no spread reported. Hover over a dot for cell type, species, recording mode, n and source locator; the table lists all values. P50 is a fitted pipette pressure, not a membrane tension. Values come from different cells and solutions and should not be averaged."
 {
   const rows = piezoData.filter(d => d.param === piezoParam)
   return Plot.plot({
@@ -116,7 +116,7 @@ Why do the values differ?
 
 ```{mermaid}
 %%| label: fig-piezo-routes
-%%| fig-cap: "Two routes of mechanotransduction. Top: a channel route (tens of ms; Pillai & Franze 2024, p. 10) from membrane tension through Piezo1 to Ca²⁺ influx. Bottom: an adhesion route (YAP/TAZ relocate within ~2 h; Dupont et al. 2011, p. 181) through focal adhesions and actomyosin tension to YAP/TAZ. Dashed links were shown in human fetal NSPCs (Pathak et al. 2014). Schematic, not exhaustive."
+%%| fig-cap: "**Schematic, not data.** Two routes of mechanotransduction. Top: a channel route (tens of ms; Pillai & Franze 2024, p. 10) from membrane tension through Piezo1 to Ca²⁺ influx. Bottom: an adhesion route (YAP/TAZ relocate within ~2 h; Dupont et al. 2011, p. 181) through focal adhesions and actomyosin tension to YAP/TAZ. Dashed links were shown in human fetal NSPCs (Pathak et al. 2014). Schematic, not exhaustive."
 flowchart LR
   S["Matrix stiffness"]
   T["Membrane tension"] --> P["Piezo1 opens"] --> C["Ca²⁺ and Na⁺ influx"]
@@ -133,58 +133,162 @@ Matrix sensing requires a cell to "pull against the matrix" and a transducer tha
 
 The routes meet in human fetal NSPCs (23 weeks' gestation). There, myosin II traction opened Piezo1 without external force, giving local Ca²⁺ "hotspots" that were minimal on 0.4–0.7 kPa and larger on stiffer substrates [@pathak2014stretch, sec. "Piezo1 Is Activated by Traction Forces"]. Piezo1 knockdown pushed Yap out of the nucleus, and blocking Piezo1 shifted differentiation from neurons to astrocytes [@pathak2014stretch, Figs. 4–5].
 
+The schematic below walks through that experiment. Pick a substrate, or one of the three perturbations Pathak and colleagues tested on glass, and watch which link of the chain breaks.
+
+```{ojs}
+//| echo: false
+import { PIEZO_CONDITIONS, channelOpen } from "../js/piezo-states.js"
+```
+
+```{ojs}
+//| echo: false
+viewof pzCond = Inputs.radio(new Map(PIEZO_CONDITIONS.map(c => [c.label, c])), {
+  value: PIEZO_CONDITIONS[4], label: "Condition"
+})
+```
+
+```{ojs}
+//| echo: false
+//| label: fig-piezo-traction
+//| fig-cap: "**Schematic, not data; conditions and outcomes from @pathak2014stretch.** Human fetal neural stem/progenitor cells (23 weeks' gestation) imaged with the Ca²⁺ dye Fluo-4 by TIRF microscopy. Myosin II pulls on actin fibres (lines), and the pull reaches the substrate through focal adhesions (dots), as traction (arrows) [sec. \"Piezo1 Is Activated by Traction Forces\"]. Piezo1 channels (triangles) in the basal membrane let Ca²⁺ in, which gives local Ca²⁺ \"hotspots\" (glow). Outcomes: minimal or no transients on 0.4 and 0.7 kPa, increasing activity on 3.7 kPa, 750 kPa and glass [Fig. 4C–D]; abolished by 6 mM EGTA [Fig. 3C–D] and by 50 µM blebbistatin [Fig. 4A–B]; fewer and smaller after Piezo1 siRNA [Fig. 3E–F]. The perturbations were tested on glass and are shown only there. Not from the literature: the glow brightness is an ordinal rank built from the authors' words, not a measured amplitude, and the open or closed state of each drawn channel is our reading of the outcome; nothing is to scale."
+{
+  const c = pzCond
+  const W = Math.min(width, 640), H = 300
+  const svg = d3.create("svg").attr("viewBox", [0, 0, W, H]).attr("width", W).attr("height", H)
+    .attr("role", "img").attr("aria-label", `Piezo1 schematic: ${c.label}`)
+  const ySub = 230, x0 = W * 0.18, x1 = W * 0.82
+  // Substrate: darker = stiffer (ordinal).
+  svg.append("rect").attr("x", 0).attr("y", ySub).attr("width", W).attr("height", H - ySub)
+    .attr("fill", "#9aa5b1").attr("fill-opacity", 0.15 + 0.6 * c.stiffness)
+  svg.append("text").attr("x", 10).attr("y", H - 12).attr("fill", "currentColor").attr("font-size", 12)
+    .text(`substrate: ${c.label.split(" + ")[0]}`)
+  // Bath Ca²⁺ (removed by EGTA).
+  if (c.calciumOutside) {
+    for (let i = 0; i < 9; i++) {
+      const x = 30 + i * (W - 60) / 8, y = 30 + (i % 3) * 14
+      svg.append("circle").attr("cx", x).attr("cy", y).attr("r", 3.5).attr("fill", "#eda100")
+    }
+    svg.append("text").attr("x", W - 12).attr("y", 24).attr("text-anchor", "end").attr("fill", "currentColor").attr("font-size", 12).text("Ca²⁺ in the bath")
+  } else {
+    svg.append("text").attr("x", W - 12).attr("y", 24).attr("text-anchor", "end").attr("fill", "currentColor").attr("font-size", 12).text("bath Ca²⁺ chelated by EGTA")
+  }
+  // Cell body.
+  svg.append("path")
+    .attr("d", `M${x0},${ySub} C${x0},${ySub - 120} ${x1},${ySub - 120} ${x1},${ySub} Z`)
+    .attr("fill", "#2a78d6").attr("fill-opacity", 0.12).attr("stroke", "#2a78d6").attr("stroke-width", 2)
+  // Ca²⁺ hotspot glow near the basal membrane.
+  const glow = svg.append("defs").append("radialGradient").attr("id", "pz-glow")
+  glow.append("stop").attr("offset", "0%").attr("stop-color", "#eda100").attr("stop-opacity", 0.95)
+  glow.append("stop").attr("offset", "100%").attr("stop-color", "#eda100").attr("stop-opacity", 0)
+  const chX = [0.35, 0.5, 0.65].map(f => x0 + f * (x1 - x0)).slice(0, c.channels === 3 ? 3 : 1)
+  const open = channelOpen(c)
+  for (const x of chX) {
+    if (c.level > 0) svg.append("ellipse").attr("cx", x).attr("cy", ySub - 14).attr("rx", 18 + 40 * c.level).attr("ry", 10 + 26 * c.level)
+      .attr("fill", "url(#pz-glow)").attr("opacity", 0.25 + 0.75 * c.level)
+    const g = open ? 7 : 0
+    svg.append("path").attr("d", `M${x - 12 - g},${ySub + 2} L${x - 2 - g},${ySub - 16} L${x - 2 - g},${ySub + 2} Z`).attr("fill", "#8e5ed6")
+    svg.append("path").attr("d", `M${x + 12 + g},${ySub + 2} L${x + 2 + g},${ySub - 16} L${x + 2 + g},${ySub + 2} Z`).attr("fill", "#8e5ed6")
+  }
+  if (c.channels < 3) svg.append("text").attr("x", (x0 + x1) / 2).attr("y", ySub + 22).attr("text-anchor", "middle")
+    .attr("fill", "currentColor").attr("font-size", 12).text("fewer Piezo1 channels (siRNA)")
+  // Actin fibres with focal adhesions, and traction arrows.
+  for (const [xa, xb] of [[x0 + 20, x0 + 0.45 * (x1 - x0)], [x1 - 20, x1 - 0.45 * (x1 - x0)]]) {
+    svg.append("line").attr("x1", xa).attr("y1", ySub - 4).attr("x2", xb).attr("y2", ySub - 70)
+      .attr("stroke", c.traction ? "#e34948" : "#9aa5b1").attr("stroke-width", 3).attr("stroke-dasharray", c.traction ? null : "4,4")
+    svg.append("circle").attr("cx", xa).attr("cy", ySub - 2).attr("r", 5).attr("fill", "currentColor")
+    if (c.traction) {
+      const d = xa < W / 2 ? 1 : -1
+      svg.append("path").attr("d", `M${xa - d * 30},${ySub + 14} L${xa + d * 10},${ySub + 14} M${xa + d * 2},${ySub + 8} L${xa + d * 10},${ySub + 14} L${xa + d * 2},${ySub + 20}`)
+        .attr("fill", "none").attr("stroke", "#e34948").attr("stroke-width", 2.5)
+    }
+  }
+  svg.append("text").attr("x", (x0 + x1) / 2).attr("y", ySub - 100).attr("text-anchor", "middle").attr("fill", "currentColor").attr("font-size", 12)
+    .text(c.traction ? "myosin II pulls on actin" : "myosin II blocked (blebbistatin)")
+  return html`<div>${svg.node()}<p class="source-note"><strong>${c.label}.</strong> ${c.note} (Pathak et al. 2014, ${c.cite})</p></div>`
+}
+```
+
+Things to try:
+
+- Step from 0.4 kPa to glass: the hotspots appear and grow with substrate stiffness, although nothing pushes or pulls on the cell from outside.
+- Choose blebbistatin: the channels and the bath Ca²⁺ are still there, but without the cell's own pull the hotspots vanish. Choose EGTA: the pull is there, but there is no Ca²⁺ to let in.
+
 ::: {.callout-warning title="Species matter"}
 Human fetal NSPCs made more neurons on stiff substrates, opposite to rodent NSCs [@pathak2014stretch, sec. "Effect of Substrate Stiffness on hNSPC Differentiation"]. In mouse NSCs from *Piezo1* knockout embryos at E10.5, astrocyte *and* neuron differentiation fell [@nourse2022piezo, Fig. 3B]; the authors attribute the conflict to species or knockdown versus knockout [@nourse2022piezo, Discussion]. @sec-frontier returns to these results.
 :::
 
 ## Check yourself {#sec-piezo-check}
 
-:::{.qmulti}
-Why do Coste et al. and Syeda et al. report 23 and 98 pS for Piezo1?
+:::{.qmulti correct="4"}
+Coste et al. report about 23 pS for Piezo1, and Syeda et al. 98 pS. What best explains the difference?
 
-- Different preparations: a patch on an intact N2A cell versus purified channel in a bilayer in 0.5 M KCl with Yoda1.
+- Yoda1 widens the open pore, so each channel passes more current.
 
-  > Correct [@coste2010piezo, Fig. 1D; @syeda2015chemical, Fig. 3B].
+  > Yoda1 acts mainly by stabilising the open state: the mean open time rose from 13 to 55 ms [@syeda2015chemical, pp. 4–7]. The two recordings also differ in preparation and salt [@syeda2015chemical, Fig. 3B].
 
-- Yoda1 doubles the pore size.
+- Coste et al. recorded human Piezo1, and Syeda et al. mouse Piezo1.
 
-  > Yoda1 stabilises the open state; the salt and preparation differ.
+  > Both recorded mouse Piezo1: endogenous channels in mouse Neuro2A cells [@coste2010piezo, Fig. 1D] and purified mouse Piezo1 [@syeda2015chemical, Fig. 3B].
+
+- The N2A patches also contained Piezo2, which has a smaller conductance.
+
+  > Knocking down Piezo1 alone abolished the MA currents of N2A cells [@coste2010piezo, sec. "Piezo1 (Fam38A) is required for MA currents of N2A cells"], so the N2A channels are Piezo1.
+
+- One used purified channel in 0.5 M KCl, the other an intact N2A mouse cell.
+
+  > Correct. Coste et al. recorded cell-attached patches on N2A cells [@coste2010piezo, Fig. 1D]; Syeda et al. recorded purified Piezo1 in a lipid bilayer in 0.5 M KCl at +100 mV, with 1 µM Yoda1 [@syeda2015chemical, Fig. 3B].
 
 :::
 
-:::{.qmulti}
+:::{.qmulti correct="4"}
 Purified TRAAK in pure lipid still opens when stretched. What does this show?
 
-- Tension in the bilayer alone can gate the channel (force from lipid).
+- TRAAK needs tethers to the cytoskeleton to open.
 
-  > Correct [@brohawn2014mechanosensitivity].
+  > The preparation had no cytoskeleton: purified TRAAK was reconstituted in lipid alone, and stretch still opened it [@brohawn2014mechanosensitivity, sec. "Biophysical Origins of Mechanosensitivity in TRAAK and TREK1"].
 
-- TRAAK needs the cytoskeleton.
+- Piezo1 in the same membrane pulls TRAAK open.
 
-  > There was no cytoskeleton in the preparation.
+  > The purified system held TRAAK and lipid, and no Piezo1, so Piezo1 cannot explain the opening.
+
+- Piezo1 is therefore gated by bilayer tension as well.
+
+  > The experiment tested TRAAK and TREK1, not Piezo1. Piezo1 is thought to sense membrane tension, but how it is activated in vivo is unknown [@pillai2024mechanics, pp. 10–11].
+
+- Tension in the bilayer is enough to gate TRAAK.
+
+  > Correct. Purified TRAAK and TREK1 in pure lipid opened when stretched, so no tether was needed: this is force-from-lipid gating [@brohawn2014mechanosensitivity, sec. "Biophysical Origins of Mechanosensitivity in TRAAK and TREK1"].
 
 :::
 
 **Compute.** A patch at the upper estimate of resting tension (4 mN/m) needs at least {{< qinput 5 tol=0.5 hints="MscL begins to open at ~9 mN/m" >}} mN/m more tension to reach the threshold of MscL.
 
-:::{.qmulti}
+:::{.qmulti correct="3"}
 A paper blocks Piezo1 with GsMTx4. What control would you ask for?
 
-- Piezo1 knockdown or knockout, since GsMTx4 is non-specific.
+- A higher dose of GsMTx4, to block Piezo1 more fully.
 
-  > Correct [@pillai2024mechanics, p. 11].
+  > More drug does not make GsMTx4 more specific: it is non-specific and mostly acts by altering membrane mechanics [@pillai2024mechanics, p. 11].
 
-- A higher dose of GsMTx4.
+- Yoda1 treatment, to show that the cells express Piezo1.
 
-  > More drug does not make it more specific.
+  > Yoda1 activates Piezo1 [@syeda2015chemical, pp. 2–7], so it shows that the channel is present, not that GsMTx4 acted through it.
+
+- Piezo1 knockdown, to show the effect needs Piezo1.
+
+  > Correct. GsMTx4 is non-specific [@pillai2024mechanics, p. 11]; removing Piezo1 genetically tests whether the effect depends on the channel.
+
+- Gd³⁺ or ruthenium red, as a second Piezo1 blocker.
+
+  > Gd³⁺ and ruthenium red are non-specific too and also act mostly by altering membrane mechanics [@pillai2024mechanics, p. 11].
 
 :::
 
 ::: {.callout-tip title="Answers" collapse="true"}
-1. Preparation and salt [@coste2010piezo, Fig. 1D; @syeda2015chemical, Fig. 3B].
-2. Force from lipid [@brohawn2014mechanosensitivity, sec. "Biophysical Origins of Mechanosensitivity in TRAAK and TREK1"].
+1. Preparation and salt: a patch on an intact N2A cell versus purified channel in a bilayer in 0.5 M KCl [@coste2010piezo, Fig. 1D; @syeda2015chemical, Fig. 3B].
+2. Bilayer tension is enough to gate TRAAK: force from lipid [@brohawn2014mechanosensitivity, sec. "Biophysical Origins of Mechanosensitivity in TRAAK and TREK1"].
 3. 9 − 4 = 5 mN/m; resting patches carry ~0.5–4 mN/m and MscL opens at ~9 mN/m [@brohawn2014mechanosensitivity, Discussion].
-4. Genetic knockdown or knockout [@pillai2024mechanics, p. 11; @pathak2014stretch].
+4. Piezo1 knockdown (or knockout), because GsMTx4 is non-specific [@pillai2024mechanics, p. 11; @pathak2014stretch].
 :::
 
 ## Summary {#sec-piezo-summary}

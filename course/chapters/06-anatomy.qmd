@@ -152,7 +152,7 @@ Newborn neurons leave the germinal zones and migrate outwards. They move along r
 </svg>
 ```
 
-Schematic, not to scale, of the mouse cortical wall during neurogenesis, ventricle at the bottom and pial surface at the top. Lines: radial glial processes ending in basal endfeet at the pial basement membrane. Blue: apical radial glia, nuclei drawn at different heights because of interkinetic nuclear migration. Green: basal progenitors and a basal radial glial cell in the SVZ. Grey: neurons migrating outwards along radial glia. Orange: neurons in the cortical plate. Purple: a Cajal–Retzius cell in the marginal zone. Hover over cells for labels. Zone names and cell types are from @gotz2005cell [pp. 778–779; Fig. 2] and @long2019extracellular [secs. 2.3.1 and 3.2]. The zone between the SVZ and the cortical plate is left unnamed because none of the course sources defines it. Illustrative; no thicknesses or cell numbers are implied.
+**Schematic, not data.** Not to scale: the mouse cortical wall during neurogenesis, ventricle at the bottom and pial surface at the top. Lines: radial glial processes ending in basal endfeet at the pial basement membrane. Blue: apical radial glia, nuclei drawn at different heights because of interkinetic nuclear migration. Green: basal progenitors and a basal radial glial cell in the SVZ. Grey: neurons migrating outwards along radial glia. Orange: neurons in the cortical plate. Purple: a Cajal–Retzius cell in the marginal zone. Hover over cells for labels. Zone names and cell types are from @gotz2005cell [pp. 778–779; Fig. 2] and @long2019extracellular [secs. 2.3.1 and 3.2]. The zone between the SVZ and the cortical plate is left unnamed because none of the course sources defines it. Illustrative; no thicknesses or cell numbers are implied.
 :::
 
 The extracellular matrix (ECM) anchors this wall. If integrin β1 is knocked out in the mouse neocortex at E11, radial glial processes detach from the basal surface within 24 h [@long2019extracellular, Fig. 1d, p. 4]. At E14.5, laminin α2 and α4 are high in the VZ, and integrin α6β1 is enriched along the ventricular surface [@long2019extracellular, sec. 2.1.2, p. 3]. @sec-ecm describes these molecules.
@@ -170,7 +170,7 @@ In human fetal neocortex, physiological folding has begun by 22 GW. In explants 
 ```{ojs}
 //| echo: false
 //| label: fig-anatomy-timeline
-//| fig-cap: "Selected events in mouse brain development, on an axis with separate embryonic (E0–E19) and postnatal (P0–P28) segments. Dots are single ages; bars are periods. Every event is quoted from its source with species and age as stated there: Moody & Bosma 2005 (hindbrain segmentation, ventricular-zone cells), Long & Huttner 2019 (neural tube, laminins, marginal zone), Götz & Huttner 2005 (radial glia transition), Nourse et al. 2022 (E10.5 neuroepithelium), Thompson et al. 2014 (atlas stages, organisation, eye opening, myelin genes) and Fawcett et al. 2019 (perineuronal nets, reported for mice and rats). No values were read off figures. The positions of events are exact; the axis has no gestation length, so the birth break is not to scale."
+//| fig-cap: "**Data/values from** @moody2005ion, @long2019extracellular, @gotz2005cell, @nourse2022piezo, @thompson2014high and @fawcett2019roles. Selected events in mouse brain development, on an axis with separate embryonic (E0–E19) and postnatal (P0–P28) segments. Dots are single ages; bars are periods. Every event is quoted from its source with species and age as stated there: Moody & Bosma 2005 (hindbrain segmentation, ventricular-zone cells), Long & Huttner 2019 (neural tube, laminins, marginal zone), Götz & Huttner 2005 (radial glia transition), Nourse et al. 2022 (E10.5 neuroepithelium), Thompson et al. 2014 (atlas stages, organisation, eye opening, myelin genes) and Fawcett et al. 2019 (perineuronal nets, reported for mice and rats). No values were read off figures. The positions of events are exact; the axis has no gestation length, so the birth break is not to scale."
 viewof anatEvent = anatTimeline(anatEvents, {
   width: Math.min(width, 720),
   colors: { mouse: "#2a78d6" },
@@ -216,7 +216,7 @@ viewof anatAge = Inputs.radio(["E11.5", "E13.5", "E15.5", "E18.5"], { value: "E1
 ```{ojs}
 //| echo: false
 //| label: fig-anatomy-atlas
-//| fig-cap: "Embryonic mouse brain at the selected age, as 3D surfaces of seven region groups. Drag to rotate, scroll to zoom, click a region to name it, and use the check boxes to hide regions. Default view: from the right side, anterior to the right, dorsal up; scale bar in mm. Geometry: annotation volumes of the Developmental Mouse Brain Common Coordinate Framework (DevCCF v1) [@kronman2024developmental; @devccf2024dataset], CC BY 4.0, from the Kim Lab, Penn State, a BRAIN Initiative Cell Census Network (BICCN) resource. Changes: atlas labels grouped into seven regions using the DevCCF ontology and converted to smoothed, simplified surface meshes (details in assets/atlas/PROVENANCE.md). Not from the literature PDFs of this course: region names follow the atlas ontology and do not map one-to-one onto the terms used in the papers."
+//| fig-cap: "**Data from an atlas outside the course sources** [@kronman2024developmental; @devccf2024dataset]. Embryonic mouse brain at the selected age, as 3D surfaces of seven region groups. Drag to rotate, scroll to zoom, click a region to name it, and use the check boxes to hide regions. Default view: from the right side, anterior to the right, dorsal up; scale bar in mm. Geometry: annotation volumes of the Developmental Mouse Brain Common Coordinate Framework (DevCCF v1) [@kronman2024developmental; @devccf2024dataset], CC BY 4.0, from the Kim Lab, Penn State, a BRAIN Initiative Cell Census Network (BICCN) resource. Changes: atlas labels grouped into seven regions using the DevCCF ontology and converted to smoothed, simplified surface meshes (details in assets/atlas/PROVENANCE.md). Not from the literature PDFs of this course: region names follow the atlas ontology and do not map one-to-one onto the terms used in the papers."
 viewof anatPicked = {
   const el = atlasViewer({ THREE, url: `../assets/atlas/${anatAge}.glb`, groups: anatAtlas.groups,
                            width: Math.min(width, 720), height: 440 })
@@ -238,69 +238,89 @@ The 3D geometry comes from the DevCCF reference atlas [@kronman2024developmental
 
 ## Check yourself {#sec-anatomy-check}
 
-:::{.qmulti}
+:::{.qmulti correct="4"}
 Going from the ventricle outwards, which order of zones is correct in the developing mouse cortex?
+
+- ventricular zone → cortical plate → subventricular zone → marginal zone
+
+  > The subventricular zone is basal to the ventricular zone [@gotz2005cell, p. 779]; the cortical plate, where migrating neurons settle, is further out [@long2019extracellular, sec. 3.2, p. 6].
+
+- subventricular zone → ventricular zone → cortical plate → marginal zone
+
+  > The ventricular zone is the layer that lines the ventricle [@gotz2005cell, p. 778]; the subventricular zone is basal to it [@gotz2005cell, p. 779].
+
+- ventricular zone → subventricular zone → marginal zone → cortical plate
+
+  > The marginal zone lies outside the cortical plate, at the pial side [@long2019extracellular, sec. 3.2, p. 6].
 
 - ventricular zone → subventricular zone → cortical plate → marginal zone
 
   > Correct [@gotz2005cell, pp. 778–779; @long2019extracellular, sec. 3.2].
 
-- cortical plate → ventricular zone → subventricular zone → marginal zone
-
-  > The ventricular zone lines the ventricle; the cortical plate is where migrating neurons end up, further out.
-
-- marginal zone → cortical plate → subventricular zone → ventricular zone
-
-  > This is the order from the pial surface inwards, i.e. reversed.
-
 :::
 
-:::{.qmulti}
+:::{.qmulti correct="1"}
 When do neuroepithelial cells turn into radial glial cells in most of the mouse brain?
 
 - Between E10 and E12.
 
-  > Correct [@gotz2005cell, p. 778].
+  > Correct: at E10 no astroglial markers are detectable yet, and by E12 the transition has occurred [@gotz2005cell, p. 778].
 
-- At birth (P0).
+- Between E8.5 and E11.5.
 
-  > The transition happens at the onset of neurogenesis, in the embryo.
+  > That is when the mouse hindbrain is segmented into rhombomeres [@moody2005ion, p. 897].
 
-- Around P23.
+- Between E9.5 and E10.5.
 
-  > That is when perineuronal nets start to form [@fawcett2019roles, p. 453].
+  > In this window the neural tube forms and closes [@long2019extracellular, sec. 2.1.2, p. 3; @nourse2022piezo, Results]; at E10 no astroglial markers are detectable yet [@gotz2005cell, p. 778].
+
+- Between E15.5 and E18.5.
+
+  > That is when regional identity switches from plate-based to areal organisation in the Allen atlas [@thompson2014high, Results, sec. "Molecular principles of brain organization"].
 
 :::
 
 **Compute.** For how many days is the mouse hindbrain segmented into rhombomeres? {{< qinput 3 tol=0 hints="From E8.5 to E11.5" >}} days [@moody2005ion, p. 897].
 
-:::{.qmulti}
-A paper reports an effect in rat cortex at E14. Can you place it at E14 on the mouse timeline?
+:::{.qmulti correct="4"}
+A paper reports an effect in rat cortex at E14. Where does it go on the mouse timeline of this chapter?
 
-- No: E-days are specific to each species, so a rat E14 is not a mouse E14.
-
-  > Correct. That is why the timeline shows a mouse lane only.
-
-- Yes: rodents develop on the same schedule.
+- At mouse E14, because rodents develop on the same schedule.
 
   > The course sources do not support transferring ages between species, and the timeline widget warns about it.
 
+- At mouse E12, two days earlier, to allow for the species gap.
+
+  > No course source gives a conversion between rat and mouse E-days, so any shift would be invented.
+
+- At mouse E14.5, because mouse ages are counted from E0.5.
+
+  > The plug day is counted as E0.5 in mouse papers [@nourse2022piezo, Methods]. That fixes how days are counted, not how a rat age maps onto a mouse age.
+
+- Off the mouse axis, reported separately as a result from rat E14.
+
+  > Correct. E-days are specific to each species, so a rat E14 is not a mouse E14. That is why the timeline shows a mouse lane only.
+
 :::
 
-:::{.qmulti}
+:::{.qmulti correct="1"}
 Where do basal progenitors divide?
 
-- At the basal side of the ventricular zone or in the subventricular zone.
+- At the basal side of the ventricular zone, or within the subventricular zone.
 
   > Correct; they often divide into two neurons [@gotz2005cell, p. 779].
 
-- At the apical (ventricular) surface, like neuroepithelial cells.
+- At the apical surface of the ventricular zone, like neuroepithelial cells.
 
-  > Apical mitosis is typical of neuroepithelial cells and apical radial glia, not of basal progenitors.
+  > Neuroepithelial cells move the nucleus back to the apical surface for mitosis [@gotz2005cell, p. 783], but basal progenitors retract their apical process [@gotz2005cell, p. 779].
 
-- In the marginal zone.
+- In the cortical plate, among neurons that have finished migrating.
 
-  > The marginal zone contains Cajal–Retzius cells, not dividing progenitors [@long2019extracellular, sec. 3.2].
+  > The cortical plate is where migrating neurons settle [@long2019extracellular, sec. 3.2, p. 6]; the mitotic layers are the ventricular and subventricular zones [@gotz2005cell, p. 779].
+
+- In the marginal zone, alongside the reelin-secreting Cajal–Retzius cells.
+
+  > The marginal zone holds the Cajal–Retzius cells, which secrete reelin [@long2019extracellular, sec. 3.2, p. 6]; it is not where progenitors divide [@gotz2005cell, p. 779].
 
 :::
 
@@ -308,7 +328,7 @@ Where do basal progenitors divide?
 1. VZ → SVZ → cortical plate → marginal zone [@gotz2005cell, pp. 778–779; @long2019extracellular, sec. 3.2, p. 6].
 2. E10–E12 [@gotz2005cell, p. 778].
 3. 3 days, from E8.5 to E11.5 [@moody2005ion, p. 897].
-4. No; ages are not transferred between species (rat E-days are not mouse E-days).
+4. Off the mouse axis, labelled as rat; ages are not transferred between species (rat E-days are not mouse E-days).
 5. Basal side of the VZ or in the SVZ [@gotz2005cell, p. 779].
 :::
 

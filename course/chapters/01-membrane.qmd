@@ -99,12 +99,13 @@ viewof guess = predictGate({
   confidence: true,
   spec: {
     kind: "choice",
-    options: ["smaller, and the gap grows with P_Na/P_K", "the same, because K⁺ dominates", "larger, because Na⁺ adds charge"],
+    options: ["the same, because K⁺ dominates", "larger, because Na⁺ adds charge", "smaller, and the gap grows with P_Na/P_K", "smaller, and the gap shrinks with P_Na/P_K"],
     answer: "smaller, and the gap grows with P_Na/P_K",
     feedback: {
-      "smaller, and the gap grows with P_Na/P_K": "Right: the Na⁺ and Cl⁻ terms dilute the effect of K⁺ in both the numerator and denominator of the GHK ratio.",
       "the same, because K⁺ dominates": "K⁺ dominates only if P_Na and P_Cl are zero. With P_Na/P_K = 0.18 the Na⁺ term is large, because external Na⁺ is high.",
-      "larger, because Na⁺ adds charge": "Na⁺ was lowered in these experiments while K⁺ was raised, and its term enters both parts of the ratio. It makes the change smaller, not larger."
+      "larger, because Na⁺ adds charge": "Na⁺ was lowered in these experiments while K⁺ was raised, and its term enters both parts of the ratio. It makes the change smaller, not larger.",
+      "smaller, and the gap grows with P_Na/P_K": "Right: the Na⁺ and Cl⁻ terms dilute the effect of K⁺ in both the numerator and denominator of the GHK ratio.",
+      "smaller, and the gap shrinks with P_Na/P_K": "Smaller, yes, but the gap grows with P_Na/P_K. For the 5.4 → 25 mM step, Fairless et al. (p. 5) predicted 10.36 mV with P_Na/P_K = 0.18 and 15.06 mV with 0.10: more Na⁺ permeability, smaller change, larger gap to the Nernst value of 38.97 mV."
     }
   }
 })
@@ -121,7 +122,7 @@ viewof perm = Inputs.form({
 ```{ojs}
 //| echo: false
 //| label: fig-nernst-ghk
-//| fig-cap: "Predicted change of membrane potential ΔE when external K⁺ is changed from the reference K_r = 4 mM to K_x (1–120 mM, log axis). Blue: Nernst (@eq-dE-nernst). Orange: GHK (@eq-dE-ghk) with the permeability ratios set by the sliders. Assumptions (not all stated by Fairless et al. for this experiment): RT/F = 25.43 mV (22 °C); Na⁺ = Na_r = 140 mM, lowered to 150 mM − K_x for K_x > 10 mM (Fairless et al., Methods and Fig. S1); internal Cl⁻ = 30 mM (the value Fairless et al. assume in their Fig. S1). Dots: the Nernst values reported by Fairless et al. (p. 7) for 1 and 120 mM. Computed curves, not measurements."
+//| fig-cap: "**Illustrative model, not data.** Equations and reference values from @fairless2013membrane. Predicted change of membrane potential ΔE when external K⁺ is changed from the reference K_r = 4 mM to K_x (1–120 mM, log axis). Blue: Nernst (@eq-dE-nernst). Orange: GHK (@eq-dE-ghk) with the permeability ratios set by the sliders. Assumptions (not all stated by Fairless et al. for this experiment): RT/F = 25.43 mV (22 °C); Na⁺ = Na_r = 140 mM, lowered to 150 mM − K_x for K_x > 10 mM (Fairless et al., Methods and Fig. S1); internal Cl⁻ = 30 mM (the value Fairless et al. assume in their Fig. S1). Dots: the Nernst values reported by Fairless et al. (p. 7) for 1 and 120 mM. Computed curves, not measurements."
 {
   if (!guess.committed) return locked()
   const p = { PK: 1, PNa: perm.PNa, PCl: perm.PCl, Nar: 140, Cli: 30 }
@@ -174,74 +175,98 @@ The classic quantitative model of the action potential [@hodgkin1952quantitative
 
 ## Check yourself {#sec-membrane-check}
 
-:::{.qmulti}
+:::{.qmulti correct="4"}
 A neuron depolarises from −70 mV to −50 mV. What happened to its membrane potential?
+
+- It became more negative: the inside became less positive relative to the outside.
+
+  > That is hyperpolarisation, the opposite change [@sundelacruz2009role, sec. "Proliferation"].
+
+- It grew in size: the voltage across the membrane rose from 50 to 70 mV.
+
+  > The size of the voltage shrank, from 70 to 50 mV. "Depolarised" describes a potential that has become less negative, not a larger number [@sundelacruz2009role, sec. "Proliferation"].
+
+- It reversed sign: the inside became positive relative to the outside.
+
+  > −50 mV is still negative, so the inside is still negative relative to the outside. A reversal would need a potential above 0 mV.
 
 - It became less negative: the inside became more positive relative to the outside.
 
-  > Correct. Depolarised means less negative [@sundelacruz2009role].
-
-- It became more negative.
-
-  > That is hyperpolarisation.
-
-- Its magnitude grew from 50 to 70 mV.
-
-  > The magnitude shrank. "Depolarised" refers to the sign convention (inside relative to outside), not to a larger number.
+  > Correct. Depolarised means less negative [@sundelacruz2009role, sec. "Proliferation"].
 
 :::
 
 **Compute.** Using $RT/F$ = 25.43 mV, external K⁺ is lowered from 4 mM to 1 mM. The Nernst equation predicts $\Delta E$ = {{< qinput -35.25 tol=0.1 hints="25.43 × ln(1/4)" >}} mV [@fairless2013membrane, p. 7].
 
-:::{.qmulti}
-Why did Fairless et al. predict only 10–15 mV of depolarisation for a 5.4 → 25 mM K⁺ step, when the Nernst equation gives about 39 mV?
+:::{.qmulti correct="1"}
+For HEK cells, Fairless et al. predicted only 10–15 mV of depolarisation for a 5.4 → 25 mM K⁺ step, although the Nernst equation gives about 39 mV. Why?
 
-- Because the membrane is also permeable to Na⁺ and Cl⁻, which the GHK equation weights by their permeabilities.
+- Because Na⁺ and Cl⁻ also cross the membrane, and GHK weights each ion by its permeability.
 
-  > Correct [@fairless2013membrane, p. 5].
+  > Correct. With $P_K : P_{Na} : P_{Cl}$ = 1.00 : 0.18 : 0.10 the GHK equation gives 10.36 mV; with 1.00 : 0.10 : 0.10 it gives 15.06 mV [@fairless2013membrane, p. 5].
 
-- Because the internal K⁺ concentration rises when external K⁺ rises.
+- Because internal K⁺ rises as external K⁺ rises, so the K⁺ gradient changes less than assumed.
 
-  > Fairless et al. explicitly assume that internal concentrations stay unchanged during short exposures.
+  > Fairless et al. assume that the internal ion concentrations stay unchanged during the short exposures to high K⁺ [@fairless2013membrane, p. 5].
 
-- Because the temperature was low.
+- Because Na⁺ was raised to keep the osmolarity constant, which adds an opposing Na⁺ gradient.
 
-  > Temperature enters both equations through RT/F in the same way; it cannot explain the difference between them.
+  > Na⁺ was lowered, not raised: above 10 mM K⁺, Na⁺ was reduced so that K⁺ + Na⁺ stayed at 150 mM [@fairless2013membrane, Methods, p. 2].
+
+- Because the cells were recorded at 22 °C, which lowers RT/F in the GHK equation but not in Nernst.
+
+  > Both equations use the same $RT/F$, 25.43 mV at 22 °C [@fairless2013membrane, p. 5], so temperature cannot explain the difference between them.
 
 :::
 
-:::{.qmulti}
+:::{.qmulti correct="2"}
 A Cl⁻ channel opens in a neuron. Can it, on its own, create a Cl⁻ gradient across the membrane?
 
-- No: channels only let ions flow down existing gradients; transporters such as KCC2 build them.
+- Yes: the open channel moves Cl⁻ into the cell until a gradient builds up.
+
+  > An open channel lets ions flow towards equilibrium, which runs a gradient down instead of building it. Conductive Cl⁻ channels "cannot generate an electrochemical ionic gradient" [@rivera1999kcc2, p. 254].
+
+- No: channels let ions flow down gradients; transporters such as KCC2 build them.
 
   > Correct [@rivera1999kcc2, p. 254].
 
-- Yes, if it stays open long enough.
+- Yes: Cl⁻ channels such as GABA_A receptors build the high internal Cl⁻ of immature neurons.
 
-  > An open channel moves ions towards equilibrium, which dissipates a gradient instead of building it.
+  > GABA_A receptors are Cl⁻-permeant channels [@rivera1999kcc2, p. 251]. The high internal Cl⁻ of immature neurons comes from the Cl⁻ importer NKCC1, a transporter [@benari2002excitatory, p. 729; Fig. 1].
+
+- No: the channel lets K⁺ out together with Cl⁻, so the two charges cancel.
+
+  > Coupled K⁺ and Cl⁻ movement describes KCC2, a K⁺/Cl⁻ co-transporter [@rivera1999kcc2, p. 251], not a Cl⁻ channel.
 
 :::
 
-:::{.qmulti}
+:::{.qmulti correct="2"}
 Why are whole-cell currents divided by membrane capacitance?
+
+- Capacitance corrects for the series resistance of the pipette, so the ratio removes access errors.
+
+  > Series resistance belongs to the pipette access (5–20 MΩ in the recordings of @kreysing2025environmental [Methods]). Dividing by capacitance does not remove it.
 
 - Capacitance is proportional to membrane area, so the ratio compares cells of different sizes.
 
   > Correct [@kreysing2025environmental, Results]. This matters when cells grow, as they do in culture.
 
-- Capacitance corrects for the series resistance of the pipette.
+- Capacitance rises on stiff substrates, so the ratio removes the effect of substrate stiffness.
 
-  > Series resistance is a separate correction. Capacitance stands in for surface area.
+  > In rat hippocampal neurons, capacitance rose about fourfold between days 2 and 14 in culture, similarly on soft and stiff substrates [@kreysing2025environmental, Results; Supplementary Fig. 3].
+
+- Capacitance is proportional to the number of open channels, so the ratio gives current per channel.
+
+  > Capacitance "is proportional to the surface area" [@kreysing2025environmental, Results], not to the number of channels.
 
 :::
 
 ::: {.callout-tip title="Answers" collapse="true"}
-1. Less negative: depolarisation [@sundelacruz2009role, sec. "Proliferation"].
+1. It became less negative: depolarisation [@sundelacruz2009role, sec. "Proliferation"].
 2. $\Delta E = 25.43 \ln(1/4) = -35.25$ mV, as reported by @fairless2013membrane [p. 7].
-3. Na⁺ and Cl⁻ permeability (GHK, @eq-dE-ghk) [@fairless2013membrane, p. 5].
-4. No; gradients are built by transporters [@rivera1999kcc2, p. 254].
-5. To normalise for membrane area [@kreysing2025environmental, Results].
+3. The membrane is also permeable to Na⁺ and Cl⁻, which the GHK equation weights by permeability (@eq-dE-ghk) [@fairless2013membrane, p. 5].
+4. No: a channel lets ions flow down a gradient; transporters such as KCC2 build it [@rivera1999kcc2, p. 254].
+5. Capacitance is proportional to membrane area, so current density compares cells of different sizes [@kreysing2025environmental, Results].
 :::
 
 ## Summary {#sec-membrane-summary}
