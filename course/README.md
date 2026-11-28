@@ -48,6 +48,8 @@ The private `sources/` and `notes/` directories are excluded from Git and are no
 | `_extensions/skyfroger/shortiquiz/` | quiz extension, copied from `quarto-gallery` |
 | `assets/` | stylesheets from `quarto-gallery` plus `course.css`; `atlas/` holds the 3D meshes |
 | `js/atlas-viewer.js`, `js/atlas-math.js` | Three.js viewer for the atlas meshes |
+| `js/gcamp-model.js`, `js/stiffness-turn.js`, `js/piezo-states.js` | logic and source values of the GCaMP spike-train explorer (ch. 4), the stiffness-gradient explorer (ch. 12) and the Piezo1 traction schematic (ch. 11) |
+| `tools/lint_quizzes.mjs` | multiple-choice linter, copied from `quarto-gallery` (`scripts/lint_quizzes.mjs`) |
 | `tools/atlas/` | Node scripts that built the meshes from DevCCF (see `assets/atlas/PROVENANCE.md`) |
 
 ## Conventions
@@ -58,6 +60,17 @@ The private `sources/` and `notes/` directories are excluded from Git and are no
   equation and the Boltzmann open-probability fit are named in the sources but not written,
   so they are not shown.
 - Statements that are not from the literature are boxed as "Not from the literature".
+- Every figure caption starts with its provenance: **Data/values from [@key]**, **Illustrative
+  model, not data** (followed by where its equation and parameters come from) or **Schematic, not
+  data**. Model curves carry no noise, so they cannot be mistaken for recordings.
+- Multiple-choice questions follow the rules in `quarto-gallery`'s AUTHORING.md ("Writing
+  multiple-choice questions"): at least 4 options, the correct one not more often the longest or
+  the shortest than chance, parallel distractors, no give-away words, and the correct position
+  fixed with `correct="N"` and balanced across the course. Check with
+  `node tools/lint_quizzes.mjs chapters` (after a render, add `--html _book` to also catch
+  untranslated widget text).
+- Widget text is English: `lang: en` in `_quarto.yml` and the localisation patch of shortiquiz
+  (`_extensions/skyfroger/shortiquiz/PATCHES.md`).
 - Every figure caption states its basis and assumptions; schematic and illustrative figures are
   labelled as such.
 

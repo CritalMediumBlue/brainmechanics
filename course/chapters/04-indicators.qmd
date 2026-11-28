@@ -153,7 +153,7 @@ viewof gcmIn = Inputs.form({
 ```{ojs}
 //| echo: false
 //| label: fig-gcamp-train
-//| fig-cap: "**Illustrative model, not data.** ΔF/F₀ of a GCaMP6 indicator for a regular train of action potentials. Per-spike values from @chen2013ultrasensitive [Supplementary Table 3; mouse V1 layer 2/3 neurons in vivo, one action potential]: peak ΔF/F₀ of 23%, 13% and 19%, time to peak of 179, 80 and 45 ms, and half-decay time of 550, 270 and 142 ms for GCaMP6s, 6m and 6f. Shaded band on the readout: the minimum inter-spike interval Chen et al. could resolve, 100–150, 75–100 and 50–75 ms [main text and Supplementary Fig. 10]. Not from the literature: the kernel shape (linear rise to the peak, then exponential decay with the measured half-time) and the linear summation of successive spikes. Real indicators saturate, because they bind Ca²⁺ cooperatively (fitted Hill coefficients 2.3–3.0, Supplementary Table 2), so the model overestimates long, fast trains. Thin lines: the contribution of each spike; thick line: their sum; ticks: spike times. No noise is added."
+//| fig-cap: "**Illustrative model, not data.** ΔF/F₀ of a GCaMP6 indicator for a regular train of action potentials. Per-spike values from @chen2013ultrasensitive [Supplementary Table 3; mouse V1 layer 2/3 neurons in vivo, one action potential]: peak ΔF/F₀ of 23%, 13% and 19%, time to peak of 179, 80 and 45 ms, and half-decay time of 550, 270 and 142 ms for GCaMP6s, 6m and 6f. The readout below the figure compares the chosen interval with the minimum inter-spike interval Chen et al. could resolve, 100–150, 75–100 and 50–75 ms [main text and Supplementary Fig. 10]. Not from the literature: the kernel shape (linear rise to the peak, then exponential decay with the measured half-time) and the linear summation of successive spikes. Real indicators saturate, because they bind Ca²⁺ cooperatively (fitted Hill coefficients 2.3–3.0, Supplementary Table 2), so the model overestimates long, fast trains. Thin lines: the contribution of each spike; thick line: their sum; ticks: spike times. No noise is added."
 {
   const p = GCAMP6[gcmIn.sensor]
   const spikes = train(gcmIn.n, gcmIn.isi)
@@ -168,7 +168,7 @@ viewof gcmIn = Inputs.form({
     marks: [
       Plot.line(parts, { x: "t", y: d => d.dff * 100, z: "i", stroke: "#9aa5b1", strokeWidth: 1 }),
       Plot.line(sum, { x: "t", y: d => d.dff * 100, stroke: "#2a78d6", strokeWidth: 2.5 }),
-      Plot.tickX(spikes, { x: d => d, y1: top * 100 * 0.93, y2: top * 100, stroke: "currentColor", strokeWidth: 1.5 }),
+      Plot.ruleX(spikes, { x: d => d, y1: top * 100 * 0.92, y2: top * 100, stroke: "currentColor", strokeWidth: 1.5 }),
       Plot.ruleY([0])
     ]
   })

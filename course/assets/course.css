@@ -1,5 +1,5 @@
 /* Course-specific additions. Bootstrap variables only, so light and dark both work. */
-.source-note { font-size: 0.85em; color: var(--bs-secondary-color, var(--bs-secondary)); }
+.source-note { font-size: 0.85em; color: var(--bs-secondary-color, var(--bs-secondary)); text-align: left; hyphens: manual; }
 .not-lit { border-left: 3px solid #eda100; padding-left: 0.6rem; }
 .answers-box summary { font-weight: 600; }
 table.evidence td, table.evidence th { font-size: 0.9em; }
@@ -29,3 +29,8 @@ svg[class^="plot-"], figure[class^="plot-"], div[class^="plot-"] {
   #quarto-document-content table { display: block; max-width: 100%; overflow-x: auto; }
 }
 #quarto-document-content span.math.display { display: block; max-width: 100%; overflow-x: auto; overflow-y: hidden; }
+
+/* Quiz options: no justified spacing in short option lines. */
+#quarto-document-content .qmulti__stem p,
+#quarto-document-content .qmulti__wrong_result p,
+#quarto-document-content .qmulti__correct_result p { text-align: left; hyphens: manual; }

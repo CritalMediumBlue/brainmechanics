@@ -135,7 +135,7 @@ viewof frTurn = Inputs.form({
   const toward = dir === 0 ? "goes straight: no gradient" :
     `turns toward the ${dir < 0 ? "rostral" : "caudal"} side, the ${(dir < 0) === (frTurn.K1 < frTurn.K2) ? "softer" : "stiffer"} one`
   const inRange = Math.abs(M) <= 7.5 ? "inside" : "outside"
-  return html`<div>${svg.node()}<p class="source-note">M = (${frTurn.K1} − ${frTurn.K2}) Pa / 100 µm = ${M.toFixed(1)} Pa/µm, ${inRange} the in vivo range of about 0–7.5 Pa/µm read off Koser et al., Fig. 3b. The bundle ${toward}.</p></div>`
+  return html`<div>${svg.node()}<p class="source-note">M = (${frTurn.K1} − ${frTurn.K2}) Pa / 100 µm = ${M.toFixed(1).replace("-", "−")} Pa/µm; its magnitude is ${inRange} the in vivo range of about 0–7.5 Pa/µm read off Koser et al., Fig. 3b. The bundle ${toward}.</p></div>`
 }
 ```
 
